@@ -1,4 +1,4 @@
-package com.example.estudiantes.model;
+package com.sistema.estudiantes.model;
 
 public abstract class ModelBase {
     private int id;

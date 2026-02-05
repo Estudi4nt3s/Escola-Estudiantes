@@ -1,4 +1,4 @@
-package com.example.estudiantes.model;
+package com.sistema.estudiantes.model;
 
 public class Disciplina extends ModelBase{
     private String nome;
