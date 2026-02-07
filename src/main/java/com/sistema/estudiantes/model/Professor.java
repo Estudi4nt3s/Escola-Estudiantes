@@ -1,6 +1,8 @@
 package com.sistema.estudiantes.model;
 
 public class Professor extends ModelBase {
+
+    private int id;
     private String nome;
     private String senha;
 
@@ -16,6 +18,12 @@ public class Professor extends ModelBase {
         this.nome = nome;
         this.senha = senha;
     }
+
+    public Professor(int id){
+        this.id = id;
+    }
+
+    public int getId(){return this.id;}
 
     public String getNome() {
         return this.nome;

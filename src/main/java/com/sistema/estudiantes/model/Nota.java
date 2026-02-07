@@ -1,6 +1,9 @@
 package com.sistema.estudiantes.model;
 
 public class Nota extends ModelBase {
+    private Aluno aluno;
+    private Disciplina disciplina;
+    private Turma turma;
     private Disciplina idDisciplina;
     private Aluno idAluno;
     private Turma idTurma;
@@ -23,9 +26,15 @@ public class Nota extends ModelBase {
         this.valor = valor;
     }
 
+    public Aluno getAluno(){return this.aluno;}
+
+    public Turma getTurma(){return this.turma;}
+
     public Disciplina getIdDisciplina() {
         return this.idDisciplina;
     }
+
+    public Disciplina getDisciplina() {return this.disciplina;}
 
     public Aluno getIdAluno() {
         return this.idAluno;
@@ -58,4 +67,5 @@ public class Nota extends ModelBase {
     public String toString() {
         return "Id: " + getId() + "\nId Disciplina: " + this.idDisciplina + "\nId Aluno: " + this.idAluno + "\nValor: " + this.valor;
     }
+
 }
