@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ProfDisciplinaDAO {
 
-    // 🔹 CREATE
+
     public void inserir(ProfessorDisciplina pd) {
         String sql = """
             INSERT INTO ProfessorDisciplina (IdProfessor, IdDisciplina)
@@ -34,7 +34,7 @@ public class ProfDisciplinaDAO {
         }
     }
 
-    // 🔹 READ (listar)
+
     public List<ProfessorDisciplina> listar() {
         List<ProfessorDisciplina> lista = new ArrayList<>();
         String sql = "SELECT * FROM ProfessorDisciplina";
@@ -60,7 +60,7 @@ public class ProfDisciplinaDAO {
         return lista;
     }
 
-    // 🔹 READ (buscar por id)
+
     public ProfessorDisciplina buscarPorId(int id) {
         String sql = "SELECT * FROM ProfessorDisciplina WHERE Id = ?";
 
@@ -84,7 +84,7 @@ public class ProfDisciplinaDAO {
         return null;
     }
 
-    // 🔹 UPDATE
+
     public boolean atualizar(ProfessorDisciplina pd) {
         String sql = """
             UPDATE ProfessorDisciplina
@@ -107,7 +107,7 @@ public class ProfDisciplinaDAO {
         }
     }
 
-    // 🔹 DELETE
+
     public boolean excluir(int id) {
         String sql = "DELETE FROM ProfessorDisciplina WHERE Id = ?";
 
