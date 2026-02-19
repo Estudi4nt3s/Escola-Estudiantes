@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class Conexao {
 
-    public static Connection createConnection() {
+    public static Connection conectar() {
         //Definindo variavel conn como null para poder tratar erros
         Connection conn = null;
 
@@ -42,7 +42,7 @@ public class Conexao {
 
 
     //Criando um método para fechar a conexão
-    public static void fecharConnection(Connection conn){
+    public static void desconectar(Connection conn){
 
         try{
             //Verifica se a conexão esta aberta, se sim, a conexão é fechada
