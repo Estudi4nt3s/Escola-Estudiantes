@@ -1,6 +1,7 @@
 package com.sistema.estudiantes.model;
 
 public class Disciplina extends ModelBase{
+    private int id;
     private String nome;
 
     public Disciplina() {}
@@ -13,6 +14,8 @@ public class Disciplina extends ModelBase{
         super(id);
         this.nome = nome;
     }
+
+    public Disciplina(int id){this.id = id;}
 
     public String getNome() {
         return this.nome;

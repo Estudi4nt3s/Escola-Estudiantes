@@ -28,6 +28,18 @@ public class Observacao extends ModelBase {
         this.idDisciplina = idDisciplina;
     }
 
+    public Observacao(int id, String texto, Date dataCriacao,
+                      int idProfessor, int idAluno, int idDisciplina) {
+
+        super(id);
+        this.texto = texto;
+        this.dataCriacao = dataCriacao;
+        this.idProfessor = new Professor(idProfessor);
+        this.idAluno = new Aluno(idAluno);
+        this.idDisciplina = new Disciplina(idDisciplina);
+    }
+
+
     public String getTexto() {
         return this.texto;
     }
