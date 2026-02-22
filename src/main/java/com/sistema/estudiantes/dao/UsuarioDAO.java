@@ -51,6 +51,39 @@ public class UsuarioDAO {
         return lista;
     }
 
+    public List<Usuario> listarComFiltro(String nomeColuna, Object valorColuna) {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        String sql = "SELECT id, email, senha FROM usuarios WHERE " + nomeColuna + " = ?";
+
+        try (Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            if (valorColuna instanceof Integer) {
+                stmt.setInt(1, (Integer) valorColuna);
+            } else if (valorColuna instanceof String) {
+                stmt.setString(1, (String) valorColuna);
+            } else {
+                stmt.setObject(1, valorColuna);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario user = new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("email"),
+                            rs.getString("senha")
+                    );
+                    usuarios.add(user);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao filtrar por " + nomeColuna + ": " + e.getMessage());
+        }
+
+        return usuarios;
+    }
+
     public boolean atualizar(Usuario u) {
         String sql = "UPDATE Usuario SET Email = ?, Senha = ? WHERE Id = ?";
 
