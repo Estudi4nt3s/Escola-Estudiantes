@@ -15,7 +15,7 @@
     <title>Colégio Estudiantes - Início</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="disciplinasStyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
 </head>
 
 <body>
@@ -27,8 +27,9 @@
     </div>
 
     <nav>
-        <a class="menu active"><i class="material-icons">home</i>Início</a>
-        <a class="menu"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/index.jsp">
+        <i class="material-icons">home</i>Início</a>
+        <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
         <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu"><i class="material-icons">person</i>Perfil</a>
     </nav>
@@ -159,7 +160,7 @@
     </div>
 </div>
 
-<script src="notficacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 
 </html>
