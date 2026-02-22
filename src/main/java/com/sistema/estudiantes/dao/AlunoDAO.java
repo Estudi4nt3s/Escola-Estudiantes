@@ -45,8 +45,9 @@ public class AlunoDAO {
                 aluno = new Aluno(
                         rs.getString("matricula"),
                         rs.getString("nome"),
-                        rs.getDate("data_nascimento")
-                )
+                        rs.getDate("data_nascimento"),
+                        rs.getString("senha")
+                );
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

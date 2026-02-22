@@ -8,7 +8,7 @@
     <title>Colégio Estudiantes - Início</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/indexStyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
 
 </head>
 
@@ -43,7 +43,7 @@
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12">
+                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
                     <span>Mateus Carlos</span>
                 </div>
             </div>
