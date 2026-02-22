@@ -3,21 +3,25 @@ package com.sistema.estudiantes.model;
 import java.util.Date;
 
 public class Aluno {
-    private String matricula;
+    private int matricula;
     private String nome;
     private Date dataNascimento;
     private String senha;
 
     public Aluno() {}
 
-    public Aluno(String matricula, String nome, Date dataNascimento, String senha) {
+    public Aluno(int matricula, String nome, Date dataNascimento, String senha) {
         this.matricula = matricula;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.senha = senha;
     }
 
-    public String getMatricula() {
+    public Aluno(int matricula){
+        this.matricula = matricula;
+    }
+
+    public int getMatricula() {
         return this.matricula;
     }
 
@@ -33,7 +37,7 @@ public class Aluno {
         return this.senha;
     }
 
-    public void setMatricula(String matricula) {
+    public void setMatricula(int matricula) {
         this.matricula = matricula;
     }
 

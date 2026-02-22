@@ -44,10 +44,11 @@ public class ServletLogin extends HttpServlet {
             System.out.println("Não é adm 💔");
             String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
             boolean professor = email.matches(regexFuncionario);
+
 //            Declarando diversos objetos
             if(!professor){
                 AlunoDAO alunoDAO = new AlunoDAO();
-                List<Aluno> aluno = alunoDAO.select();
+                List<Aluno> aluno = alunoDAO.listar();
 
 //            Vendo se o e-mail da empresa está presente no banco de dados
                 for (int i = 0; i < aluno.size(); i++) {
@@ -61,7 +62,7 @@ public class ServletLogin extends HttpServlet {
             }
             else{
                 ProfessorDAO profDAO = new ProfessorDAO();
-                List<Professor> prof = profDAO.select();
+                List<Professor> prof = profDAO.listar();
 
 //            Vendo se o e-mail da empresa está presente no banco de dados
                 for (int i = 0; i < prof.size(); i++) {

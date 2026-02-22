@@ -22,7 +22,8 @@
 
         <nav>
             <a class="menu active"><i class="material-icons">home</i>Início</a>
-            <a class="menu"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
+                <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu"><i class="material-icons">person</i>Perfil</a>
         </nav>
@@ -159,7 +160,7 @@
         </div>
     </div>
 
-    <script src="${pageContext.request.contextPath}/notificacoes.js"></script>
+    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 
 </html>
