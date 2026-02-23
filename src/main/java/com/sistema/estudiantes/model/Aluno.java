@@ -6,15 +6,17 @@ public class Aluno {
     private int matricula;
     private String nome;
     private Date dataNascimento;
-    private String senha;
+    private String photo;
+    private int usuario_id;
 
     public Aluno() {}
 
-    public Aluno(int matricula, String nome, Date dataNascimento, String senha) {
+    public Aluno(int matricula, String nome, Date dataNascimento,String photo ,int usuario_id) {
         this.matricula = matricula;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
-        this.senha = senha;
+        this.photo = photo;
+        this.usuario_id = usuario_id;
     }
 
     public Aluno(int matricula){
@@ -33,9 +35,14 @@ public class Aluno {
         return this.dataNascimento;
     }
 
-    public String getSenha() {
-        return this.senha;
+    public String getPhoto() {
+        return this.photo;
     }
+
+    public int getUsuario_id() {
+        return this.usuario_id;
+    }
+
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
@@ -49,11 +56,8 @@ public class Aluno {
         this.dataNascimento = dataNascimento;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
 
     public String toString() {
-        return "Matrícula: " + this.matricula + "\nNome: " + this.nome + "\nData Nascimento: " + this.dataNascimento + "\nSenha: " + this.senha;
+        return "Matrícula: " + this.matricula + "\nNome: " + this.nome + "\nData Nascimento: " + this.dataNascimento + "\nPhoto: " + this.photo + "\nUsuario_id: " + this.usuario_id;
     }
 }
