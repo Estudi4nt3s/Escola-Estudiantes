@@ -48,18 +48,6 @@ body {
     margin-bottom: 30px;
 }
 
-.left button {
-    background: #e6c37a;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    font-family: "Inria Serif", serif;
-
-}
-
 /* Lado direito - Login */
 .login-box {
     width: 400px;
@@ -67,8 +55,8 @@ body {
     border-radius: 20px;
     padding: 40px 30px;
     color: #7a4a00;
-    margin-right: 70px;
-    height: 350px;
+    height: 550px;
+    margin-top: -50px;
 }
 
 .login-box h2 {
