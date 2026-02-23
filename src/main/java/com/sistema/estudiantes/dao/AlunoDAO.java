@@ -65,7 +65,35 @@ public class AlunoDAO {
         return lista;
     }
 
+    public List<Aluno> listarComFiltro(String nomeColuna, Object valorColuna) {
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = "SELECT matricula, nome, dataNascimento, senha FROM alunos WHERE " + nomeColuna + " = ?";
 
+        try (Connection conn = Conexao.conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            if (valorColuna instanceof java.util.Date) {
+                stmt.setDate(1, new java.sql.Date(((java.util.Date) valorColuna).getTime()));
+            } else {
+                stmt.setObject(1, valorColuna);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Aluno aluno = new Aluno(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getDate("dataNascimento"),
+                            rs.getString("senha")
+                    );
+                    alunos.add(aluno);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao filtrar Aluno por " + nomeColuna + ": " + e.getMessage());
+        }
+        return alunos;
+    }
     public boolean atualizar(Aluno aluno) {
 
         String sql = "UPDATE Aluno " +
