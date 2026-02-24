@@ -41,6 +41,7 @@ create table Aluno ( Matricula      serial          not null
 			       , Cpf			varchar(11)     not null
                    , Nome           varchar(200)    not null
 				   , UsuarioId  	int                 null
+                   , TelefonePai    varchar(15)     not null
                    , constraint pk_aluno primary key (Matricula)
                    )
 
