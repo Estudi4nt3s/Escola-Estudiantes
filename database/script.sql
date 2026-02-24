@@ -21,10 +21,10 @@ create table Disciplina ( Id    serial      not null
                         )
 
 create table Aula	( Id 			serial 	    not null
-					, Horario		hour        not null
-					, DisciplinaId	int	        not null
+                    , Horario		hour        not null
+                    , DisciplinaId	int	        not null
                     , TurmaId       int         not null
-                    , diaSemana     varchar(20) not null
+                    , diaSemana     char(3)     not null
                     , constraint fk_Aula_Disciplina  foreign key (DisciplinaId)   references Disciplina(Id)
                     , constraint fk_Aula_Turma  foreign key (TurmaId)   references Turma(Id)
 					)
