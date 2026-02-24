@@ -8,7 +8,7 @@
     <title>Colégio Estudiantes - Início</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/indexStyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
 
 </head>
 
@@ -22,9 +22,12 @@
 
         <nav>
             <a class="menu active"><i class="material-icons">home</i>Início</a>
-            <a class="menu"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
+                <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu"><i class="material-icons">person</i>Perfil</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp">
+                <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
 
         <div class="config">
@@ -43,7 +46,7 @@
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12">
+                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
                     <span>Mateus Carlos</span>
                 </div>
             </div>
@@ -159,7 +162,7 @@
         </div>
     </div>
 
-    <script src="${pageContext.request.contextPath}/notificacoes.js"></script>
+    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 
 </html>
