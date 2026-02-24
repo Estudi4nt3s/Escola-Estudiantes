@@ -50,6 +50,30 @@ public class ProfessorDAO {
         return lista;
     }
 
+    public List<Professor> listarComFiltro(String nomeColuna, Object valorColuna) {
+        List<Professor> professores = new ArrayList<>();
+        String sql = "SELECT id, nome, senha FROM professores WHERE " + nomeColuna + " = ?";
+
+        try (Connection conn = Conexao.conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setObject(1, valorColuna);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Professor prof = new Professor(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("senha")
+                    );
+                    professores.add(prof);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao filtrar Professor por " + nomeColuna + ": " + e.getMessage());
+        }
+        return professores;
+    }
+
     public boolean atualizar(Professor professor){
         String sql = "UPDATE Professor" +
                 "Nome = ?" +

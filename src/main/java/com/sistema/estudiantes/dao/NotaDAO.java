@@ -1,10 +1,7 @@
 package com.sistema.estudiantes.dao;
 
 import com.sistema.estudiantes.conexao.Conexao;
-import com.sistema.estudiantes.model.Aluno;
-import com.sistema.estudiantes.model.Disciplina;
-import com.sistema.estudiantes.model.Nota;
-import com.sistema.estudiantes.model.Turma;
+import com.sistema.estudiantes.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -67,7 +64,41 @@ public class NotaDAO {
         return lista;
     }
 
+    public List<Nota> listarComFiltro(String nomeColuna, Object valorColuna){
+        List<Nota> listaNota = new ArrayList<>();
+        String sql = "SELECT * FROM Nota WHERE" + nomeColuna + "= ?";
 
+        try(Connection conn = Conexao.conectar();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setObject(1, valorColuna);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+
+                    Disciplina disciplina = new Disciplina();
+                    disciplina.setId(rs.getInt("IdDisciplina"));
+
+                    Aluno aluno = new Aluno();
+
+                    Turma turma = new Turma();
+                    turma.setId(rs.getInt("IdTurma"));
+
+                    Nota nota = new Nota(
+                            rs.getInt("id"),
+                            disciplina,
+                            aluno,
+                            turma,
+                            rs.getDouble("Valor")
+                    );
+
+                    listaNota.add(nota);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaNota;
+    }
 
     public boolean atualizar(Nota n) {
         String sql = """
