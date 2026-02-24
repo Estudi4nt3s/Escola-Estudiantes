@@ -1,11 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gustavosousa-ieg
-  Date: 05/02/2026
-  Time: 08:40
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%
+    String busca = "";
+    if (request.getParameter("busca") != null) {
+        busca = request.getParameter("busca");
+    }
+%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -15,7 +16,7 @@
     <title>Colégio Estudiantes - Início</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas.css">
 </head>
 
 <body>
@@ -28,10 +29,13 @@
 
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/index.jsp">
-        <i class="material-icons">home</i>Início</a>
-        <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
+            <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
         <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/turmas.jsp">
+            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
     </nav>
 
     <div class="config">
@@ -56,65 +60,40 @@
         </div>
     </header>
 
-    <section class="dashboard disciplinas">
-
-        <h2 class="page-title">Minhas Disciplinas</h2>
-
-        <div class="disciplinas-grid">
-
-            <div class="disciplina card1">
-                <div class="disciplina-info">
-                    <h3>Matemática</h3>
-                    <p>Prof. Valdislei</p>
-                </div>
-                <img src="Matematica.png" alt="">
+    <div class="main-content">
+        <div class="turmas-topo">
+            <div class="turmas-titulo">
+                Turmas
             </div>
 
-            <div class="disciplina card2">
-                <div class="disciplina-info">
-                    <h3>Português</h3>
-                    <p>Prof. Cláudia</p>
-                </div>
-                <img src="Matematica.png" alt="">
-            </div>
-
-            <div class="disciplina card3">
-                <div class="disciplina-info">
-                    <h3>Geografia</h3>
-                    <p>Prof. Flávio</p>
-                </div>
-                <img src="Matematica.png" alt="">
-            </div>
-
-            <div class="disciplina card4">
-                <div class="disciplina-info">
-                    <h3>História</h3>
-                    <p>Prof. Rosangela</p>
-                </div>
-                <img src="Matematica.png" alt="">
-            </div>
-
-            <div class="disciplina card5">
-                <div class="disciplina-info">
-                    <h3>Inglês</h3>
-                    <p>Prof. Erika</p>
-                </div>
-                <img src="Matematica.png" alt="">
-            </div>
-
-            <div class="disciplina card6">
-                <div class="disciplina-info">
-                    <h3>Ciências</h3>
-                    <p>Prof. Robson</p>
-                </div>
-                <img src="Matematica.png" alt="">
-            </div>
-
+            <form method="get" action="${pageContext.request.contextPath}/turmas" class="barra-pesquisa">
+                <i class="material-icons">search</i>
+                <input type="text" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
+            </form>
         </div>
 
-    </section>
-
-
+        <div class="turmas">
+            <%
+                List<Turma> turmas = (List<Turma>) request.getAttribute("turmas");
+                if (turmas != null && !turmas.isEmpty()) {
+                    for (Turma turma : turmas) {
+            %>
+            <div class="turmas-card">
+                <h3><%= turma.getSerie() %></h3>
+                <a href="${pageContext.request.contextPath}/alunos.jsp?id=<%= turma.getId() %>">
+                    <i class="material-icons">arrow_forward</i>
+                </a>
+            </div>
+            <%
+                }
+            } else {
+            %>
+            <p>Nenhuma turma encontrada.</p>
+            <%
+                }
+            %>
+        </div>
+    </div>
 </main>
 <!-- Overlay -->
 <div class="notification-overlay" id="notificationOverlay">

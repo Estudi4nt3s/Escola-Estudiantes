@@ -1,7 +1,6 @@
 package com.sistema.estudiantes.dao;
 
 import com.sistema.estudiantes.conexao.Conexao;
-import com.sistema.estudiantes.model.Aluno;
 import com.sistema.estudiantes.model.Professor;
 
 import java.sql.Connection;
@@ -41,7 +40,7 @@ public class ProfessorDAO {
                 Professor professor = new Professor(
                         rs.getInt("id"),
                         rs.getString("Nome"),
-                        rs.getString("Senha")
+                        rs.getInt("usuario_id")
                 );
                 lista.add(professor);
             }
@@ -84,7 +83,7 @@ public class ProfessorDAO {
                 PreparedStatement psmt = conn.prepareStatement(sql)
                 ) {
             psmt.setString(1, professor.getNome());
-            psmt.setString(2, professor.getSenha());
+            psmt.setInt(2, professor.getId());
 
             return psmt.executeUpdate() > 0;
         } catch (SQLException e) {
