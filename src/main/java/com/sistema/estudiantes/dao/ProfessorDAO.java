@@ -40,8 +40,7 @@ public class ProfessorDAO {
             while (rs.next()){
                 Professor professor = new Professor(
                         rs.getInt("id"),
-                        rs.getString("Nome"),
-                        rs.getString("Senha")
+                        rs.getString("Nome")
                 );
                 lista.add(professor);
             }
@@ -53,7 +52,7 @@ public class ProfessorDAO {
 
     public List<Professor> listarComFiltro(String nomeColuna, Object valorColuna) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT id, nome, senha FROM professores WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT * FROM Professor WHERE " + nomeColuna + " = ?";
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -63,8 +62,7 @@ public class ProfessorDAO {
                 while (rs.next()) {
                     Professor prof = new Professor(
                             rs.getInt("id"),
-                            rs.getString("nome"),
-                            rs.getString("senha")
+                            rs.getString("nome")
                     );
                     professores.add(prof);
                 }
@@ -84,7 +82,6 @@ public class ProfessorDAO {
                 PreparedStatement psmt = conn.prepareStatement(sql)
                 ) {
             psmt.setString(1, professor.getNome());
-            psmt.setString(2, professor.getSenha());
 
             return psmt.executeUpdate() > 0;
         } catch (SQLException e) {
