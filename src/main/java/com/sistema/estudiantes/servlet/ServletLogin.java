@@ -27,13 +27,7 @@ public class ServletLogin extends HttpServlet {
 //        Declarando variáveis com valores padrões
         boolean validarEmail = false;
         boolean validarSenha = false;
-        int posicao = -1;
 
-//        Guardando informações para usar depois
-
-        request.getSession().setAttribute("emailfuncionario", email);
-        request.getSession().setAttribute("filtro","");
-        request.getSession().setAttribute("tabela","");
         System.out.println("Entrou no servlet");
 //        Validando para ver se nós estamos tentando logar
         if(email.equals("ADMFODAO@gmail.com") || senha.equals("AAAAAAAAAAAAAAAAAAAHHHHHHHHH")){
@@ -52,9 +46,9 @@ public class ServletLogin extends HttpServlet {
                 if (validarSenha) {
                     request.getSession().setAttribute("usuario_id", users.getFirst().getId());
                     if (professor) {
-                        request.getRequestDispatcher("WEB-INF/.jsp").forward(request, response);
+                        request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     } else {
-                        request.getRequestDispatcher("WEB-INF/.jsp").forward(request, response);
+                        request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     }
                 }
             }

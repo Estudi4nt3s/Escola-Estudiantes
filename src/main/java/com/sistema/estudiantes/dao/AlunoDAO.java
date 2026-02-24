@@ -56,6 +56,7 @@ public class AlunoDAO {
                         rs.getString("nome"),
                         rs.getDate("dataNascimento"),
                         rs.getString("photo"),
+                        rs.getString("cpf"),
                         rs.getInt("usuario_id")
                 );
                 lista.add(aluno);
@@ -91,6 +92,7 @@ public class AlunoDAO {
                             rs.getString("nome"),
                             rs.getDate("dataNascimento"),
                             rs.getString("photo"),
+                            rs.getString("cpf"),
                             rs.getInt("usuario_id")
                     );
                     alunos.add(aluno);

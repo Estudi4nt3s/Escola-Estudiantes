@@ -7,17 +7,25 @@ public class Aluno {
     private String nome;
     private Date dataNascimento;
     private String photo;
+    private String cpf;
     private int usuario_id;
 
     public Aluno() {}
 
-    public Aluno(int matricula, String nome, Date dataNascimento,String photo ,int usuario_id) {
+    public Aluno(int matricula, String nome, Date dataNascimento,String photo, String cpf ,int usuario_id) {
         this.matricula = matricula;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.photo = photo;
+        this.cpf = cpf;
         this.usuario_id = usuario_id;
     }
+
+    public Aluno(int matricula, String nome) {
+        this.matricula = matricula;
+        this.nome = nome;
+    }
+
 
     public Aluno(int matricula){
         this.matricula = matricula;
@@ -38,6 +46,11 @@ public class Aluno {
     public String getPhoto() {
         return this.photo;
     }
+
+    public String getCPF() {
+        return this.cpf;
+    }
+
 
     public int getUsuario_id() {
         return this.usuario_id;
