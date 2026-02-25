@@ -1,5 +1,5 @@
 INSERT INTO Professor (Id, Nome) VALUES
- (1, 'Ana Paula Souza'),
+ (1, 'Ana Souza'),
  (2, 'Bruno Almeida'),
  (3, 'Carla Mendes'),
  (4, 'Diego Santos'),
