@@ -4,19 +4,19 @@ public class Professor extends ModelBase {
 
     private int id;
     private String nome;
-    private String senha;
+    private Usuario usuarioId;
 
     public Professor() {}
 
-    public Professor(String nome, String senha) {
+    public Professor(String nome, Usuario usuarioId) {
         this.nome = nome;
-        this.senha = senha;
+        this.usuarioId = usuarioId;
     }
 
-    public Professor(int id, String nome, String senha) {
+    public Professor(int id, String nome, Usuario usuarioId) {
         super(id);
         this.nome = nome;
-        this.senha = senha;
+        this.usuarioId = usuarioId;
     }
 
     public Professor(int id){
@@ -29,19 +29,19 @@ public class Professor extends ModelBase {
         return this.nome;
     }
 
-    public String getSenha() {
-        return this.senha;
+    public Usuario getUsuarioId() {
+        return this.usuarioId;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setUsuarioId(Usuario usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String toString() {
-        return "Id: " + getId() + "\nNome: " + this.nome + "\nSenha: " + this.senha;
+        return "Id: " + getId() + "\nNome: " + this.nome + "\nId Usuário: " + this.usuarioId;
     }
 }
