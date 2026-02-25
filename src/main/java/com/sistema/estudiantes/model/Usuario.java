@@ -1,20 +1,31 @@
 package com.sistema.estudiantes.model;
 
+import java.sql.Date;
+
 public class Usuario extends ModelBase {
     private String email;
     private String senha;
+    private boolean isAdm;
+    private String foto;
+    private Date dataNascimento;
 
     public Usuario() {}
 
-    public Usuario(String email, String senha) {
+    public Usuario(String email, String senha, boolean isAdm, String foto, Date dataNascimento) {
         this.email = email;
         this.senha = senha;
+        this.isAdm = isAdm;
+        this.foto = foto;
+        this.dataNascimento = dataNascimento;
     }
 
-    public Usuario(int id, String email, String senha) {
+    public Usuario(int id, String email, String senha, boolean isAdm, String foto, Date dataNascimento) {
         super(id);
         this.email = email;
         this.senha = senha;
+        this.isAdm = isAdm;
+        this.foto = foto;
+        this.dataNascimento = dataNascimento;
     }
 
     public String getEmail() {
@@ -25,6 +36,18 @@ public class Usuario extends ModelBase {
         return this.senha;
     }
 
+    public boolean getIsAdm() {
+        return this.isAdm;
+    }
+
+    public String getFoto() {
+        return this.foto;
+    }
+
+    public Date getDataNascimento() {
+        return this.dataNascimento;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -33,7 +56,19 @@ public class Usuario extends ModelBase {
         this.senha = senha;
     }
 
+    public void setIsAdm(boolean isAdm) {
+        this.isAdm = isAdm;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
     public String toString() {
-        return "Id: " + getId() + "\nEmail: " + this.email + "\nSenha: " + this.senha;
+        return "Id: " + getId() + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nÉ admin? " + this.isAdm + "\nFoto: " + this.foto + "\nData de Nascimento: " + this.dataNascimento;
     }
 }
