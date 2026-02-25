@@ -47,6 +47,37 @@ public class DisciplinaDAO {
             return lista;
         }
 
+    public List<Disciplina> listarComFiltro(String nomeColuna, Object valorColuna) {
+
+        List<Disciplina> disciplinas = new ArrayList<>();
+        String sql = "SELECT Id, Nome FROM Disciplina WHERE " + nomeColuna + " = ?";
+
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setObject(1, valorColuna);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    Disciplina disciplina = new Disciplina(
+                            rs.getInt("Id"),
+                            rs.getString("Nome")
+                    );
+
+                    disciplinas.add(disciplina);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao filtrar Disciplina por " + nomeColuna + ": " + e.getMessage());
+        }
+
+        return disciplinas;
+    }
+
         public boolean atualizar(Disciplina d) {
             String sql = "UPDATE Disciplina SET Nome = ? WHERE Id = ?";
 

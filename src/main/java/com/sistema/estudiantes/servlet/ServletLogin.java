@@ -30,11 +30,6 @@ public class ServletLogin extends HttpServlet {
 
         System.out.println("Entrou no servlet");
 //        Validando para ver se nós estamos tentando logar
-        if(email.equals("ADMFODAO@gmail.com") || senha.equals("AAAAAAAAAAAAAAAAAAAHHHHHHHHH")){
-            System.out.println("Parametro correto");
-            request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
-        }
-        else {
             System.out.println("Não é adm 💔");
             String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
             boolean professor = email.matches(regexFuncionario);
@@ -46,12 +41,17 @@ public class ServletLogin extends HttpServlet {
                 if (validarSenha) {
                     request.getSession().setAttribute("usuario_id", users.getFirst().getId());
                     if (professor) {
+                        ProfessorDAO profDAO = new ProfessorDAO();
+                        List<Professor> profs = profDAO.listarComFiltro("usuario_id", users.getFirst().getId());
+                        request.getSession().setAttribute("nome", profs.getFirst().getNome());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     } else {
+                        AlunoDAO alunoDAO = new AlunoDAO();
+                        List<Aluno> aluno = alunoDAO.listarComFiltro("usuario_id", users.getFirst().getId());
+                        request.getSession().setAttribute("nome", aluno.getFirst().getNome());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     }
                 }
-            }
             request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
         }
     }

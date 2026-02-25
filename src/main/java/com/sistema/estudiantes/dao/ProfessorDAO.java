@@ -52,7 +52,7 @@ public class ProfessorDAO {
 
     public List<Professor> listarComFiltro(String nomeColuna, Object valorColuna) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT id, nome, senha FROM professores WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT * FROM professor WHERE " + nomeColuna + " = ?";
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -63,7 +63,7 @@ public class ProfessorDAO {
                     Professor prof = new Professor(
                             rs.getInt("id"),
                             rs.getString("nome"),
-                            rs.getString("senha")
+                            rs.getInt("usuario_id")
                     );
                     professores.add(prof);
                 }

@@ -1,39 +1,47 @@
 package com.sistema.estudiantes.model;
 
-import java.sql.Time;
+import java.time.LocalTime;
 
-public class Aula extends ModelBase {
-    private Time horario;
-    private Disciplina disciplinaId;
-    private Turma turmaId;
+public class Aula {
+
+    private int id;
+    private LocalTime horario;
+    private int disciplinaId;
+    private int turmaId;
     private String diaSemana;
 
     public Aula() {}
 
-    public Aula(Time horario, Disciplina disciplinaId, Turma turmaId, String diaSemana) {
+    public Aula(int id, LocalTime horario, int disciplinaId, int turmaId, String diaSemana) {
+        this.id = id;
         this.horario = horario;
         this.disciplinaId = disciplinaId;
         this.turmaId = turmaId;
         this.diaSemana = diaSemana;
     }
 
-    public Aula(int id, Time horario, Disciplina disciplinaId, Turma turmaId, String diaSemana) {
-        super(id);
-        this.horario = horario;
-        this.disciplinaId = disciplinaId;
-        this.turmaId = turmaId;
+    public Aula(int id) {
+        this.id = id;
+    }
+
+    public Aula(int id, String diaSemana) {
+        this.id = id;
         this.diaSemana = diaSemana;
     }
 
-    public Time getHorario() {
+    public int getId() {
+        return this.id;
+    }
+
+    public LocalTime getHorario() {
         return this.horario;
     }
 
-    public Disciplina getDisciplinaId() {
+    public int getDisciplinaId() {
         return this.disciplinaId;
     }
 
-    public Turma getTurmaId() {
+    public int getTurmaId() {
         return this.turmaId;
     }
 
@@ -41,15 +49,19 @@ public class Aula extends ModelBase {
         return this.diaSemana;
     }
 
-    public void setHorario(Time horario) {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setHorario(LocalTime horario) {
         this.horario = horario;
     }
 
-    public void setDisciplinaId(Disciplina disciplinaId) {
+    public void setDisciplinaId(int disciplinaId) {
         this.disciplinaId = disciplinaId;
     }
 
-    public void setTurmaId(Turma turmaId) {
+    public void setTurmaId(int turmaId) {
         this.turmaId = turmaId;
     }
 
@@ -57,7 +69,12 @@ public class Aula extends ModelBase {
         this.diaSemana = diaSemana;
     }
 
+    @Override
     public String toString() {
-        return "Id: " + getId() + "\nHorario: " + this.horario + "\nId Disciplina: " + this.disciplinaId + "\nId Turma: " + this.turmaId + "\nDia da Semana: " + this.diaSemana;
+        return "Id: " + this.id +
+                "\nHorário: " + this.horario +
+                "\nDisciplinaId: " + this.disciplinaId +
+                "\nTurmaId: " + this.turmaId +
+                "\nDia da Semana: " + this.diaSemana;
     }
 }
