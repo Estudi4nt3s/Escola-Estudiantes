@@ -79,7 +79,7 @@
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getSerie() %></h3>
+                <h3><%= turma.getAno() + "º" + turma.getLetra() %></h3>
                 <a href="${pageContext.request.contextPath}/alunos.jsp?id=<%= turma.getId() %>">
                     <i class="material-icons">arrow_forward</i>
                 </a>

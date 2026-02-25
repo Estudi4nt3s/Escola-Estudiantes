@@ -1,32 +1,26 @@
 package com.sistema.estudiantes.dao;
 
-
 import com.sistema.estudiantes.conexao.Conexao;
-import com.sistema.estudiantes.model.Observacao;
-import com.sistema.estudiantes.model.Professor;
+import com.sistema.estudiantes.model.*;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ObservacaoDAO {
-
-    public void inserir(String texto, LocalDate dataCriacao, int idProfessor, int idAluno, int idDisciplina) {
+public class AulaDAO {
+    public void inserir(Time horario, int disciplinaId, int turmaId, String diaSemana) {
         String sql = """
-            INSERT INTO Observacao (Texto, DataCriacao, IdProfessor, IdAluno, IdDisciplina)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO Aula (horario, disciplinaid, turmaid, diasemana)
+            VALUES (?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, texto);
-            psmt.setObject(2, dataCriacao);
-            psmt.setInt(3, idProfessor);
-            psmt.setInt(4, idAluno);
-            psmt.setInt(5, idDisciplina);
+            psmt.setTime(1, horario);
+            psmt.setInt(2, disciplinaId);
+            psmt.setInt(3, turmaId);
+            psmt.setString(4, diaSemana);
 
             psmt.executeUpdate();
 
@@ -35,24 +29,28 @@ public class ObservacaoDAO {
         }
     }
 
-    public List<Observacao> listar() {
-        List<Observacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Observacao";
+    public List<Aula> listar() {
+        List<Aula> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Aula";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
              ResultSet rs = psmt.executeQuery()) {
 
             while (rs.next()) {
-                Observacao o = new Observacao(
+
+                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                Turma t = new Turma(rs.getInt("turmaid"));
+
+                Aula a = new Aula(
                         rs.getInt("id"),
-                        rs.getString("texto"),
-                        rs.getObject("datacriacao", LocalDate.class),
-                        rs.getInt("professorid"),
-                        rs.getInt("idaluno"),
-                        rs.getInt("disciplinaid")
+                        rs.getTime("horario"),
+                        d,
+                        t,
+                        rs.getString("diasemana")
                 );
-                lista.add(o);
+
+                lista.add(a);
             }
 
         } catch (SQLException e) {
@@ -61,15 +59,22 @@ public class ObservacaoDAO {
         return lista;
     }
 
-    public boolean atualizar(Observacao o) {
-        String sql = "UPDATE Observacao SET Texto = ?, DataCriacao = ? WHERE Id = ?";
+    public boolean atualizar(Aula a) {
+        String sql = """
+        UPDATE Aula
+           SET horario = ?, disciplinaid = ?, turmaid = ?, diasemana = ?
+         WHERE Id = ?
+    """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, o.getTexto());
-            psmt.setObject(2, o.getDataCriacao());
-            psmt.setInt(3, o.getId());
+
+            psmt.setTime(1, a.getHorario());
+            psmt.setInt(2, a.getDisciplinaId().getId());
+            psmt.setInt(3, a.getTurmaId().getId());
+            psmt.setString(4, a.getDiaSemana());
+            psmt.setInt(5, a.getId());
 
             return psmt.executeUpdate() > 0;
 
@@ -79,8 +84,9 @@ public class ObservacaoDAO {
         }
     }
 
+
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Observacao WHERE Id = ?";
+        String sql = "DELETE FROM Aula WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

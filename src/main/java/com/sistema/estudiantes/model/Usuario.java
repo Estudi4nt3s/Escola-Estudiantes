@@ -1,17 +1,18 @@
 package com.sistema.estudiantes.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Usuario extends ModelBase {
+    private int id;
     private String email;
     private String senha;
     private boolean isAdm;
     private String foto;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
 
     public Usuario() {}
 
-    public Usuario(String email, String senha, boolean isAdm, String foto, Date dataNascimento) {
+    public Usuario(String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
         this.email = email;
         this.senha = senha;
         this.isAdm = isAdm;
@@ -19,13 +20,17 @@ public class Usuario extends ModelBase {
         this.dataNascimento = dataNascimento;
     }
 
-    public Usuario(int id, String email, String senha, boolean isAdm, String foto, Date dataNascimento) {
+    public Usuario(int id, String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
         super(id);
         this.email = email;
         this.senha = senha;
         this.isAdm = isAdm;
         this.foto = foto;
         this.dataNascimento = dataNascimento;
+    }
+
+    public Usuario(int id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -44,7 +49,7 @@ public class Usuario extends ModelBase {
         return this.foto;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return this.dataNascimento;
     }
 
@@ -64,7 +69,7 @@ public class Usuario extends ModelBase {
         this.foto = foto;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
