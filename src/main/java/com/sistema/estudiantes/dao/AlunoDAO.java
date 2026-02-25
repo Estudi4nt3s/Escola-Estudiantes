@@ -88,8 +88,10 @@ public class AlunoDAO {
                             rs.getInt("matricula"),
                             rs.getString("nome"),
                             rs.getDate("dataNascimento"),
-                            rs.getString("senha")
-                    );
+                            rs.getString("photo"),
+                            rs.getString("cpf"),
+                            rs.getInt("usuario_id")
+                            );
                     alunos.add(aluno);
                 }
             }

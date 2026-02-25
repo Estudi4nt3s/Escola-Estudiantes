@@ -1,3 +1,7 @@
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.time.format.TextStyle" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -11,7 +15,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
 
 </head>
-
+<%
+    LocalDate hoje = LocalDate.now();
+    String dia = String.format("%02d",hoje.getDayOfMonth());
+    String mes = String.format("%02d",hoje.getMonthValue());
+    Locale ptBr = new Locale("pt", "BR");
+    // Pega o nome abreviado (ex: "seg.")
+    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).substring(0, 3);
+    String nome = (String) request.getSession().getAttribute("nome");
+%>
 <body>
 
     <aside class="sidebar">
@@ -40,14 +52,14 @@
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
-                Seg, 09/02
+                <%=dia + "/" + mes%>
             </div>
 
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
                     <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
-                    <span>Mateus Carlos</span>
+                    <span><%=nome%></span>
                 </div>
             </div>
         </header>
@@ -57,48 +69,21 @@
             <div class="left">
 
                 <div class="welcome">
-                    <h2>Olá, Mateus!</h2>
+                    <h2>Olá, <%=nome%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 
                 <div class="flex">
-                    <div class="card card1">
-                        <h3>Matemática</h3>
+                    <%
+                        String materia = "matematica";
+                        for(int i = 0;i < 6;i++){%>
+                    <div class="card <%=materia%>">
+                        <h3><%=materia%></h3>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
                             nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
+                        <img src="${pageContext.request.contextPath}/utils/<%=materia%>.png" alt="<%=materia%>">
                     </div>
-
-                    <div class="card card2">
-                        <h3>Português</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card3">
-                        <h3>Historia</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card4">
-                        <h3>Geografia</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card5">
-                        <h3>Ingles</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card6">
-                        <h3>Ciencias</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
+                    <%System.out.println(materia);}%>
                 </div>
 
             </div>

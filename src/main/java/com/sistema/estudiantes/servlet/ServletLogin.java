@@ -42,9 +42,13 @@ public class ServletLogin extends HttpServlet {
                     request.getSession().setAttribute("usuario_id", users.getFirst().getId());
                     if (professor) {
                         ProfessorDAO profDAO = new ProfessorDAO();
-                        List<Professor> profs = profDAO.listar();
+                        List<Professor> profs = profDAO.listarComFiltro("usuario_id", users.getFirst().getId());
+                        request.getSession().setAttribute("nome", profs.getFirst().getNome());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     } else {
+                        AlunoDAO alunoDAO = new AlunoDAO();
+                        List<Aluno> aluno = alunoDAO.listarComFiltro("usuario_id", users.getFirst().getId());
+                        request.getSession().setAttribute("nome", aluno.getFirst().getNome());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     }
                 }
