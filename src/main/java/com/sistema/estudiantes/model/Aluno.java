@@ -1,12 +1,15 @@
 package com.sistema.estudiantes.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Aluno {
     private int matricula;
     private String cpf;
     private String nome;
-    private Usuario usuarioId;
+    private LocalDate dataNascimento;
+    private String photo;
+    private Usuario usuario_id;
     private String telefonePai;
 
     public Aluno() {}
@@ -44,7 +47,7 @@ public class Aluno {
     }
 
     public Usuario getUsuarioId() {
-        return this.usuarioId;
+        return this.usuario_id;
     }
 
     public String getTelefonePai() {
@@ -65,7 +68,7 @@ public class Aluno {
     }
 
     public void setUsuarioId(Usuario usuarioId) {
-        this.usuarioId = usuarioId;
+        this.usuario_id = usuarioId;
     }
 
     public void setTelefonePai(String telefonePai) {
@@ -73,6 +76,6 @@ public class Aluno {
     }
 
     public String toString() {
-        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf  + "\nNome: " + this.nome + "\nId Usuário: " + this.usuarioId + "\nTelefone Pai: " + this.telefonePai;
+        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf  + "\nNome: " + this.nome + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
     }
 }
