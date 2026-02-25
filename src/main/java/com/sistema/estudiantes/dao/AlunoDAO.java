@@ -17,7 +17,7 @@ public class AlunoDAO {
 
     public boolean inserir(Aluno aluno) {
 
-        String sql = "INSERT INTO Aluno (matricula, nome, dataNascimento, senha) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Aluno (matricula, cpf, nome, usuarioid, telefonepai) VALUES (?, ?, ?, ?, ?)";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -25,10 +25,10 @@ public class AlunoDAO {
         ) {
 
             psmt.setInt(1, aluno.getMatricula());
-            psmt.setString(2, aluno.getNome());
-            psmt.setDate(3, new java.sql.Date(aluno.getDataNascimento().getTime()));
-            psmt.setString(4, aluno.getPhoto());
-            psmt.setInt(5, aluno.getUsuario_id());
+            psmt.setString(2, aluno.getCpf());
+            psmt.setString(3, aluno.getNome());
+            psmt.setInt(4, aluno.getUsuarioId().getId());
+            psmt.setString(5, aluno.getTelefonePai());
 
             return psmt.executeUpdate() > 0;
 
@@ -51,13 +51,13 @@ public class AlunoDAO {
         ) {
 
             while (rs.next()) {
+                Usuario u = new Usuario(rs.getInt("usuarioid"));
                 Aluno aluno = new Aluno(
                         rs.getInt("matricula"),
-                        rs.getString("nome"),
-                        rs.getDate("dataNascimento"),
-                        rs.getString("photo"),
                         rs.getString("cpf"),
-                        rs.getInt("usuario_id")
+                        rs.getString("nome"),
+                        u,
+                        rs.getString("telefonepai")
                 );
                 lista.add(aluno);
             }
@@ -84,14 +84,14 @@ public class AlunoDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    Usuario u = new Usuario(rs.getInt("usuarioid"));
                     Aluno aluno = new Aluno(
                             rs.getInt("matricula"),
-                            rs.getString("nome"),
-                            rs.getDate("dataNascimento"),
-                            rs.getString("photo"),
                             rs.getString("cpf"),
-                            rs.getInt("usuario_id")
-                            );
+                            rs.getString("nome"),
+                            u,
+                            rs.getString("telefonepai")
+                    );
                     alunos.add(aluno);
                 }
             }
@@ -103,7 +103,7 @@ public class AlunoDAO {
     public boolean atualizar(Aluno aluno) {
 
         String sql = "UPDATE Aluno " +
-                "SET nome = ?, dataNascimento = ?, photo = ?, usua " +
+                "SET cpf = ?, nome = ?, usuarioid = ?, telefonepai = ? " +
                 "WHERE matricula = ?";
 
         try (
@@ -112,8 +112,9 @@ public class AlunoDAO {
         ) {
 
             psmt.setString(1, aluno.getNome());
-            psmt.setDate(2, new java.sql.Date(aluno.getDataNascimento().getTime()));
-            psmt.setString(3, aluno.getPhoto());
+            psmt.setString(2, aluno.getCpf());
+            psmt.setInt(3, aluno.getUsuarioId().getId());
+            psmt.setString(4, aluno.getTelefonePai());
             psmt.setInt(5, aluno.getMatricula());
 
             return psmt.executeUpdate() > 0;
@@ -125,7 +126,7 @@ public class AlunoDAO {
     }
 
     public int excluir(int matricula){
-        String sql = "DELETE * FROM Aluno WHERE matricula = ?";
+        String sql = "DELETE FROM Aluno WHERE matricula = ?";
 
         try(   Connection conn = new Conexao().conectar();
                PreparedStatement psmt = conn.prepareStatement(sql)

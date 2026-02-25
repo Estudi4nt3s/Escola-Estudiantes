@@ -43,7 +43,7 @@
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu"><i class="material-icons">person</i>Perfil</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp">
+            <a class="menu" href="${pageContext.request.contextPath}/turma">
                 <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
 

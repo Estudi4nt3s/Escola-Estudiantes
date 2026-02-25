@@ -1,7 +1,9 @@
 package com.sistema.estudiantes.dao;
 
 import com.sistema.estudiantes.conexao.Conexao;
+import com.sistema.estudiantes.model.Aluno;
 import com.sistema.estudiantes.model.Professor;
+import com.sistema.estudiantes.model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,13 +15,14 @@ import java.util.List;
 
 public class ProfessorDAO {
 
-    public void inserir(String nome) {
-        String sql = "INSERT INTO Professor (Nome) VALUES (?)";
+    public void inserir(String nome, int usuarioId) {
+        String sql = "INSERT INTO Professor (Nome, UsuarioId) VALUES (?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, nome);
+            ps.setInt(2, usuarioId);
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -37,10 +40,11 @@ public class ProfessorDAO {
                 ResultSet rs = psmt.executeQuery()
         ) {
             while (rs.next()){
+                Usuario u = new Usuario(rs.getInt("UsuarioId"));
                 Professor professor = new Professor(
                         rs.getInt("id"),
                         rs.getString("Nome"),
-                        rs.getInt("usuario_id")
+                        u
                 );
                 lista.add(professor);
             }
@@ -52,7 +56,7 @@ public class ProfessorDAO {
 
     public List<Professor> listarComFiltro(String nomeColuna, Object valorColuna) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT * FROM professor WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT id, nome, senha FROM professores WHERE " + nomeColuna + " = ?";
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -60,10 +64,11 @@ public class ProfessorDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    Usuario u = new Usuario(rs.getInt("UsuarioId"));
                     Professor prof = new Professor(
                             rs.getInt("id"),
                             rs.getString("nome"),
-                            rs.getInt("usuario_id")
+                            u
                     );
                     professores.add(prof);
                 }
@@ -75,15 +80,15 @@ public class ProfessorDAO {
     }
 
     public boolean atualizar(Professor professor){
-        String sql = "UPDATE Professor" +
-                "Nome = ?" +
+        String sql = "UPDATE Professor " +
+                "SET nome = ?, usuarioid = ?" +
                 "WHERE id = ?";
         try(
                 Connection conn = new Conexao().conectar();
                 PreparedStatement psmt = conn.prepareStatement(sql)
                 ) {
             psmt.setString(1, professor.getNome());
-            psmt.setInt(2, professor.getId());
+            psmt.setInt(2, professor.getUsuarioId().getId());
 
             return psmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -93,7 +98,7 @@ public class ProfessorDAO {
     }
 
     public int excluir(int id){
-        String sql = "DELETE * FROM Professor WHERE id = ?";
+        String sql = "DELETE FROM Professor WHERE id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)

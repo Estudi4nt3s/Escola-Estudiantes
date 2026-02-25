@@ -1,17 +1,17 @@
 package com.sistema.estudiantes.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Observacao extends ModelBase {
     private String texto;
-    private Date dataCriacao;
+    private LocalDate dataCriacao;
     private Professor idProfessor;
     private Aluno idAluno;
     private Disciplina idDisciplina;
 
     public Observacao() {}
 
-    public Observacao(String texto, Date dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
         this.texto = texto;
         this.dataCriacao = dataCriacao;
         this.idProfessor = idProfessor;
@@ -19,7 +19,7 @@ public class Observacao extends ModelBase {
         this.idDisciplina = idDisciplina;
     }
 
-    public Observacao(int id, String texto, Date dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(int id, String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
         super(id);
         this.texto = texto;
         this.dataCriacao = dataCriacao;
@@ -28,7 +28,7 @@ public class Observacao extends ModelBase {
         this.idDisciplina = idDisciplina;
     }
 
-    public Observacao(int id, String texto, Date dataCriacao,
+    public Observacao(int id, String texto, LocalDate dataCriacao,
                       int idProfessor, int idAluno, int idDisciplina) {
 
         super(id);
@@ -44,7 +44,7 @@ public class Observacao extends ModelBase {
         return this.texto;
     }
 
-    public Date getDataCriacao() {
+    public LocalDate getDataCriacao() {
         return this.dataCriacao;
     }
 
@@ -64,7 +64,7 @@ public class Observacao extends ModelBase {
         this.texto = texto;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
+    public void setDataCriacao(LocalDate dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 

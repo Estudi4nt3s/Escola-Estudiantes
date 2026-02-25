@@ -8,19 +8,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAO {
 
-    public void inserir(String email, String senha) {
-        String sql = "INSERT INTO Usuario (Email, Senha) VALUES (?, ?)";
+    public void inserir(String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
+        String sql = "INSERT INTO Usuario (Email, Senha, IsAdm, Photo, DataNascimento) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setString(1, email);
             psmt.setString(2, senha);
+            psmt.setBoolean(3, isAdm);
+            psmt.setString(4, foto);
+            psmt.setObject(5, dataNascimento);
             psmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -40,7 +44,10 @@ public class UsuarioDAO {
                 Usuario u = new Usuario(
                         rs.getInt("Id"),
                         rs.getString("Email"),
-                        rs.getString("Senha")
+                        rs.getString("Senha"),
+                        rs.getBoolean("IsAdm"),
+                        rs.getString("Photo"),
+                        rs.getObject("DataNascimento", LocalDate.class)
                 );
                 lista.add(u);
             }
@@ -72,7 +79,10 @@ public class UsuarioDAO {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
                             rs.getString("email"),
-                            rs.getString("senha")
+                            rs.getString("senha"),
+                            rs.getBoolean("IsAdm"),
+                            rs.getString("Photo"),
+                            rs.getObject("DataNascimento", LocalDate.class)
                     );
                     usuarios.add(user);
                 }
@@ -85,14 +95,17 @@ public class UsuarioDAO {
     }
 
     public boolean atualizar(Usuario u) {
-        String sql = "UPDATE Usuario SET Email = ?, Senha = ? WHERE Id = ?";
+        String sql = "UPDATE Usuario SET Email = ?, Senha = ?, IsAdm = ?, Photo = ?, DataNascimento = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setString(1, u.getEmail());
             psmt.setString(2, u.getSenha());
-            psmt.setInt(3, u.getId());
+            psmt.setBoolean(3, u.getIsAdm());
+            psmt.setString(4, u.getFoto());
+            psmt.setObject(5, u.getDataNascimento());
+            psmt.setInt(6, u.getId());
 
             return psmt.executeUpdate() > 0;
 
