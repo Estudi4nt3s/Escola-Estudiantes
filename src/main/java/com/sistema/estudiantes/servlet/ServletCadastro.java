@@ -21,7 +21,7 @@ public class ServletCadastro extends HttpServlet {
         List<Aluno> alunos1 = alunoDAO.listarComFiltro("matricula",matricula);
 
         if (alunos1.getFirst().getMatricula() == matricula){
-            if(alunos1.getFirst().getCPF().equals(cpf)){
+            if(alunos1.getFirst().getCpf().equals(cpf)){
                 String usuario = request.getParameter("usuario");
                 String senha = request.getParameter("senha");
                 usuarioDAO.inserir(usuario,senha);

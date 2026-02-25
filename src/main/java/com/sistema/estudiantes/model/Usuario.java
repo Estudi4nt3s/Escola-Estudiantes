@@ -20,6 +20,11 @@ public class Usuario extends ModelBase {
         this.dataNascimento = dataNascimento;
     }
 
+    public Usuario(String email, String senha) {
+        this.email = email;
+        this.senha = senha;
+    }
+
     public Usuario(int id, String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
         super(id);
         this.email = email;

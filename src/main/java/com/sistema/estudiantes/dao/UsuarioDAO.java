@@ -14,17 +14,14 @@ import java.util.List;
 
 public class UsuarioDAO {
 
-    public void inserir(String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
-        String sql = "INSERT INTO Usuario (Email, Senha, IsAdm, Photo, DataNascimento) VALUES (?, ?, ?, ?, ?)";
+    public void inserir(String email, String senha) {
+        String sql = "INSERT INTO Usuario (Email, Senha) VALUES (?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setString(1, email);
             psmt.setString(2, senha);
-            psmt.setBoolean(3, isAdm);
-            psmt.setString(4, foto);
-            psmt.setObject(5, dataNascimento);
             psmt.executeUpdate();
 
         } catch (SQLException e) {

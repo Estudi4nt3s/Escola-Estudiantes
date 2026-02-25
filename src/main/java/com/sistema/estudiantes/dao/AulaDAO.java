@@ -4,6 +4,7 @@ import com.sistema.estudiantes.conexao.Conexao;
 import com.sistema.estudiantes.model.*;
 
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,35 +30,40 @@ public class AulaDAO {
         }
     }
 
-    public List<Aula> listar() {
-        List<Aula> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aula";
+    public List<Aula> listarComFiltro(String nomeColuna, Object valorColuna) {
 
-        try (Connection conn = new Conexao().conectar();
-             PreparedStatement psmt = conn.prepareStatement(sql);
-             ResultSet rs = psmt.executeQuery()) {
+        List<Aula> aulas = new ArrayList<>();
+        String sql = "SELECT Id, Horario, DisciplinaId, TurmaId, diaSemana FROM Aula WHERE " + nomeColuna + " = ?";
 
-            while (rs.next()) {
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+                stmt.setObject(1, valorColuna);
 
-                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
-                Turma t = new Turma(rs.getInt("turmaid"));
+            try (ResultSet rs = stmt.executeQuery()) {
 
-                Aula a = new Aula(
-                        rs.getInt("id"),
-                        rs.getTime("horario"),
-                        d,
-                        t,
-                        rs.getString("diasemana")
-                );
+                while (rs.next()) {
+                    Aula aula = new Aula(
+                            rs.getInt("Id"),
+                            rs.getObject("Horario", LocalTime.class),
+                            rs.getInt("DisciplinaId"),
+                            rs.getInt("TurmaId"),
+                            rs.getString("diaSemana")
+                    );
 
-                lista.add(a);
+                    aulas.add(aula);
+                }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Erro ao filtrar Aula por " + nomeColuna + ": " + e.getMessage());
         }
-        return lista;
+
+        return aulas;
     }
+
+
 
     public boolean atualizar(Aula a) {
         String sql = """
@@ -70,9 +76,9 @@ public class AulaDAO {
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
 
-            psmt.setTime(1, a.getHorario());
-            psmt.setInt(2, a.getDisciplinaId().getId());
-            psmt.setInt(3, a.getTurmaId().getId());
+            psmt.setObject(1, a.getHorario());
+            psmt.setInt(2, a.getDisciplinaId());
+            psmt.setInt(3, a.getTurmaId());
             psmt.setString(4, a.getDiaSemana());
             psmt.setInt(5, a.getId());
 
