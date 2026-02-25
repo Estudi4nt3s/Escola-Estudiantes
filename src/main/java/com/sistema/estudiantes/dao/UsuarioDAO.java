@@ -54,7 +54,7 @@ public class UsuarioDAO {
     public List<Usuario> listarComFiltro(String nomeColuna, Object valorColuna) {
         List<Usuario> usuarios = new ArrayList<>();
 
-        String sql = "SELECT id, email, senha FROM usuario WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT id, email, senha FROM usuarios WHERE " + nomeColuna + " = ?";
 
         try (Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
