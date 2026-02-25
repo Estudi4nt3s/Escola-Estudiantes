@@ -15,8 +15,17 @@ public class Aluno {
         this.matricula = matricula;
         this.cpf = cpf;
         this.nome = nome;
-        this.usuarioId = usuarioId;
+        this.dataNascimento = dataNascimento;
+        this.photo = photo;
+        this.cpf = cpf;
+        this.usuario_id = usuario_id;
     }
+
+    public Aluno(int matricula, String nome) {
+        this.matricula = matricula;
+        this.nome = nome;
+    }
+
 
     public Aluno(int matricula){
         this.matricula = matricula;
@@ -41,6 +50,7 @@ public class Aluno {
     public String getTelefonePai() {
         return this.telefonePai;
     }
+
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
