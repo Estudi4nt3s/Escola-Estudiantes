@@ -46,7 +46,7 @@
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12">
+                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
                     <span>Mateus Carlos</span>
                 </div>
             </div>

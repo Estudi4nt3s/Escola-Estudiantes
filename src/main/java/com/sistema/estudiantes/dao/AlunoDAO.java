@@ -2,6 +2,7 @@ package com.sistema.estudiantes.dao;
 
 import com.sistema.estudiantes.conexao.Conexao;
 import com.sistema.estudiantes.model.Aluno;
+import com.sistema.estudiantes.model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,8 @@ public class AlunoDAO {
             psmt.setInt(1, aluno.getMatricula());
             psmt.setString(2, aluno.getNome());
             psmt.setDate(3, new java.sql.Date(aluno.getDataNascimento().getTime()));
-            psmt.setString(4, aluno.getSenha());
+            psmt.setString(4, aluno.getPhoto());
+            psmt.setInt(5, aluno.getUsuario_id());
 
             return psmt.executeUpdate() > 0;
 
@@ -53,7 +55,9 @@ public class AlunoDAO {
                         rs.getInt("matricula"),
                         rs.getString("nome"),
                         rs.getDate("dataNascimento"),
-                        rs.getString("senha")
+                        rs.getString("photo"),
+                        rs.getString("cpf"),
+                        rs.getInt("usuario_id")
                 );
                 lista.add(aluno);
             }
@@ -97,7 +101,7 @@ public class AlunoDAO {
     public boolean atualizar(Aluno aluno) {
 
         String sql = "UPDATE Aluno " +
-                "SET nome = ?, dataNascimento = ?, senha = ? " +
+                "SET nome = ?, dataNascimento = ?, photo = ?, usua " +
                 "WHERE matricula = ?";
 
         try (
@@ -107,8 +111,8 @@ public class AlunoDAO {
 
             psmt.setString(1, aluno.getNome());
             psmt.setDate(2, new java.sql.Date(aluno.getDataNascimento().getTime()));
-            psmt.setString(3, aluno.getSenha());
-            psmt.setInt(4, aluno.getMatricula());
+            psmt.setString(3, aluno.getPhoto());
+            psmt.setInt(5, aluno.getMatricula());
 
             return psmt.executeUpdate() > 0;
 
