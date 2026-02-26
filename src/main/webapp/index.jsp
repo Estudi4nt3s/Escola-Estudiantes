@@ -1,3 +1,11 @@
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.time.format.TextStyle" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.sistema.estudiantes.model.Aula" %>
+<%@ page import="com.sistema.estudiantes.dao.AulaDAO" %>
+<%@ page import="com.sistema.estudiantes.dao.DisciplinaDAO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -11,7 +19,16 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
 
 </head>
-
+<%
+    AulaDAO aulaDAO = new AulaDAO();
+    DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+    LocalDate hoje = LocalDate.now();
+    String dia = String.format("%02d",hoje.getDayOfMonth());
+    String mes = String.format("%02d",hoje.getMonthValue());
+    Locale ptBr = new Locale("pt", "BR");
+    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).substring(0, 3);
+    String nome = (String) request.getSession().getAttribute("nome");
+%>
 <body>
 
     <aside class="sidebar">
@@ -26,7 +43,7 @@
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu"><i class="material-icons">person</i>Perfil</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp">
+            <a class="menu" href="${pageContext.request.contextPath}/turma">
                 <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
 
@@ -40,14 +57,14 @@
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
-                Seg, 09/02
+                <%=dia + "/" + mes%>
             </div>
 
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12">
-                    <span>Mateus Carlos</span>
+                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
+                    <span><%=nome%></span>
                 </div>
             </div>
         </header>
@@ -57,48 +74,25 @@
             <div class="left">
 
                 <div class="welcome">
-                    <h2>Olá, Mateus!</h2>
+                    <h2>Olá, <%=nome%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 
                 <div class="flex">
-                    <div class="card card1">
-                        <h3>Matemática</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
+                    <%
+                        if(!semana.equals("sab") && !semana.equals("dom")){
+                            List<Aula> aulas = aulaDAO.listarComFiltro("diaSemana",semana + "order by 2");
+                            for(int i = 0;i < 6;i++){
+                                int id = aulas.get(i).getDisciplinaId();
+                                String materia = disciplinaDAO.listarComFiltro("id",id).getFirst().getNome();%>
 
-                    <div class="card card2">
-                        <h3>Português</h3>
+                    <div class="card <%=materia%>">
+                        <h3><%=materia%></h3>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
                             nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
+                        <img src="${pageContext.request.contextPath}/utils/<%=materia%>.png" alt="<%=materia%>">
                     </div>
-                    <div class="card card3">
-                        <h3>Historia</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card4">
-                        <h3>Geografia</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card5">
-                        <h3>Ingles</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card6">
-                        <h3>Ciencias</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
+                    <%System.out.println(materia);}}%>
                 </div>
 
             </div>
@@ -106,12 +100,27 @@
             <div class="content-today">
                 <h2>Aulas de Hoje</h2>
                 <ul>
-                    <li><strong>Matemática</strong> - 07:00 às 08:00</li>
-                    <li><strong>Português</strong> - 08:00 às 9:00</li>
-                    <li><strong>História</strong> - 9:00 às 10:00</li>
-                    <li><strong>Geografia</strong> - 10:30 às 11:30</li>
-                    <li><strong>Inglês</strong> - 12:00 às 13:00</li>
-                    <li><strong>Ciências</strong> - 13:30 às 14:30</li>
+                    <%
+                        String[] horario = new String[6];
+                        horario[0] = "07:00 às 08:00";
+                        horario[1] = "08:00 às 09:00";
+                        horario[2] = "09:00 às 10:00";
+                        horario[3] = "10:30 às 11:30";
+                        horario[4] = "11:30 às 12:30";
+                        horario[5] = "13:30 às 14:30";
+
+                        if(!semana.equals("sab") && !semana.equals("dom")){
+                            List<Aula> aulas = aulaDAO.listarComFiltro("diaSemana",semana + "order by 2");
+                            for(int i = 0;i < 6;i++){
+                                int id = aulas.get(i).getDisciplinaId();
+                                String materia = disciplinaDAO.listarComFiltro("id",id).getFirst().getNome();%>
+
+                    %>
+                    <li><strong><%=materia%></strong> - <%=horario[i]%></li>
+                    <%
+                            }
+                        }
+                    %>
                 </ul>
             </div>
 

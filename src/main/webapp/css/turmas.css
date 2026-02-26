@@ -329,30 +329,31 @@ nav {
 .turmas {
     padding: 20px 40px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    width: 100%;
 }
 
 .turmas-card {
     background: #FFFFFF;
     border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     box-shadow: var(--shadow);
-    transition: 0.25s;
     cursor: pointer;
+    transition: 0.25s;
+    border-top: 8px solid var(--red);
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px 18px;
 }
 
 .turmas-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-.turmas-card strong {
-    font-size: 1.1rem;
-    color: #1a1a1a;
+.turmas-card h3 {
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .turmas-card p {
@@ -362,20 +363,18 @@ nav {
 }
 
 .turmas-card a {
-    background: #f1f1f1;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: auto;
+    align-self: flex-end;
+    color: black;
     text-decoration: none;
-    transition: 0.2s;
 }
 
 .turmas-card a:hover {
-    background: var(--red);
-    color: white;
+    color: red;
+}
+
+.turmas-card a:hover i {
+    color: red;
 }
 
 .turmas-card a i {

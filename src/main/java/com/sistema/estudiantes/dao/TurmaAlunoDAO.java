@@ -2,6 +2,7 @@ package com.sistema.estudiantes.dao;
 
 import com.sistema.estudiantes.conexao.Conexao;
 import com.sistema.estudiantes.model.Aluno;
+import com.sistema.estudiantes.model.Turma;
 import com.sistema.estudiantes.model.TurmaAluno;
 
 import java.sql.Connection;
@@ -39,11 +40,12 @@ public class TurmaAlunoDAO {
              ResultSet rs = psmt.executeQuery()) {
 
             while (rs.next()) {
-
+                Aluno a = new Aluno(rs.getInt("matriculaaluno"));
+                Turma t = new Turma(rs.getInt("idturma"));
                 TurmaAluno ta = new TurmaAluno(
                         rs.getInt("Id"),
-                        rs.getInt("MatriculaAluno"),
-                        rs.getInt("IdTurma")
+                        a,
+                        t
                 );
                 lista.add(ta);
             }
@@ -64,7 +66,7 @@ public class TurmaAlunoDAO {
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, ta.getAluno().getMatricula());
+            psmt.setInt(1, ta.getMatriculaAluno().getMatricula());
             psmt.setInt(2, ta.getId());
 
             return psmt.executeUpdate() > 0;

@@ -14,10 +14,9 @@ import java.util.List;
 
 public class ProfDisciplinaDAO {
 
-
     public void inserir(ProfessorDisciplina pd) {
         String sql = """
-            INSERT INTO ProfessorDisciplina (IdProfessor, IdDisciplina)
+            INSERT INTO ProfessorDisciplina (professorid, disciplinaid)
             VALUES (?, ?)
         """;
 
@@ -46,9 +45,9 @@ public class ProfDisciplinaDAO {
             while (rs.next()) {
 
                 ProfessorDisciplina pd = new ProfessorDisciplina(
-                        rs.getInt("Id"),
-                        new Professor(rs.getInt("IdProfessor")),
-                        new Disciplina(rs.getInt("IdDisciplina"))
+                        rs.getInt("id"),
+                        new Professor(rs.getInt("professorid")),
+                        new Disciplina(rs.getInt("disciplinaid"))
                 );
 
                 lista.add(pd);
@@ -72,9 +71,9 @@ public class ProfDisciplinaDAO {
 
             if (rs.next()) {
                 return new ProfessorDisciplina(
-                        rs.getInt("Id"),
-                        new Professor(rs.getInt("IdProfessor")),
-                        new Disciplina(rs.getInt("IdDisciplina"))
+                        rs.getInt("id"),
+                        new Professor(rs.getInt("professorid")),
+                        new Disciplina(rs.getInt("disciplinaid"))
                 );
             }
 
@@ -84,12 +83,11 @@ public class ProfDisciplinaDAO {
         return null;
     }
 
-
     public boolean atualizar(ProfessorDisciplina pd) {
         String sql = """
             UPDATE ProfessorDisciplina
-               SET IdProfessor = ?, IdDisciplina = ?
-             WHERE Id = ?
+               SET professorid = ?, disciplinaid = ?
+             WHERE id = ?
         """;
 
         try (Connection conn = new Conexao().conectar();

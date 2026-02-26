@@ -1,87 +1,74 @@
-begin;
+INSERT INTO Professor (Id, Nome) VALUES
+ (1, 'Ana Souza'),
+ (2, 'Bruno Almeida'),
+ (3, 'Carla Mendes'),
+ (4, 'Diego Santos'),
+ (5, 'Eduarda Lima'),
+ (6, 'Fernando Rocha'),
+ (7, 'Gabriela Nunes'),
+ (8, 'Henrique Duarte'),
+ (9, 'Isabela Carvalho'),
+ (10, 'João Pedro Martins');
 
-insert into Usuario (Id, Email, Senha, isAdm, Photo) values
- (1,  'ana.prof@escola.com',        'hashed_senha_1',  true,  null),
- (2,  'bruno.prof@escola.com',      'hashed_senha_2',  false, null),
- (3,  'carla.prof@escola.com',      'hashed_senha_3',  false, null),
- (4,  'diego.prof@escola.com',      'hashed_senha_4',  false, null),
- (5,  'erika.prof@escola.com',      'hashed_senha_5',  false, null),
- (6,  'fabio.prof@escola.com',      'hashed_senha_6',  false, null),
- (7,  'gabi.prof@escola.com',       'hashed_senha_7',  false, null),
- (8,  'heitor.prof@escola.com',     'hashed_senha_8',  false, null),
- (9,  'isabela.prof@escola.com',    'hashed_senha_9',  false, null),
- (10, 'joao.prof@escola.com',       'hashed_senha_10', false, null),
- (11, 'aluno1@escola.com',          'hashed_senha_11', false, null),
- (12, 'aluno2@escola.com',          'hashed_senha_12', false, null),
- (13, 'aluno3@escola.com',          'hashed_senha_13', false, null),
- (14, 'aluno4@escola.com',          'hashed_senha_14', false, null),
- (15, 'aluno5@escola.com',          'hashed_senha_15', false, null),
- (16, 'aluno6@escola.com',          'hashed_senha_16', false, null),
- (17, 'aluno7@escola.com',          'hashed_senha_17', false, null),
- (18, 'aluno8@escola.com',          'hashed_senha_18', false, null),
- (19, 'aluno9@escola.com',          'hashed_senha_19', false, null),
- (20, 'aluno10@escola.com',         'hashed_senha_20', false, null);
+INSERT INTO Disciplina (Id, Nome) VALUES
+ (1, 'Matemática'),
+ (2, 'Português'),
+ (3, 'História'),
+ (4, 'Geografia'),
+ (5, 'Ciências'),
+ (6, 'Inglês'),
+ (7, 'Educação Física'),
+ (8, 'Artes'),
+ (9, 'Física'),
+ (10, 'Química');
 
-insert into Professor (Id, Nome, UsuarioId) values
- (1, 'Ana Martins',     1),
- (2, 'Bruno Lima',      2),
- (3, 'Carla Souza',     3),
- (4, 'Diego Pereira',   4),
- (5, 'Érika Santos',    5),
- (6, 'Fábio Almeida',   6),
- (7, 'Gabriela Rocha',  7),
- (8, 'Heitor Castro',   8),
- (9, 'Isabela Ramos',   9),
- (10,'João Oliveira',   10);
+INSERT INTO ProfessorDisciplina (Id, IdProfessor, IdDisciplina) VALUES
+ (1, 1, 1),
+ (2, 2, 2),
+ (3, 3, 3),
+ (4, 4, 4),
+ (5, 5, 5),
+ (6, 6, 6),
+ (7, 7, 7),
+ (8, 8, 8),
+ (9, 9, 9),
+ (10, 10, 10),
+ (11, 1, 9),
+ (12, 2, 6),
+ (13, 3, 4),
+ (14, 4, 3),
+ (15, 5, 10);
 
-insert into Disciplina (Id, Nome) values
- (1,  'Matemática'),
- (2,  'Português'),
- (3,  'História'),
- (4,  'Geografia'),
- (5,  'Ciências'),
- (6,  'Inglês'),
- (7,  'Artes'),
- (8,  'Educação Física'),
- (9,  'Física'),
- (10, 'Química'),
- (11, 'Biologia');
+INSERT INTO Aluno (Matricula, Nome, DataNascimento, Photo) VALUES
+ (1,  'Lucas Ferreira',       '2010-03-15', NULL),
+ (2,  'Mariana Oliveira',     '2009-11-02', NULL),
+ (3,  'Rafael Silva',         '2011-01-28', NULL),
+ (4,  'Beatriz Santos',       '2010-07-19', NULL),
+ (5,  'Gustavo Costa',        '2009-05-05', NULL),
+ (6,  'Camila Rodrigues',     '2011-09-13', NULL),
+ (7,  'Pedro Almeida',        '2010-12-22', NULL),
+ (8,  'Larissa Pereira',      '2009-08-30', NULL),
+ (9,  'Thiago Barros',        '2011-04-04', NULL),
+ (10, 'Fernanda Teixeira',    '2010-10-10', NULL),
+ (11, 'Matheus Carvalho',     '2011-02-17', NULL),
+ (12, 'Ana Clara Martins',    '2009-03-25', NULL),
+ (13, 'João Vitor Araujo',    '2010-06-06', NULL),
+ (14, 'Julia Moreira',        '2011-12-01', NULL),
+ (15, 'Daniel Souza',         '2009-09-09', NULL),
+ (16, 'Sofia Ribeiro',        '2010-01-11', NULL),
+ (17, 'André Gonçalves',      '2011-05-21', NULL),
+ (18, 'Bruna Figueiredo',     '2009-07-27', NULL),
+ (19, 'Felipe Mendes',        '2010-02-02', NULL),
+ (20, 'Carolina Duarte',      '2011-11-14', NULL);
 
-insert into Turma (Id, Ano, Serie, Letra) values
- (1,  2024, '6º ano',  'A'),
- (2,  2024, '6º ano',  'B'),
- (3,  2024, '7º ano',  'A'),
- (4,  2024, '7º ano',  'B'),
- (5,  2024, '8º ano',  'A'),
- (6,  2024, '8º ano',  'B'),
- (7,  2024, '9º ano',  'A'),
- (8,  2024, '9º ano',  'B'),
- (9,  2025, '1º EM',   'A'),
- (10, 2025, '1º EM',   'B');
+INSERT INTO Turma (Id, Ano, Serie, Letra) VALUES
+ (1, 2024, '6º Ano',  'A'),
+ (2, 2024, '6º Ano',  'B'),
+ (3, 2024, '7º Ano',  'A'),
+ (4, 2024, '7º Ano',  'B'),
+ (5, 2024, '8º Ano',  'A');
 
-insert into Aluno (Matricula, Cpf, Nome, DataNascimento, UsuarioId, TelefonePai) values
- (1,  '11111111111', 'Lucas Andrade',      '2011-05-10', 11, '(11)90000-0001'),
- (2,  '22222222222', 'Maria Fernanda',     '2010-08-22', 12, '(11)90000-0002'),
- (3,  '33333333333', 'Pedro Henrique',     '2011-01-14', 13, '(11)90000-0003'),
- (4,  '44444444444', 'Larissa Costa',      '2010-12-03', 14, '(11)90000-0004'),
- (5,  '55555555555', 'Rafael Martins',     '2009-03-30', 15, '(11)90000-0005'),
- (6,  '66666666666', 'Beatriz Silva',      '2009-07-18', 16, '(11)90000-0006'),
- (7,  '77777777777', 'Gustavo Lima',       '2008-11-11', 17, '(11)90000-0007'),
- (8,  '88888888888', 'Ana Carolina',       '2008-09-27', 18, '(11)90000-0008'),
- (9,  '99999999999', 'Felipe Souza',       '2011-02-02', 19, '(11)90000-0009'),
- (10, '10101010101', 'Camila Rocha',       '2010-04-25', 20, '(11)90000-0010'),
- (11, '12121212121', 'Bruna Santos',       '2011-07-05', null, '(11)90000-0011'),
- (12, '13131313131', 'Thiago Gomes',       '2010-10-19', null, '(11)90000-0012'),
- (13, '14141414141', 'Joana Ribeiro',      '2009-06-01', null, '(11)90000-0013'),
- (14, '15151515151', 'Leonardo Araújo',    '2008-05-17', null, '(11)90000-0014'),
- (15, '16161616161', 'Sofia Freitas',      '2011-12-29', null, '(11)90000-0015'),
- (16, '17171717171', 'Enzo Barros',        '2010-03-07', null, '(11)90000-0016'),
- (17, '18181818181', 'Helena Pires',       '2009-01-22', null, '(11)90000-0017'),
- (18, '19191919191', 'Daniel Almeida',     '2008-02-28', null, '(11)90000-0018'),
- (19, '20202020202', 'Mariana Castro',     '2011-09-09', null, '(11)90000-0019'),
- (20, '21212121212', 'Rodrigo Correia',    '2010-06-16', null, '(11)90000-0020');
-
-insert into ProfessorDisciplina (Id, ProfessorId, DisciplinaId) values
+INSERT INTO TurmaAluno (Id, MatriculaAluno, IdTurma) VALUES
  (1,  1, 1),
  (2,  1, 9),
  (3,  2, 2),
