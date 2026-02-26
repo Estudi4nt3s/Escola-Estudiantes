@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+=======
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Locale" %>
@@ -7,17 +10,17 @@
 <%@ page import="com.sistema.estudiantes.dao.AulaDAO" %>
 <%@ page import="com.sistema.estudiantes.dao.DisciplinaDAO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+>>>>>>> main
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
-
+    <title>Login - Estudantes</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@300;400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <%
     AulaDAO aulaDAO = new AulaDAO();
@@ -31,10 +34,12 @@
 %>
 <body>
 
-    <aside class="sidebar">
-        <div class="logo">
-            <i class="material-icons">school</i>
-            <span>Colégio Estudiantes</span>
+    <a href="#" class="restricted">acesso restrito</a>
+
+    <main>
+        <div class="div-overlay">
+            <div class="overlay"></div>
+            <img src="${pageContext.request.contextPath}/3b9acabc-be87-4b60-af72-8bc163abe1d6.png" alt="Estudantes">
         </div>
 
         <nav>
@@ -123,55 +128,7 @@
                     %>
                 </ul>
             </div>
-
-        </section>
-
-    </main>
-        <!-- Overlay -->
-    <div class="notification-overlay" id="notificationOverlay">
-
-        <div class="notification-modal">
-
-            <div class="notification-modal-header">
-                <h2>Notificações</h2>
-                <button id="closeNotificationModal">✕</button>
-            </div>
-
-            <ul class="notification-modal-list">
-                <li class="denied">
-                    
-                    <div class="notification-content">
-                        <strong>Avaliação de Matemática</strong>
-                        <span>Status: Negado</span>
-                    </div>
-
-                    <button class="confirm-btn">Confirmar</button>
-                </li>
-
-                <li class="denied">
-                    <div class="notification-content">
-                        <strong>Avaliação 2ª Guerra</strong>
-                        <span>Status: Negado</span>
-                    </div>
-                
-                    <button class="confirm-btn">Confirmar</button>
-                </li>
-                
-
-                <li class="denied">
-                    <div class="notification-content">
-                        <strong>Trabalho de Geografia</strong>
-                        <span>Status: Negado</span>
-                    </div>
-                
-                    <button class="confirm-btn">Confirmar</button>
-                </li>
-            </ul>
-
         </div>
-    </div>
-
-    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+    </main>
 </body>
-
 </html>
