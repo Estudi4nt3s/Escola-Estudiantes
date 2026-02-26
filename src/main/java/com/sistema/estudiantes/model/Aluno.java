@@ -1,31 +1,31 @@
 package com.sistema.estudiantes.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Aluno {
     private int matricula;
-    private String nome;
-    private Date dataNascimento;
-    private String photo;
     private String cpf;
-    private int usuario_id;
+    private String nome;
+    private LocalDate dataNascimento;
+    private Usuario usuario_id;
+    private String telefonePai;
 
     public Aluno() {}
 
-    public Aluno(int matricula, String nome, Date dataNascimento,String photo, String cpf ,int usuario_id) {
+    public Aluno(int matricula, String cpf, String nome, LocalDate dataNascimento, Usuario usuarioId, String telefonePai) {
         this.matricula = matricula;
+        this.cpf = cpf;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
-        this.photo = photo;
         this.cpf = cpf;
-        this.usuario_id = usuario_id;
+        this.usuario_id = usuarioId;
+        this.telefonePai = telefonePai;
     }
 
     public Aluno(int matricula, String nome) {
         this.matricula = matricula;
         this.nome = nome;
     }
-
 
     public Aluno(int matricula){
         this.matricula = matricula;
@@ -35,25 +35,24 @@ public class Aluno {
         return this.matricula;
     }
 
+    public String getCpf() {
+        return this.cpf;
+    }
+
     public String getNome() {
         return this.nome;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return this.dataNascimento;
     }
 
-    public String getPhoto() {
-        return this.photo;
-    }
-
-    public String getCPF() {
-        return this.cpf;
-    }
-
-
-    public int getUsuario_id() {
+    public Usuario getUsuarioId() {
         return this.usuario_id;
+    }
+
+    public String getTelefonePai() {
+        return this.telefonePai;
     }
 
 
@@ -61,16 +60,27 @@ public class Aluno {
         this.matricula = matricula;
     }
 
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
+    public void setUsuarioId(Usuario usuarioId) {
+        this.usuario_id = usuarioId;
+    }
+
+    public void setTelefonePai(String telefonePai) {
+        this.telefonePai = telefonePai;
+    }
 
     public String toString() {
-        return "Matrícula: " + this.matricula + "\nNome: " + this.nome + "\nData Nascimento: " + this.dataNascimento + "\nPhoto: " + this.photo + "\nUsuario_id: " + this.usuario_id;
+        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf  + "\nNome: " + this.nome + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
     }
 }

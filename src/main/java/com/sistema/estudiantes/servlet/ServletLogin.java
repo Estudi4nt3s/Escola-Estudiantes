@@ -21,7 +21,7 @@ public class ServletLogin extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 //        Pegando os Parâmetros
-        String email = request.getParameter("usuario").strip();
+        String emailStr = request.getParameter("usuario").strip();
         String senha = request.getParameter("senha").strip();
 
 //        Declarando variáveis com valores padrões
@@ -30,28 +30,29 @@ public class ServletLogin extends HttpServlet {
 
         System.out.println("Entrou no servlet");
 //        Validando para ver se nós estamos tentando logar
-        if(email.equals("ADMFODAO@gmail.com") || senha.equals("AAAAAAAAAAAAAAAAAAAHHHHHHHHH")){
-            System.out.println("Parametro correto");
-            request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
-        }
-        else {
             System.out.println("Não é adm 💔");
             String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
-            boolean professor = email.matches(regexFuncionario);
+            boolean professor = emailStr.matches(regexFuncionario);
             UsuarioDAO userDAO = new UsuarioDAO();
-            List<Usuario> users = userDAO.listarComFiltro("email", email);
+            int email = Integer.parseInt(emailStr);
+            List<Usuario> users = userDAO.listarComFiltro(email);
             if (!users.isEmpty()) {
                 validarEmail = true;
                 validarSenha = users.getFirst().getSenha().equals(senha);
                 if (validarSenha) {
                     request.getSession().setAttribute("usuario_id", users.getFirst().getId());
                     if (professor) {
+                        ProfessorDAO profDAO = new ProfessorDAO();
+                        List<Professor> profs = profDAO.listarComFiltro(users.getFirst().getId());
+                        request.getSession().setAttribute("nome", profs.getFirst().getNome());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     } else {
+                        AlunoDAO alunoDAO = new AlunoDAO();
+                        List<Aluno> aluno = alunoDAO.listarComFiltro(users.getFirst().getId());
+                        request.getSession().setAttribute("nome", aluno.getFirst().getNome());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     }
                 }
-            }
             request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
         }
     }

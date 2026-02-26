@@ -1,22 +1,17 @@
 package com.sistema.estudiantes.model;
 
-public class Professor extends ModelBase {
+public class Professor {
 
     private int id;
     private String nome;
-    private int usuario_id;
+    private Usuario usuarioId;
 
     public Professor() {}
 
-    public Professor(String nome, int usuario_id) {
+    public Professor(int id, String nome, Usuario usuarioId) {
+        this.id = id;
         this.nome = nome;
-        this.usuario_id = usuario_id;
-    }
-
-    public Professor(int id, String nome, int usuario_id) {
-        super(id);
-        this.nome = nome;
-        this.usuario_id = usuario_id;
+        this.usuarioId = usuarioId;
     }
 
     public Professor(int id){
@@ -29,15 +24,23 @@ public class Professor extends ModelBase {
         return this.nome;
     }
 
-    public int getUsuario_id() {
-        return this.usuario_id;
+    public Usuario getUsuarioId() {
+        return this.usuarioId;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    public void setUsuarioId(Usuario usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
     public String toString() {
-        return "Id: " + getId() + "\nNome: " + this.nome + "\nUsuario_id: " + this.usuario_id;
+        return "Id: " + this.id + "\nNome: " + this.nome + "\nId Usuário: " + this.usuarioId;
     }
 }

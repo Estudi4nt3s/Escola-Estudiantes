@@ -1,17 +1,18 @@
 package com.sistema.estudiantes.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public class Observacao extends ModelBase {
+public class Observacao {
+    private int id;
     private String texto;
-    private Date dataCriacao;
+    private LocalDate dataCriacao;
     private Professor idProfessor;
     private Aluno idAluno;
     private Disciplina idDisciplina;
 
     public Observacao() {}
 
-    public Observacao(String texto, Date dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
         this.texto = texto;
         this.dataCriacao = dataCriacao;
         this.idProfessor = idProfessor;
@@ -19,8 +20,8 @@ public class Observacao extends ModelBase {
         this.idDisciplina = idDisciplina;
     }
 
-    public Observacao(int id, String texto, Date dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
-        super(id);
+    public Observacao(int id, String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+        this.id = id;
         this.texto = texto;
         this.dataCriacao = dataCriacao;
         this.idProfessor = idProfessor;
@@ -28,23 +29,15 @@ public class Observacao extends ModelBase {
         this.idDisciplina = idDisciplina;
     }
 
-    public Observacao(int id, String texto, Date dataCriacao,
-                      int idProfessor, int idAluno, int idDisciplina) {
-
-        super(id);
-        this.texto = texto;
-        this.dataCriacao = dataCriacao;
-        this.idProfessor = new Professor(idProfessor);
-        this.idAluno = new Aluno(idAluno);
-        this.idDisciplina = new Disciplina(idDisciplina);
+    public int getId() {
+        return this.id;
     }
-
 
     public String getTexto() {
         return this.texto;
     }
 
-    public Date getDataCriacao() {
+    public LocalDate getDataCriacao() {
         return this.dataCriacao;
     }
 
@@ -60,11 +53,15 @@ public class Observacao extends ModelBase {
         return this.idDisciplina;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setTexto(String texto) {
         this.texto = texto;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
+    public void setDataCriacao(LocalDate dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 
@@ -81,7 +78,7 @@ public class Observacao extends ModelBase {
     }
 
     public String toString() {
-        return "Id: " + getId() + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno + "\nId Disciplina: " + this.idDisciplina;
+        return "Id: " + this.id + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno + "\nId Disciplina: " + this.idDisciplina;
     }
 
 }

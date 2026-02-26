@@ -359,27 +359,27 @@ nav {
     border-radius: 0 10px 10px 0;
 }
 
-.card1::before {
+.matematica::before {
     background: #d11d22;
 }
 
-.card2::before {
+.portugues::before {
     background: #501581;
 }
 
-.card3::before {
+.historia::before {
     background: #a95510;
 }
 
-.card4::before {
+.geografia::before {
     background: #483115;
 }
 
-.card5::before {
+.ingles::before {
     background: #5f2eb9;
 }
 
-.card6::before {
+.ciencias::before {
     background: #1a4815;
 }
 
