@@ -1,168 +1,59 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
-
+    <title>Login - Estudantes</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@300;400;700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-    <aside class="sidebar">
-        <div class="logo">
-            <i class="material-icons">school</i>
-            <span>Colégio Estudiantes</span>
+    <a href="#" class="restricted">acesso restrito</a>
+
+    <main>
+        <div class="div-overlay">
+            <div class="overlay"></div>
+            <img src="${pageContext.request.contextPath}/3b9acabc-be87-4b60-af72-8bc163abe1d6.png" alt="Estudantes">
         </div>
 
-        <nav>
-            <a class="menu active"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
-                <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu"><i class="material-icons">person</i>Perfil</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp">
-                <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
-        </nav>
-
-        <div class="config">
-            <i class="material-icons">settings</i>Configurações
-        </div>
-    </aside>
-
-    <main class="main">
-
-        <header class="topbar">
-            <div class="date">
-                <i class="material-icons">calendar_today</i>
-                Seg, 09/02
-            </div>
-
-            <div class="user">
-                <i class="material-icons" id="openNotification">notifications</i>
-                <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
-                    <span>Mateus Carlos</span>
-                </div>
-            </div>
-        </header>
-
-        <section class="dashboard">
-
+        <div class="container">
             <div class="left">
-
-                <div class="welcome">
-                    <h2>Olá, Mateus!</h2>
-                    <p>Pronto para as aulas de hoje?</p>
+                <h1>Seja bem-vindo ao Estudantes</h1>
+                <div class="divider"></div>
+                <p>A educação é a arma mais poderosa que você pode usar para mudar o mundo.</p>
+                
+                <div class="signup-section">
+                    <span>Não tem conta?</span><br>
+                    <button type="button" class="btn-signup" onclick="location.href='cadastro.jsp'">Cadastrar-se</button>
                 </div>
-
-                <div class="flex">
-                    <div class="card card1">
-                        <h3>Matemática</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-
-                    <div class="card card2">
-                        <h3>Português</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card3">
-                        <h3>Historia</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card4">
-                        <h3>Geografia</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card5">
-                        <h3>Ingles</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                    <div class="card card6">
-                        <h3>Ciencias</h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
-                        <img src="Matematica.png" alt="Matemática">
-                    </div>
-                </div>
-
             </div>
 
-            <div class="content-today">
-                <h2>Aulas de Hoje</h2>
-                <ul>
-                    <li><strong>Matemática</strong> - 07:00 às 08:00</li>
-                    <li><strong>Português</strong> - 08:00 às 9:00</li>
-                    <li><strong>História</strong> - 9:00 às 10:00</li>
-                    <li><strong>Geografia</strong> - 10:30 às 11:30</li>
-                    <li><strong>Inglês</strong> - 12:00 às 13:00</li>
-                    <li><strong>Ciências</strong> - 13:30 às 14:30</li>
-                </ul>
+            <div class="login-box">
+                <h2>Login</h2>
+                <form action="LoginServlet" method="POST">
+                    <div class="input-group">
+                        <label for="matricula">Matrícula</label>
+                        <input type="text" id="matricula" name="txtMatricula" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" name="txtSenha" required>
+                    </div>
+
+                    <%-- Exemplo de mensagem de erro dinâmica --%>
+                    <% if(request.getAttribute("errorMessage") != null) { %>
+                        <p style="color: red; font-size: 0.8em;"><%= request.getAttribute("errorMessage") %></p>
+                    <% } %>
+
+                    <button type="submit" class="btn-enter">Entrar</button>
+                </form>
             </div>
-
-        </section>
-
-    </main>
-        <!-- Overlay -->
-    <div class="notification-overlay" id="notificationOverlay">
-
-        <div class="notification-modal">
-
-            <div class="notification-modal-header">
-                <h2>Notificações</h2>
-                <button id="closeNotificationModal">✕</button>
-            </div>
-
-            <ul class="notification-modal-list">
-                <li class="denied">
-                    
-                    <div class="notification-content">
-                        <strong>Avaliação de Matemática</strong>
-                        <span>Status: Negado</span>
-                    </div>
-
-                    <button class="confirm-btn">Confirmar</button>
-                </li>
-
-                <li class="denied">
-                    <div class="notification-content">
-                        <strong>Avaliação 2ª Guerra</strong>
-                        <span>Status: Negado</span>
-                    </div>
-                
-                    <button class="confirm-btn">Confirmar</button>
-                </li>
-                
-
-                <li class="denied">
-                    <div class="notification-content">
-                        <strong>Trabalho de Geografia</strong>
-                        <span>Status: Negado</span>
-                    </div>
-                
-                    <button class="confirm-btn">Confirmar</button>
-                </li>
-            </ul>
-
         </div>
-    </div>
-
-    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+    </main>
 </body>
-
 </html>
