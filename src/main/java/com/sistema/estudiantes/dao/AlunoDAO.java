@@ -9,15 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlunoDAO {
 
-
     public boolean inserir(Aluno aluno) {
 
-        String sql = "INSERT INTO Aluno (matricula, cpf, nome, usuarioid, telefonepai) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Aluno (matricula, cpf, nome, datanascimento, usuarioid, telefonepai) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -27,8 +27,9 @@ public class AlunoDAO {
             psmt.setInt(1, aluno.getMatricula());
             psmt.setString(2, aluno.getCpf());
             psmt.setString(3, aluno.getNome());
-            psmt.setInt(4, aluno.getUsuarioId().getId());
-            psmt.setString(5, aluno.getTelefonePai());
+            psmt.setObject(4, aluno.getDataNascimento());
+            psmt.setInt(5, aluno.getUsuarioId().getId());
+            psmt.setString(6, aluno.getTelefonePai());
 
             return psmt.executeUpdate() > 0;
 
@@ -56,6 +57,7 @@ public class AlunoDAO {
                         rs.getInt("matricula"),
                         rs.getString("cpf"),
                         rs.getString("nome"),
+                        rs.getObject("datanascimento", LocalDate.class),
                         u,
                         rs.getString("telefonepai")
                 );
@@ -69,18 +71,14 @@ public class AlunoDAO {
         return lista;
     }
 
-    public List<Aluno> listarComFiltro(String nomeColuna, Object valorColuna) {
+    public List<Aluno> listarComFiltro(int matricula) {
         List<Aluno> alunos = new ArrayList<>();
-        String sql = "SELECT * FROM alunos WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT * FROM aluno WHERE matricula = ?";
 
         try (Connection conn = Conexao.conectar();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            if (valorColuna instanceof java.util.Date) {
-                stmt.setDate(1, new java.sql.Date(((java.util.Date) valorColuna).getTime()));
-            } else {
-                stmt.setObject(1, valorColuna);
-            }
+            stmt.setInt(1, matricula);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -89,6 +87,7 @@ public class AlunoDAO {
                             rs.getInt("matricula"),
                             rs.getString("cpf"),
                             rs.getString("nome"),
+                            rs.getObject("datanascimento", LocalDate.class),
                             u,
                             rs.getString("telefonepai")
                     );
@@ -96,54 +95,89 @@ public class AlunoDAO {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Erro ao filtrar Aluno por " + nomeColuna + ": " + e.getMessage());
+            e.printStackTrace();
         }
         return alunos;
     }
-    public boolean atualizar(Aluno aluno) {
 
-        String sql = "UPDATE Aluno " +
-                "SET cpf = ?, nome = ?, usuarioid = ?, telefonepai = ? " +
-                "WHERE matricula = ?";
+    public List<Aluno> listarPorTurma(int turmaId) {
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = """
+                    SELECT a.* 
+                    FROM aluno a
+                    INNER JOIN turmaaluno ta ON ta.matriculaaluno = a.matricula
+                    WHERE ta.idturma = ?
+        """;
+                try (Connection conn = Conexao.conectar();
+                     PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        try (
-                Connection conn = new Conexao().conectar();
-                PreparedStatement psmt = conn.prepareStatement(sql)
-        ) {
+                    stmt.setInt(1, turmaId);
 
-            psmt.setString(1, aluno.getNome());
-            psmt.setString(2, aluno.getCpf());
-            psmt.setInt(3, aluno.getUsuarioId().getId());
-            psmt.setString(4, aluno.getTelefonePai());
-            psmt.setInt(5, aluno.getMatricula());
+                    ResultSet rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        Usuario u = new Usuario(rs.getInt("usuarioid"));
+                        Aluno aluno = new Aluno(
+                                rs.getInt("matricula"),
+                                rs.getString("cpf"),
+                                rs.getString("nome"),
+                                rs.getObject("datanascimento", LocalDate.class),
+                                u,
+                                rs.getString("telefonepai")
+                        );
 
-            return psmt.executeUpdate() > 0;
+                        alunos.add(aluno);
+                    }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return alunos;
+            }
+
+        public boolean atualizar(Aluno aluno) {
+
+            String sql = "UPDATE Aluno " +
+                    "SET cpf = ?, nome = ?, datanascimento = ?, usuarioid = ?, telefonepai = ? " +
+                    "WHERE matricula = ?";
+
+            try (
+                    Connection conn = new Conexao().conectar();
+                    PreparedStatement psmt = conn.prepareStatement(sql)
+            ) {
+
+                psmt.setString(1, aluno.getCpf());
+                psmt.setString(2, aluno.getNome());
+                psmt.setObject(3, aluno.getDataNascimento());
+                psmt.setInt(4, aluno.getUsuarioId().getId());
+                psmt.setString(5, aluno.getTelefonePai());
+                psmt.setInt(6, aluno.getMatricula());
+
+                return psmt.executeUpdate() > 0;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
-    }
 
-    public int excluir(int matricula){
-        String sql = "DELETE FROM Aluno WHERE matricula = ?";
+        public int excluir(int matricula){
+            String sql = "DELETE FROM Aluno WHERE matricula = ?";
 
-        try(   Connection conn = new Conexao().conectar();
-               PreparedStatement psmt = conn.prepareStatement(sql)
-        ){
-            psmt.setInt(1, matricula);
+            try(   Connection conn = new Conexao().conectar();
+                   PreparedStatement psmt = conn.prepareStatement(sql)
+            ){
+                psmt.setInt(1, matricula);
 
-            if (psmt.executeUpdate() > 0){
-            return 1;
-            }else {
-            return 0;
+                if (psmt.executeUpdate() > 0){
+                    return 1;
+                }else {
+                    return 0;
+                }
+
+            }catch (SQLException e){
+                e.printStackTrace();
+                return -1;
+            }
         }
-
-        }catch (SQLException e){
-        e.printStackTrace();
-        return -1;
         }
-    }
-
-
-}

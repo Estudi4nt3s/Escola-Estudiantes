@@ -15,14 +15,14 @@ import java.util.List;
 
 public class ProfessorDAO {
 
-    public void inserir(String nome, int usuarioId) {
+    public void inserir(Professor professor) {
         String sql = "INSERT INTO Professor (Nome, UsuarioId) VALUES (?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, nome);
-            ps.setInt(2, usuarioId);
+            ps.setString(1, professor.getNome());
+            ps.setInt(2, professor.getUsuarioId().getId());
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -40,10 +40,10 @@ public class ProfessorDAO {
                 ResultSet rs = psmt.executeQuery()
         ) {
             while (rs.next()){
-                Usuario u = new Usuario(rs.getInt("UsuarioId"));
+                Usuario u = new Usuario(rs.getInt("usuarioid"));
                 Professor professor = new Professor(
                         rs.getInt("id"),
-                        rs.getString("Nome"),
+                        rs.getString("nome"),
                         u
                 );
                 lista.add(professor);
@@ -54,13 +54,13 @@ public class ProfessorDAO {
         return lista;
     }
 
-    public List<Professor> listarComFiltro(String nomeColuna, Object valorColuna) {
+    public List<Professor> listarComFiltro(int id) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT id, nome, senha FROM professores WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT id, nome, usuarioid FROM professor WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, valorColuna);
+            stmt.setObject(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -74,7 +74,7 @@ public class ProfessorDAO {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Erro ao filtrar Professor por " + nomeColuna + ": " + e.getMessage());
+            e.printStackTrace();
         }
         return professores;
     }
@@ -89,6 +89,7 @@ public class ProfessorDAO {
                 ) {
             psmt.setString(1, professor.getNome());
             psmt.setInt(2, professor.getUsuarioId().getId());
+            psmt.setInt(3, professor.getId());
 
             return psmt.executeUpdate() > 0;
         } catch (SQLException e) {

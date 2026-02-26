@@ -5,16 +5,18 @@ import java.time.LocalTime;
 public class Aula {
 
     private int id;
-    private LocalTime horario;
-    private int disciplinaId;
-    private int turmaId;
+    private LocalTime horarioInicio;
+    private LocalTime horarioFim;
+    private Disciplina disciplinaId;
+    private Turma turmaId;
     private String diaSemana;
 
     public Aula() {}
 
-    public Aula(int id, LocalTime horario, int disciplinaId, int turmaId, String diaSemana) {
+    public Aula(int id, LocalTime horarioInicio, LocalTime horarioFim, Disciplina disciplinaId, Turma turmaId, String diaSemana) {
         this.id = id;
-        this.horario = horario;
+        this.horarioInicio = horarioInicio;
+        this.horarioFim = horarioFim;
         this.disciplinaId = disciplinaId;
         this.turmaId = turmaId;
         this.diaSemana = diaSemana;
@@ -33,15 +35,19 @@ public class Aula {
         return this.id;
     }
 
-    public LocalTime getHorario() {
-        return this.horario;
+    public LocalTime getHorarioInicio() {
+        return this.horarioInicio;
     }
 
-    public int getDisciplinaId() {
+    public LocalTime getHorarioFim() {
+        return this.horarioFim;
+    }
+
+    public Disciplina getDisciplinaId() {
         return this.disciplinaId;
     }
 
-    public int getTurmaId() {
+    public Turma getTurmaId() {
         return this.turmaId;
     }
 
@@ -53,15 +59,19 @@ public class Aula {
         this.id = id;
     }
 
-    public void setHorario(LocalTime horario) {
-        this.horario = horario;
+    public void setHorarioInicio(LocalTime horarioInicio) {
+        this.horarioInicio = horarioInicio;
     }
 
-    public void setDisciplinaId(int disciplinaId) {
+    public void setHorarioFim(LocalTime horarioFim) {
+        this.horarioFim = horarioFim;
+    }
+
+    public void setDisciplinaId(Disciplina disciplinaId) {
         this.disciplinaId = disciplinaId;
     }
 
-    public void setTurmaId(int turmaId) {
+    public void setTurmaId(Turma turmaId) {
         this.turmaId = turmaId;
     }
 
@@ -72,9 +82,10 @@ public class Aula {
     @Override
     public String toString() {
         return "Id: " + this.id +
-                "\nHorário: " + this.horario +
-                "\nDisciplinaId: " + this.disciplinaId +
-                "\nTurmaId: " + this.turmaId +
+                "\nHorário Início: " + this.horarioInicio +
+                "\nHorário Fim: " + this.horarioFim +
+                "\nId Disciplina: " + this.disciplinaId +
+                "\nId Turma: " + this.turmaId +
                 "\nDia da Semana: " + this.diaSemana;
     }
 }

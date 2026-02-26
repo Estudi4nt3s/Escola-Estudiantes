@@ -14,14 +14,16 @@ import java.util.List;
 
 public class UsuarioDAO {
 
-    public void inserir(String email, String senha) {
-        String sql = "INSERT INTO Usuario (Email, Senha) VALUES (?, ?)";
+    public void inserir(Usuario usuario) {
+        String sql = "INSERT INTO Usuario (email, senha, isadm, photo) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, email);
-            psmt.setString(2, senha);
+            psmt.setString(1, usuario.getEmail());
+            psmt.setString(2, usuario.getSenha());
+            psmt.setBoolean(3, usuario.getIsAdm());
+            psmt.setString(4, usuario.getFoto());
             psmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -39,12 +41,11 @@ public class UsuarioDAO {
 
             while (rs.next()) {
                 Usuario u = new Usuario(
-                        rs.getInt("Id"),
-                        rs.getString("Email"),
-                        rs.getString("Senha"),
-                        rs.getBoolean("IsAdm"),
-                        rs.getString("Photo"),
-                        rs.getObject("DataNascimento", LocalDate.class)
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getBoolean("isadm"),
+                        rs.getString("photo")
                 );
                 lista.add(u);
             }
@@ -55,21 +56,15 @@ public class UsuarioDAO {
         return lista;
     }
 
-    public List<Usuario> listarComFiltro(String nomeColuna, Object valorColuna) {
+    public List<Usuario> listarComFiltro(int id) {
         List<Usuario> usuarios = new ArrayList<>();
 
-        String sql = "SELECT id, email, senha FROM usuarios WHERE " + nomeColuna + " = ?";
+        String sql = "SELECT * FROM usuario WHERE id = ?";
 
         try (Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            if (valorColuna instanceof Integer) {
-                stmt.setInt(1, (Integer) valorColuna);
-            } else if (valorColuna instanceof String) {
-                stmt.setString(1, (String) valorColuna);
-            } else {
-                stmt.setObject(1, valorColuna);
-            }
+            stmt.setInt(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -78,21 +73,20 @@ public class UsuarioDAO {
                             rs.getString("email"),
                             rs.getString("senha"),
                             rs.getBoolean("IsAdm"),
-                            rs.getString("Photo"),
-                            rs.getObject("DataNascimento", LocalDate.class)
+                            rs.getString("Photo")
                     );
                     usuarios.add(user);
                 }
             }
         } catch (Exception e) {
-            System.err.println("Erro ao filtrar por " + nomeColuna + ": " + e.getMessage());
+            e.printStackTrace();
         }
 
         return usuarios;
     }
 
     public boolean atualizar(Usuario u) {
-        String sql = "UPDATE Usuario SET Email = ?, Senha = ?, IsAdm = ?, Photo = ?, DataNascimento = ? WHERE Id = ?";
+        String sql = "UPDATE Usuario SET Email = ?, Senha = ?, IsAdm = ?, Photo = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -101,8 +95,7 @@ public class UsuarioDAO {
             psmt.setString(2, u.getSenha());
             psmt.setBoolean(3, u.getIsAdm());
             psmt.setString(4, u.getFoto());
-            psmt.setObject(5, u.getDataNascimento());
-            psmt.setInt(6, u.getId());
+            psmt.setInt(5, u.getId());
 
             return psmt.executeUpdate() > 0;
 
