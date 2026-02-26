@@ -1,23 +1,31 @@
 package com.sistema.estudiantes.model;
 
-import java.time.LocalDate;
-
-public class Usuario extends ModelBase {
+public class Usuario {
     private int id;
     private String email;
     private String senha;
     private boolean isAdm;
     private String foto;
-    private LocalDate dataNascimento;
 
     public Usuario() {}
 
-    public Usuario(String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
+    public Usuario(int id, String email, String senha, boolean isAdm, String foto) {
+        this.id = id;
         this.email = email;
         this.senha = senha;
         this.isAdm = isAdm;
         this.foto = foto;
-        this.dataNascimento = dataNascimento;
+    }
+
+    public Usuario( String email, String senha, boolean isAdm, String foto) {
+        this.email = email;
+        this.senha = senha;
+        this.isAdm = isAdm;
+        this.foto = foto;
+    }
+
+    public Usuario(int id) {
+        this.id = id;
     }
 
     public Usuario(String email, String senha) {
@@ -25,17 +33,8 @@ public class Usuario extends ModelBase {
         this.senha = senha;
     }
 
-    public Usuario(int id, String email, String senha, boolean isAdm, String foto, LocalDate dataNascimento) {
-        super(id);
-        this.email = email;
-        this.senha = senha;
-        this.isAdm = isAdm;
-        this.foto = foto;
-        this.dataNascimento = dataNascimento;
-    }
-
-    public Usuario(int id) {
-        this.id = id;
+    public int getId() {
+        return this.id;
     }
 
     public String getEmail() {
@@ -54,8 +53,8 @@ public class Usuario extends ModelBase {
         return this.foto;
     }
 
-    public LocalDate getDataNascimento() {
-        return this.dataNascimento;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
@@ -74,11 +73,7 @@ public class Usuario extends ModelBase {
         this.foto = foto;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
     public String toString() {
-        return "Id: " + getId() + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nÉ admin? " + this.isAdm + "\nFoto: " + this.foto + "\nData de Nascimento: " + this.dataNascimento;
+        return "Id: " + this.id + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nÉ admin? " + this.isAdm + "\nFoto: " + this.foto;
     }
 }

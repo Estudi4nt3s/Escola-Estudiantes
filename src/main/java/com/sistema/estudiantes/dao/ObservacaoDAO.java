@@ -2,6 +2,8 @@ package com.sistema.estudiantes.dao;
 
 
 import com.sistema.estudiantes.conexao.Conexao;
+import com.sistema.estudiantes.model.Aluno;
+import com.sistema.estudiantes.model.Disciplina;
 import com.sistema.estudiantes.model.Observacao;
 import com.sistema.estudiantes.model.Professor;
 
@@ -13,20 +15,20 @@ import java.util.List;
 
 public class ObservacaoDAO {
 
-    public void inserir(String texto, LocalDate dataCriacao, int idProfessor, int idAluno, int idDisciplina) {
+    public void inserir(Observacao observacao) {
         String sql = """
-            INSERT INTO Observacao (Texto, DataCriacao, IdProfessor, IdAluno, IdDisciplina)
+            INSERT INTO Observacao (Texto, DataCriacao, ProfessorId, IdAluno, DisciplinaId)
             VALUES (?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, texto);
-            psmt.setObject(2, dataCriacao);
-            psmt.setInt(3, idProfessor);
-            psmt.setInt(4, idAluno);
-            psmt.setInt(5, idDisciplina);
+            psmt.setString(1, observacao.getTexto());
+            psmt.setObject(2, observacao.getDataCriacao());
+            psmt.setInt(3, observacao.getIdProfessor().getId());
+            psmt.setInt(4, observacao.getIdAluno().getMatricula());
+            psmt.setInt(5, observacao.getIdDisciplina().getId());
 
             psmt.executeUpdate();
 
@@ -44,13 +46,16 @@ public class ObservacaoDAO {
              ResultSet rs = psmt.executeQuery()) {
 
             while (rs.next()) {
+                Professor p = new Professor(rs.getInt("professorid"));
+                Aluno a = new Aluno(rs.getInt("idaluno"));
+                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
                 Observacao o = new Observacao(
                         rs.getInt("id"),
                         rs.getString("texto"),
                         rs.getObject("datacriacao", LocalDate.class),
-                        rs.getInt("professorid"),
-                        rs.getInt("idaluno"),
-                        rs.getInt("disciplinaid")
+                        p,
+                        a,
+                        d
                 );
                 lista.add(o);
             }

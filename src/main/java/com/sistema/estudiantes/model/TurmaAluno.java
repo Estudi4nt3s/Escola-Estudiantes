@@ -1,30 +1,21 @@
 package com.sistema.estudiantes.model;
 
-public class TurmaAluno extends ModelBase {
-    private Aluno aluno;
+public class TurmaAluno {
+    private int id;
     private Aluno matriculaAluno;
     private Turma idTurma;
 
     public TurmaAluno() {}
 
-    public TurmaAluno(Aluno matriculaAluno, Turma idTurma) {
-        this.matriculaAluno = matriculaAluno;
-        this.idTurma = idTurma;
-    }
-
     public TurmaAluno(int id, Aluno matriculaAluno, Turma idTurma) {
-        super(id);
+        this.id = id;
         this.matriculaAluno = matriculaAluno;
         this.idTurma = idTurma;
     }
 
-    public TurmaAluno(int id, int matriculaAluno, int idTurma) {
-        super(id);
-        this.matriculaAluno = new Aluno(matriculaAluno);
-        this.idTurma = new Turma(idTurma);
+    public int getId() {
+        return this.id;
     }
-
-    public Aluno getAluno(){return this.aluno;}
 
     public Aluno getMatriculaAluno() {
         return this.matriculaAluno;
@@ -34,11 +25,19 @@ public class TurmaAluno extends ModelBase {
         return this.idTurma;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setMatriculaAluno(Aluno matriculaAluno) {
         this.matriculaAluno = matriculaAluno;
     }
 
     public void setIdTurma(Turma idTurma) {
         this.idTurma = idTurma;
+    }
+
+    public String toString() {
+        return "Id: " + this.id + "\nMatricula Aluno: " + this.matriculaAluno + "\nId Turma: " + this.idTurma;
     }
 }

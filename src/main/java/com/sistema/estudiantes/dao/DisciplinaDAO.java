@@ -11,19 +11,19 @@ import java.util.List;
 
 public class DisciplinaDAO {
 
-    public void inserir(String nome) {
-            String sql = "INSERT INTO Disciplina (Nome) VALUES (?)";
+        public void inserir(String nome) {
+                String sql = "INSERT INTO Disciplina (Nome) VALUES (?)";
 
-            try (Connection conn = new Conexao().conectar();
-                 PreparedStatement psmt = conn.prepareStatement(sql)) {
+                try (Connection conn = new Conexao().conectar();
+                     PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-                psmt.setString(1, nome);
-                psmt.executeUpdate();
+                    psmt.setString(1, nome);
+                    psmt.executeUpdate();
 
-            } catch (SQLException e) {
-                e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        }
 
         public List<Disciplina> listar() {
             List<Disciplina> lista = new ArrayList<>();
@@ -47,36 +47,36 @@ public class DisciplinaDAO {
             return lista;
         }
 
-    public List<Disciplina> listarComFiltro(String nomeColuna, Object valorColuna) {
+        public List<Disciplina> listarComFiltro(int id) {
 
-        List<Disciplina> disciplinas = new ArrayList<>();
-        String sql = "SELECT Id, Nome FROM Disciplina WHERE " + nomeColuna + " = ?";
+            List<Disciplina> disciplinas = new ArrayList<>();
+            String sql = "SELECT * FROM Disciplina WHERE id = ?";
 
-        try (
-                Connection conn = new Conexao().conectar();
-                PreparedStatement stmt = conn.prepareStatement(sql)
-        ) {
+            try (
+                    Connection conn = new Conexao().conectar();
+                    PreparedStatement stmt = conn.prepareStatement(sql)
+            ) {
 
-            stmt.setObject(1, valorColuna);
+                stmt.setObject(1, id);
 
-            try (ResultSet rs = stmt.executeQuery()) {
+                try (ResultSet rs = stmt.executeQuery()) {
 
-                while (rs.next()) {
-                    Disciplina disciplina = new Disciplina(
-                            rs.getInt("Id"),
-                            rs.getString("Nome")
-                    );
+                    while (rs.next()) {
+                        Disciplina disciplina = new Disciplina(
+                                rs.getInt("Id"),
+                                rs.getString("Nome")
+                        );
 
-                    disciplinas.add(disciplina);
+                        disciplinas.add(disciplina);
+                    }
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-        } catch (Exception e) {
-            System.err.println("Erro ao filtrar Disciplina por " + nomeColuna + ": " + e.getMessage());
+            return disciplinas;
         }
-
-        return disciplinas;
-    }
 
         public boolean atualizar(Disciplina d) {
             String sql = "UPDATE Disciplina SET Nome = ? WHERE Id = ?";

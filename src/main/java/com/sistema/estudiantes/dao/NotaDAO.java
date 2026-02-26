@@ -12,19 +12,19 @@ import java.util.List;
 
 public class NotaDAO {
 
-    public void inserir(int idDisciplina, int idAluno, int idTurma, double valor) {
+    public void inserir(Nota nota) {
         String sql = """
-            INSERT INTO Nota (IdDisciplina, IdAluno, IdTurma, Valor)
+            INSERT INTO Nota (disciplinaid, idaluno, idturma, valor)
             VALUES (?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, idDisciplina);
-            psmt.setInt(2, idAluno);
-            psmt.setInt(3, idTurma);
-            psmt.setDouble(4, valor);
+            psmt.setInt(1, nota.getIdDisciplina().getId());
+            psmt.setInt(2, nota.getIdAluno().getMatricula());
+            psmt.setInt(3, nota.getIdTurma().getId());
+            psmt.setDouble(4, nota.getValor());
 
             psmt.executeUpdate();
 
@@ -43,9 +43,9 @@ public class NotaDAO {
 
             while (rs.next()) {
 
-                Disciplina d = new Disciplina(rs.getInt("IdDisciplina"));
-                Aluno a = new Aluno(rs.getInt("IdAluno"));
-                Turma t = new Turma(rs.getInt("IdTurma"));
+                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                Aluno a = new Aluno(rs.getInt("idaluno"));
+                Turma t = new Turma(rs.getInt("idturma"));
 
                 Nota n = new Nota(
                         rs.getInt("Id"),
@@ -64,24 +64,20 @@ public class NotaDAO {
         return lista;
     }
 
-    public List<Nota> listarComFiltro(String nomeColuna, Object valorColuna){
+    public List<Nota> listarComFiltro(int id){
         List<Nota> listaNota = new ArrayList<>();
-        String sql = "SELECT * FROM Nota WHERE" + nomeColuna + "= ?";
+        String sql = "SELECT * FROM Nota WHERE id = ?";
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, valorColuna);
+            stmt.setObject(1, id);
 
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
 
-                    Disciplina disciplina = new Disciplina();
-                    disciplina.setId(rs.getInt("IdDisciplina"));
-
-                    Aluno aluno = new Aluno();
-
-                    Turma turma = new Turma();
-                    turma.setId(rs.getInt("IdTurma"));
+                    Disciplina disciplina = new Disciplina(rs.getInt("disciplinaid"));
+                    Aluno aluno = new Aluno(rs.getInt("idaluno"));
+                    Turma turma = new Turma(rs.getInt("idturma"));
 
                     Nota nota = new Nota(
                             rs.getInt("id"),
@@ -103,17 +99,16 @@ public class NotaDAO {
     public boolean atualizar(Nota n) {
         String sql = """
         UPDATE Nota
-           SET IdDisciplina = ?, IdAluno = ?, IdTurma = ?, Valor = ?
+           SET disciplinaid = ?, IdAluno = ?, IdTurma = ?, Valor = ?
          WHERE Id = ?
     """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-
-            psmt.setInt(1, n.getDisciplina().getId());
-            psmt.setInt(2, n.getAluno().getMatricula());
-            psmt.setInt(3, n.getTurma().getId());
+            psmt.setInt(1, n.getIdDisciplina().getId());
+            psmt.setInt(2, n.getIdAluno().getMatricula());
+            psmt.setInt(3, n.getIdTurma().getId());
             psmt.setDouble(4, n.getValor());
             psmt.setInt(5, n.getId());
 

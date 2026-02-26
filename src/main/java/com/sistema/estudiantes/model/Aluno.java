@@ -1,34 +1,31 @@
 package com.sistema.estudiantes.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Aluno {
     private int matricula;
     private String cpf;
     private String nome;
     private LocalDate dataNascimento;
-    private String photo;
     private Usuario usuario_id;
     private String telefonePai;
 
     public Aluno() {}
 
-    public Aluno(int matricula, String cpf, String nome, Usuario usuarioId, String telefonePai) {
+    public Aluno(int matricula, String cpf, String nome, LocalDate dataNascimento, Usuario usuarioId, String telefonePai) {
         this.matricula = matricula;
         this.cpf = cpf;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
-        this.photo = photo;
         this.cpf = cpf;
-        this.usuario_id = usuario_id;
+        this.usuario_id = usuarioId;
+        this.telefonePai = telefonePai;
     }
 
     public Aluno(int matricula, String nome) {
         this.matricula = matricula;
         this.nome = nome;
     }
-
 
     public Aluno(int matricula){
         this.matricula = matricula;
@@ -44,6 +41,10 @@ public class Aluno {
 
     public String getNome() {
         return this.nome;
+    }
+
+    public LocalDate getDataNascimento() {
+        return this.dataNascimento;
     }
 
     public Usuario getUsuarioId() {
@@ -67,6 +68,10 @@ public class Aluno {
         this.nome = nome;
     }
 
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
     public void setUsuarioId(Usuario usuarioId) {
         this.usuario_id = usuarioId;
     }
@@ -76,6 +81,6 @@ public class Aluno {
     }
 
     public String toString() {
-        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf  + "\nNome: " + this.nome + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
+        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf  + "\nNome: " + this.nome + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
     }
 }
