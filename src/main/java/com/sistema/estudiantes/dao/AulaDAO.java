@@ -65,16 +65,16 @@ public class AulaDAO {
         return lista;
     }
 
-    public List<Aula> listarComFiltro(int id) {
+    public List<Aula> listarComFiltro(String coluna, String dado, String adicional) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM Aula WHERE id = ?";
+        String sql = "SELECT * FROM Aula WHERE " + coluna + " = ?" + " " + adicional;
 
         try (
                 Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-                stmt.setObject(1, id);
+                stmt.setString(1, dado);
 
             try (ResultSet rs = stmt.executeQuery()) {
 
@@ -88,6 +88,7 @@ public class AulaDAO {
                             d,
                             t,
                             rs.getString("diasemana")
+
 
                     );
                     aulas.add(aula);
