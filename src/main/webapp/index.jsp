@@ -26,7 +26,8 @@
     String dia = String.format("%02d",hoje.getDayOfMonth());
     String mes = String.format("%02d",hoje.getMonthValue());
     Locale ptBr = new Locale("pt", "BR");
-    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).substring(0, 3);
+    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+    System.out.println(semana);
     String nome = (String) request.getSession().getAttribute("nome");
 %>
 <body>
@@ -80,11 +81,12 @@
 
                 <div class="flex">
                     <%
-                        if(!semana.equals("sab") && !semana.equals("dom")){
-                            List<Aula> aulas = aulaDAO.listarComFiltro("diaSemana",semana + "order by 2");
+                        if(!semana.equals("SAB") && !semana.equals("DOM")){
+                            List<Aula> aulas = aulaDAO.listarComFiltro("diasemana",semana, "order by 2");
+                            System.out.println(aulas.getFirst());
                             for(int i = 0;i < 6;i++){
-                                int id = aulas.get(i).getDisciplinaId();
-                                String materia = disciplinaDAO.listarComFiltro("id",id).getFirst().getNome();%>
+                                int id = aulas.get(i).getDisciplinaId().getId();
+                                String materia = disciplinaDAO.listarComFiltro("id",String.valueOf(id)).getFirst().getNome();%>
 
                     <div class="card <%=materia%>">
                         <h3><%=materia%></h3>
@@ -109,11 +111,14 @@
                         horario[4] = "11:30 às 12:30";
                         horario[5] = "13:30 às 14:30";
 
-                        if(!semana.equals("sab") && !semana.equals("dom")){
-                            List<Aula> aulas = aulaDAO.listarComFiltro("diaSemana",semana + "order by 2");
+                        if(!semana.equals("SAB") && !semana.equals("DOM")){
+                            List<Aula> aulas = aulaDAO.listarComFiltro("diasemana",semana, "order by 2");
+                            System.out.println(aulas);
                             for(int i = 0;i < 6;i++){
-                                int id = aulas.get(i).getDisciplinaId();
-                                String materia = disciplinaDAO.listarComFiltro("id",id).getFirst().getNome();%>
+                                int id = aulas.get(i).getDisciplinaId().getId();
+                                String materia = disciplinaDAO.listarComFiltro("id",String.valueOf(id)).getFirst().getNome();
+                                System.out.println(materia);
+                                System.out.println(semana);%>
 
                     %>
                     <li><strong><%=materia%></strong> - <%=horario[i]%></li>

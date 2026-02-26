@@ -47,17 +47,17 @@ public class DisciplinaDAO {
             return lista;
         }
 
-        public List<Disciplina> listarComFiltro(int id) {
+        public List<Disciplina> listarComFiltro(String coluna, String filtro) {
 
             List<Disciplina> disciplinas = new ArrayList<>();
-            String sql = "SELECT * FROM Disciplina WHERE id = ?";
+            String sql = "SELECT * FROM Disciplina WHERE " + coluna + " = ?";
 
             try (
                     Connection conn = new Conexao().conectar();
                     PreparedStatement stmt = conn.prepareStatement(sql)
             ) {
 
-                stmt.setObject(1, id);
+                stmt.setInt(1, Integer.parseInt(filtro));
 
                 try (ResultSet rs = stmt.executeQuery()) {
 
