@@ -49,7 +49,6 @@ public class ServletLogin extends HttpServlet {
                         AlunoDAO alunoDAO = new AlunoDAO();
                         List<Aluno> aluno = alunoDAO.listarComFiltro(users.getFirst().getId());
                         request.getSession().setAttribute("nome", aluno.getFirst().getNome());
-                        request.getSession().setAttribute("foto", users.getFirst().getFoto());
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
                     }
                 }

@@ -130,8 +130,6 @@
                                         break;
                                     }
                                 }%>
-
-                    %>
                     <li><strong><%=materia%></strong> - <%=horario[i]%></li>
                     <%
                             }
