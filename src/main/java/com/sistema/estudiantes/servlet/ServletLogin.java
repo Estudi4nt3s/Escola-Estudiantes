@@ -21,7 +21,7 @@ public class ServletLogin extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 //        Pegando os Parâmetros
-        String emailStr = request.getParameter("usuario").strip();
+        String email = request.getParameter("usuario").strip();
         String senha = request.getParameter("senha").strip();
 
 //        Declarando variáveis com valores padrões
@@ -32,10 +32,9 @@ public class ServletLogin extends HttpServlet {
 //        Validando para ver se nós estamos tentando logar
             System.out.println("Não é adm 💔");
             String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
-            boolean professor = emailStr.matches(regexFuncionario);
+            boolean professor = email.matches(regexFuncionario);
             UsuarioDAO userDAO = new UsuarioDAO();
-            int email = Integer.parseInt(emailStr);
-            List<Usuario> users = userDAO.listarComFiltro(email);
+            List<Usuario> users = userDAO.listarComFiltro("email",email);
             if (!users.isEmpty()) {
                 validarEmail = true;
                 validarSenha = users.getFirst().getSenha().equals(senha);
@@ -50,7 +49,8 @@ public class ServletLogin extends HttpServlet {
                         AlunoDAO alunoDAO = new AlunoDAO();
                         List<Aluno> aluno = alunoDAO.listarComFiltro(users.getFirst().getId());
                         request.getSession().setAttribute("nome", aluno.getFirst().getNome());
-                        request.getRequestDispatcher("views/index.jsp").forward(request, response);
+                        request.getSession().setAttribute("foto", users.getFirst().getFoto());
+                        request.getRequestDispatcher("views/home.jsp").forward(request, response);
                     }
                 }
             request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
