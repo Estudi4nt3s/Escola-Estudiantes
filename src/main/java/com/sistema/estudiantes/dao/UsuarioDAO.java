@@ -56,15 +56,15 @@ public class UsuarioDAO {
         return lista;
     }
 
-    public List<Usuario> listarComFiltro(int id) {
+    public List<Usuario> listarComFiltro(String coluna, String filtro) {
         List<Usuario> usuarios = new ArrayList<>();
 
-        String sql = "SELECT * FROM usuario WHERE id = ?";
+        String sql = "SELECT * FROM usuario WHERE " + coluna + " = ?";
 
         try (Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setInt(1, id);
+            stmt.setString(1, filtro);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

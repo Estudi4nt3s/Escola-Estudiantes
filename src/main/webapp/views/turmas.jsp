@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="java.time.LocalDate" %>
@@ -62,7 +62,7 @@
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12">
+                <img src="https://i.pravatar.cc/40?img=12" alt="">
                 <span>Mateus Carlos</span>
             </div>
         </div>

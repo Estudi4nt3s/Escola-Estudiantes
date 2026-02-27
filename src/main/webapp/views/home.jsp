@@ -6,6 +6,7 @@
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="com.sistema.estudiantes.dao.AulaDAO" %>
 <%@ page import="com.sistema.estudiantes.dao.DisciplinaDAO" %>
+<%@ page import="com.sistema.estudiantes.model.Disciplina" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -82,10 +83,17 @@
                     <%
                         if(!semana.equals("SAB") && !semana.equals("DOM")){
                             List<Aula> aulas = aulaDAO.listarComFiltro("diasemana",semana, "order by 2");
-                            System.out.println(aulas.getFirst());
+                            List<Disciplina> disciplina = disciplinaDAO.listar();
+                            String materia = "";
                             for(int i = 0;i < 6;i++){
                                 int id = aulas.get(i).getDisciplinaId().getId();
-                                String materia = disciplinaDAO.listarComFiltro("id",String.valueOf(id)).getFirst().getNome();%>
+                                for(int j = 0; j < disciplina.size(); j++){
+                                    if (disciplina.get(j).getId() == id){
+                                        materia = disciplina.get(j).getNome();
+                                        break;
+                                    }
+                                }
+                    %>
 
                     <div class="card <%=materia%>">
                         <h3><%=materia%></h3>
@@ -112,12 +120,16 @@
 
                         if(!semana.equals("SAB") && !semana.equals("DOM")){
                             List<Aula> aulas = aulaDAO.listarComFiltro("diasemana",semana, "order by 2");
-                            System.out.println(aulas);
+                            List<Disciplina> disciplina = disciplinaDAO.listar();
+                            String materia = "";
                             for(int i = 0;i < 6;i++){
                                 int id = aulas.get(i).getDisciplinaId().getId();
-                                String materia = disciplinaDAO.listarComFiltro("id",String.valueOf(id)).getFirst().getNome();
-                                System.out.println(materia);
-                                System.out.println(semana);%>
+                                for(int j = 0; j < disciplina.size(); j++){
+                                    if (disciplina.get(j).getId() == id){
+                                        materia = disciplina.get(j).getNome();
+                                        break;
+                                    }
+                                }%>
 
                     %>
                     <li><strong><%=materia%></strong> - <%=horario[i]%></li>

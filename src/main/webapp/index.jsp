@@ -15,10 +15,11 @@
     <a href="#" class="restricted">acesso restrito</a>
 
     <main>
-        <div class="div-overlay">
-            <div class="overlay"></div>
-            <img src="${pageContext.request.contextPath}/3b9acabc-be87-4b60-af72-8bc163abe1d6.png" alt="Estudantes">
-        </div>
+        <form action="servletLogin" method="post">
+            <input type="text" name="usuario">
+            <input type="password" name="senha">
+            <input type="submit">
+        </form>
     </main>
 </body>
 </html>
