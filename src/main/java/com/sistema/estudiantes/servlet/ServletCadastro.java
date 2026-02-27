@@ -17,17 +17,14 @@ public class ServletCadastro extends HttpServlet {
         List<Aluno> alunos = alunoDAO.listar();
 
         int matricula = Integer.parseInt(request.getParameter("matricula"));
-        String cpf = request.getParameter("cpf");
+        String cpf = request.getParameter("cpf").replace(".", "").replace("-", "");
         List<Aluno> alunos1 = alunoDAO.listarComFiltro(matricula);
 
         if (alunos1.getFirst().getMatricula() == matricula){
             if(alunos1.getFirst().getCpf().equals(cpf)){
                 String email = request.getParameter("email");
                 String senha = request.getParameter("senha");
-                String isAdmStr = request.getParameter("isadm");
-                boolean isAdm = Boolean.parseBoolean(isAdmStr);
-                String foto = request.getParameter("photo");
-                Usuario usuario = new Usuario(email, senha, isAdm, foto);
+                Usuario usuario = new Usuario(email, senha);
                 usuarioDAO.inserir(usuario);
             }
             //CPF não compativel

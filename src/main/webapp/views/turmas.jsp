@@ -1,11 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.time.format.TextStyle" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
         busca = request.getParameter("busca");
     }
+    LocalDate hoje = LocalDate.now();
+    String dia = String.format("%02d",hoje.getDayOfMonth());
+    String mes = String.format("%02d",hoje.getMonthValue());
+    Locale ptBr = new Locale("pt", "BR");
+    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -48,7 +56,7 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            Seg, 09/02
+            <%=semana.toUpperCase().charAt(0) + semana.toLowerCase().substring(1) + ", " + dia + "/" + mes%>
         </div>
 
         <div class="user">
@@ -80,7 +88,7 @@
             %>
             <div class="turmas-card">
                 <h3><%= turma.getAno() + "º" + turma.getLetra() %></h3>
-                <a href="${pageContext.request.contextPath}/alunos.jsp?id=<%= turma.getId() %>">
+                <a href="${pageContext.request.contextPath}/views/alunos.jsp?id=<%= turma.getId() %>">
                     <i class="material-icons">arrow_forward</i>
                 </a>
             </div>
