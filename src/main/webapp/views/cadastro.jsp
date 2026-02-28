@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Estudantes</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/cadastro.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cadastro.css">
     
     <%-- Fontes (mantidas conforme original) --%>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,19 +30,19 @@
                 <h1>Cadastro</h1>
 
                 <%-- Início do Formulário --%>
-                <form action="CadastroServlet" method="POST">
+                <form action="servletCadastro" method="POST">
                     
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="txtCpf" required>
+                    <input type="text" id="cpf" name="cpf" required>
 
                     <label for="matricula">Matrícula</label>
-                    <input type="text" id="matricula" name="txtMatricula" required>
+                    <input type="text" id="matricula" name="matricula" required>
 
                     <label for="email">E-mail</label>
-                    <input type="email" id="email" name="txtEmail" required>
+                    <input type="email" id="email" name="email" required>
 
                     <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="txtSenha" required>
+                    <input type="password" id="senha" name="senha" required>
 
                     <%-- Botão agora é do tipo submit para enviar o form --%>
                     <button type="submit">Cadastrar</button>

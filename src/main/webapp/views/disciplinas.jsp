@@ -1,6 +1,9 @@
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.time.format.TextStyle" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +12,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/disciplinas.css">
 </head>
+<%
+    LocalDate hoje = LocalDate.now();
+    String dia = String.format("%02d",hoje.getDayOfMonth());
+    String mes = String.format("%02d",hoje.getMonthValue());
+    Locale ptBr = new Locale("pt", "BR");
+    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+%>
 
 <body>
 
@@ -18,16 +28,13 @@
             <span>Colégio Estudiantes</span>
         </div>
 
-        <nav>
-            <a class="menu" href="index.html">
-                <i class="material-icons">home</i>Início
-            </a>
-            <a class="menu active">
-                <i class="material-icons">menu_book</i>Minhas Disciplinas
-            </a>
-            <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu"><i class="material-icons">person</i>Perfil</a>
-        </nav>
+    <nav>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp">
+        <i class="material-icons">home</i>Início</a>
+        <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu"><i class="material-icons">person</i>Perfil</a>
+    </nav>
 
         <div class="config">
             <i class="material-icons">settings</i>Configurações
@@ -36,11 +43,11 @@
 
     <main class="main">
 
-        <header class="topbar">
-            <div class="date">
-                <i class="material-icons">calendar_today</i>
-                Seg, 09/02
-            </div>
+    <header class="topbar">
+        <div class="date">
+            <i class="material-icons">calendar_today</i>
+            <%=semana.toUpperCase().charAt(0) + semana.toLowerCase().substring(1) + ", " + dia + "/" + mes%>
+        </div>
 
             <div class="user">
                 <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
@@ -57,53 +64,53 @@
 
             <div class="disciplinas-grid">
 
-                <div class="disciplina card1">
-                    <div class="disciplina-info">
-                        <h3>Matemática</h3>
-                        <p>Prof. Valdislei</p>
-                    </div>
-                    <img src="img/Matematica.png" alt="Matemática">
+            <div class="disciplina card1">
+                <div class="disciplina-info">
+                    <h3>Matemática</h3>
+                    <p>Prof. Valdislei</p>
                 </div>
+                <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
+            </div>
 
-                <div class="disciplina card2">
-                    <div class="disciplina-info">
-                        <h3>Português</h3>
-                        <p>Prof. Cláudia</p>
-                    </div>
-                    <img src="img/Matematica.png" alt="Português">
+            <div class="disciplina card2">
+                <div class="disciplina-info">
+                    <h3>Português</h3>
+                    <p>Prof. Cláudia</p>
                 </div>
+                <img src="${pageContext.request.contextPath}/utils/portugues.png" alt="">
+            </div>
 
-                <div class="disciplina card3">
-                    <div class="disciplina-info">
-                        <h3>Geografia</h3>
-                        <p>Prof. Flávio</p>
-                    </div>
-                    <img src="img/Matematica.png" alt="Geografia">
+            <div class="disciplina card3">
+                <div class="disciplina-info">
+                    <h3>Geografia</h3>
+                    <p>Prof. Flávio</p>
                 </div>
+                <img src="${pageContext.request.contextPath}/utils/geografia.png" alt="">
+            </div>
 
-                <div class="disciplina card4">
-                    <div class="disciplina-info">
-                        <h3>História</h3>
-                        <p>Prof. Rosangela</p>
-                    </div>
-                    <img src="img/Matematica.png" alt="História">
+            <div class="disciplina card4">
+                <div class="disciplina-info">
+                    <h3>História</h3>
+                    <p>Prof. Rosangela</p>
                 </div>
+                <img src="${pageContext.request.contextPath}/utils/historia.png" alt="">
+            </div>
 
-                <div class="disciplina card5">
-                    <div class="disciplina-info">
-                        <h3>Inglês</h3>
-                        <p>Prof. Erika</p>
-                    </div>
-                    <img src="img/Matematica.png" alt="Inglês">
+            <div class="disciplina card5">
+                <div class="disciplina-info">
+                    <h3>Inglês</h3>
+                    <p>Prof. Erika</p>
                 </div>
+                <img src="${pageContext.request.contextPath}/utils/ingles.png" alt="">
+            </div>
 
-                <div class="disciplina card6">
-                    <div class="disciplina-info">
-                        <h3>Ciências</h3>
-                        <p>Prof. Robson</p>
-                    </div>
-                    <img src="img/Matematica.png" alt="Ciências">
+            <div class="disciplina card6">
+                <div class="disciplina-info">
+                    <h3>Ciências</h3>
+                    <p>Prof. Robson</p>
                 </div>
+                <img src="${pageContext.request.contextPath}/utils/ciencias.png" alt="">
+            </div>
 
             </div>
 
