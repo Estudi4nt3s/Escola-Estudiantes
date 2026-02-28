@@ -26,7 +26,7 @@ body{
 }
 
 .nav-btn{
-    background:#2E86C1;
+    background:#D11D22;
     border:none;
     color:white;
     padding:8px 15px;
@@ -36,7 +36,7 @@ body{
 }
 
 .nav-btn:hover{
-    background:#1f618d;
+    background:#A5161A;
 }
 
 .calendar-grid{
