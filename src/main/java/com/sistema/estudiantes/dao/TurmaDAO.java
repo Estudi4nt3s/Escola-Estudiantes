@@ -62,17 +62,7 @@ public class TurmaDAO {
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            if (valor instanceof Integer) {
-                stmt.setInt(1, (Integer) valor);
-            } else if (valor instanceof String) {
-                stmt.setString(1, (String) valor);
-            } else if (valor instanceof Character) {
-                stmt.setString(1, valor.toString());
-            } else {
-                throw new IllegalArgumentException("Tipo não suportado: " + valor.getClass());
-            }
-
+             stmt.setObject(1, valor);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Turma turma = new Turma(

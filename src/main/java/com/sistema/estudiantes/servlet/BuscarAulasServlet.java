@@ -15,13 +15,13 @@ import com.sistema.estudiantes.dao.AulaDAO;
 
 @WebServlet("/BuscarAulasServlet")
 public class BuscarAulasServlet extends HttpServlet {
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String data = request.getParameter("data");
 
-        List<Aula> aulas = AulaDAO.buscarPorData(data);
+        AulaDAO aulaDAO = new AulaDAO();
+        List<Aula> aulas = aulaDAO.listarComFiltro("data = ?",data);
 
         request.setAttribute("aulas", aulas);
 

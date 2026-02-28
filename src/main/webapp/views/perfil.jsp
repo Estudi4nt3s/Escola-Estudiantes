@@ -1,23 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
-<%@ page import="com.sistema.estudiantes.dao.NotaDAO" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.sistema.estudiantes.dao.TurmaAlunoDAO" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
-<%@ page import="com.sistema.estudiantes.dao.TurmaDAO" %>
-<%@ page import="com.sistema.estudiantes.model.TurmaAluno" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
 
 <%
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
-    NotaDAO notaDAO = new NotaDAO();
-    TurmaAlunoDAO turmaAlunoDAO = new TurmaAlunoDAO();
-    TurmaDAO turmaDAO = new TurmaDAO();
-    List<TurmaAluno> turmaAluno = turmaAlunoDAO.listarComFiltro("matriculaaluno = ?",aluno.getMatricula());
-    List<Turma> turmas = turmaDAO.listarComFiltro("id = ? order by 2 desc",turmaAluno.getFirst().getIdTurma());
-    double media = notaDAO.Media(aluno.getMatricula());
+    Turma turma = (Turma) request.getSession().getAttribute("turma");
+    String[] data = (String[]) request.getSession().getAttribute("data");
+    double media = (Double) request.getSession().getAttribute("media");
 %>
 
 <!DOCTYPE html>
@@ -43,14 +35,10 @@
 
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
-        <a class="menu"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu active"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
-
-    <div class="config">
-        <i class="material-icons">settings</i>Configurações
-    </div>
 </aside>
 
 <main class="main">
@@ -58,7 +46,7 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            <%= java.time.LocalDate.now() %>
+            <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
         </div>
 
         <div class="user">
@@ -79,7 +67,7 @@
 
             <div class="perfil-info-principal">
                 <h2><%= aluno.getNome() %></h2>
-                <p> trocar dps</p>
+                <p> <%=turma.getSerie()%></p>
 
                 <div class="perfil-status ativo">
                     ● Aluno Ativo
@@ -100,7 +88,7 @@
                 <h3>Desempenho</h3>
                 <div class="linha"><span>Média Geral:</span> <%=media%></div>
                 <div class="linha"><span>Frequência:</span> -100</div>
-                <div class="linha"><span>Turma:</span> <%=turmas.getFirst().getSerie()%></div>
+                <div class="linha"><span>Turma:</span> <%=turma.getSerie()%></div>
             </div>
 
             <div class="perfil-card-info">
