@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.Locale" %>
-<%@ page import="java.time.format.TextStyle" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="com.sistema.estudiantes.dao.AulaDAO" %>
@@ -26,7 +25,8 @@
     String dia = String.format("%02d",hoje.getDayOfMonth());
     String mes = String.format("%02d",hoje.getMonthValue());
     Locale ptBr = new Locale("pt", "BR");
-    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+    String semana = "QUI";
+            //hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
     System.out.println(semana);
     String nome = (String) request.getSession().getAttribute("nome");
 %>
@@ -43,7 +43,7 @@
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu"><i class="material-icons">person</i>Perfil</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
             <a class="menu" href="${pageContext.request.contextPath}/turma">
                 <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
@@ -64,7 +64,7 @@
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
+                    <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="https://i.pravatar.cc/40?img=12" alt="avatar"></a>
                     <span><%=nome%></span>
                 </div>
             </div>
@@ -81,21 +81,21 @@
 
                 <div class="flex">
                     <%
-                        if(!semana.equals("SAB") && !semana.equals("DOM")){
+                        if(!semana.equals("SÁB") && !semana.equals("DOM")){
                             List<Aula> aulas = aulaDAO.listarComFiltro("diasemana",semana, "order by 2");
                             List<Disciplina> disciplina = disciplinaDAO.listar();
                             String materia = "";
                             for(int i = 0;i < 6;i++){
                                 int id = aulas.get(i).getDisciplinaId().getId();
-                                for(int j = 0; j < disciplina.size(); j++){
-                                    if (disciplina.get(j).getId() == id){
-                                        materia = disciplina.get(j).getNome();
+                                for (Disciplina value : disciplina) {
+                                    if (value.getId() == id) {
+                                        materia = value.getNome();
                                         break;
                                     }
                                 }
                     %>
 
-                    <div class="card <%=materia%>">
+                    <div class="card <%=materia.toLowerCase()%>">
                         <h3><%=materia%></h3>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
                             nesciunt.</p>
@@ -124,9 +124,9 @@
                             String materia = "";
                             for(int i = 0;i < 6;i++){
                                 int id = aulas.get(i).getDisciplinaId().getId();
-                                for(int j = 0; j < disciplina.size(); j++){
-                                    if (disciplina.get(j).getId() == id){
-                                        materia = disciplina.get(j).getNome();
+                                for (Disciplina value : disciplina) {
+                                    if (value.getId() == id) {
+                                        materia = value.getNome();
                                         break;
                                     }
                                 }%>

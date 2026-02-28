@@ -26,7 +26,7 @@ public class ServletLogin extends HttpServlet {
 
 //        Declarando variáveis com valores padrões
         boolean validarEmail = false;
-        boolean validarSenha = false;
+        boolean validarSenha;
 
         System.out.println("Entrou no servlet");
 //        Validando para ver se nós estamos tentando logar
@@ -39,16 +39,16 @@ public class ServletLogin extends HttpServlet {
                 validarEmail = true;
                 validarSenha = users.getFirst().getSenha().equals(senha);
                 if (validarSenha) {
-                    request.getSession().setAttribute("usuario_id", users.getFirst().getId());
+                    request.getSession().setAttribute("usuario", users.getFirst());
                     if (professor) {
                         ProfessorDAO profDAO = new ProfessorDAO();
                         List<Professor> profs = profDAO.listarComFiltro(users.getFirst().getId());
-                        request.getSession().setAttribute("nome", profs.getFirst().getNome());
+                        request.getSession().setAttribute("professor", profs.getFirst());
                         request.getRequestDispatcher("views/index.jsp").forward(request, response);
                     } else {
                         AlunoDAO alunoDAO = new AlunoDAO();
                         List<Aluno> aluno = alunoDAO.listarComFiltro(users.getFirst().getId());
-                        request.getSession().setAttribute("nome", aluno.getFirst().getNome());
+                        request.getSession().setAttribute("aluno", aluno.getFirst());
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
                     }
                 }

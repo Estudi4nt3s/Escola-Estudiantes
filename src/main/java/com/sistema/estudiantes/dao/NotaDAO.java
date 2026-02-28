@@ -18,7 +18,7 @@ public class NotaDAO {
             VALUES (?, ?, ?, ?)
         """;
 
-        try (Connection conn = new Conexao().conectar();
+        try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setInt(1, nota.getIdDisciplina().getId());
@@ -37,7 +37,7 @@ public class NotaDAO {
         List<Nota> lista = new ArrayList<>();
         String sql = "SELECT * FROM Nota";
 
-        try (Connection conn = new Conexao().conectar();
+        try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
              ResultSet rs = psmt.executeQuery()) {
 
@@ -64,13 +64,13 @@ public class NotaDAO {
         return lista;
     }
 
-    public List<Nota> listarComFiltro(int id){
+    public List<Nota> listarComFiltro(String condicao, Object valor){
         List<Nota> listaNota = new ArrayList<>();
-        String sql = "SELECT * FROM Nota WHERE id = ?";
+        String sql = "SELECT * FROM Nota WHERE "+condicao;
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, id);
+            stmt.setObject(1, valor);
 
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
@@ -96,6 +96,24 @@ public class NotaDAO {
         return listaNota;
     }
 
+    public double Media(int id){
+        String sql = "SELECT avg(valor) as media FROM Nota WHERE idaluno = ?";
+        double media = 0;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    media = rs.getDouble("media");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return media;
+    }
+
     public boolean atualizar(Nota n) {
         String sql = """
         UPDATE Nota
@@ -103,7 +121,7 @@ public class NotaDAO {
          WHERE Id = ?
     """;
 
-        try (Connection conn = new Conexao().conectar();
+        try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setInt(1, n.getIdDisciplina().getId());
@@ -124,7 +142,7 @@ public class NotaDAO {
     public boolean excluir(int id) {
         String sql = "DELETE FROM Nota WHERE Id = ?";
 
-        try (Connection conn = new Conexao().conectar();
+        try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setInt(1, id);
