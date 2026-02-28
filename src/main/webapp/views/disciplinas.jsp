@@ -1,6 +1,4 @@
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.time.format.TextStyle" %>
+
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,14 +8,10 @@
     <title>Colégio Estudiantes - Minhas Disciplinas</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/disciplinas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
 </head>
 <%
-    LocalDate hoje = LocalDate.now();
-    String dia = String.format("%02d",hoje.getDayOfMonth());
-    String mes = String.format("%02d",hoje.getMonthValue());
-    Locale ptBr = new Locale("pt", "BR");
-    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+    String[] data = (String[]) request.getSession().getAttribute("data");
 %>
 
 <body>
@@ -32,13 +26,9 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp">
         <i class="material-icons">home</i>Início</a>
         <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
-
-        <div class="config">
-            <i class="material-icons">settings</i>Configurações
-        </div>
     </aside>
 
     <main class="main">
@@ -46,7 +36,7 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            <%=semana.toUpperCase().charAt(0) + semana.toLowerCase().substring(1) + ", " + dia + "/" + mes%>
+            <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
         </div>
 
             <div class="user">
@@ -153,7 +143,7 @@
         </div>
     </div>
 
-    <script src="js/notificacoes.js"></script>
+    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 
 </html>
