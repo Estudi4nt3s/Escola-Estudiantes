@@ -1,6 +1,9 @@
 package com.sistema.estudiantes.dao;
 
 import com.sistema.estudiantes.conexao.Conexao;
+import com.sistema.estudiantes.model.Aluno;
+import com.sistema.estudiantes.model.Disciplina;
+import com.sistema.estudiantes.model.Nota;
 import com.sistema.estudiantes.model.Turma;
 
 import java.sql.Connection;
@@ -51,6 +54,32 @@ public class TurmaDAO {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public List<Turma> listarComFiltro(String condicao, Object valor) {
+        List<Turma> turmas = new ArrayList<>();
+        String sql = "SELECT * FROM Turma WHERE " + condicao;
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             stmt.setObject(1, valor);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Turma turma = new Turma(
+                            rs.getInt("id"),
+                            rs.getInt("ano"),
+                            rs.getString("serie"),
+                            rs.getString("letra").charAt(0)
+                    );
+                    turmas.add(turma);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return turmas;
     }
 
     public boolean atualizar(Turma t) {

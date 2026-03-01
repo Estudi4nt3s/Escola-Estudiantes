@@ -1,8 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="importa o aluno aqui cadu" %>
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 
 <%
-    Aluno aluno = (Aluno) request.getAttribute("aluno");
+    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+    Turma turma = (Turma) request.getSession().getAttribute("turma");
+    String[] data = (String[]) request.getSession().getAttribute("data");
+    double media = (Double) request.getSession().getAttribute("media");
 %>
 
 <!DOCTYPE html>
@@ -15,7 +22,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="perfil.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil.css">
 </head>
 
 <body>
@@ -27,15 +34,11 @@
     </div>
 
     <nav>
-        <a class="menu" href="inicio.jsp"><i class="material-icons">home</i>Início</a>
-        <a class="menu"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu active"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
-
-    <div class="config">
-        <i class="material-icons">settings</i>Configurações
-    </div>
 </aside>
 
 <main class="main">
@@ -43,13 +46,13 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            <%= java.time.LocalDate.now() %>
+            <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
         </div>
 
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="<%= aluno.getFotoUrl() %>">
+                <img src="https://i.pravatar.cc/40?img=12">
                 <span><%= aluno.getNome() %></span>
             </div>
         </div>
@@ -59,12 +62,12 @@
 
         <div class="perfil-header-card">
             <div class="perfil-foto">
-                <img src="<%= aluno.getFotoUrl() %>" alt="Aluno">
+                <img src="https://i.pravatar.cc/40?img=12" alt="Aluno">
             </div>
 
             <div class="perfil-info-principal">
                 <h2><%= aluno.getNome() %></h2>
-                <p><%= aluno.getSerie() %> • Ensino Médio</p>
+                <p> <%=turma.getSerie()%></p>
 
                 <div class="perfil-status ativo">
                     ● Aluno Ativo
@@ -76,16 +79,16 @@
 
             <div class="perfil-card-info">
                 <h3>Informações Pessoais</h3>
-                <div class="linha"><span>RA:</span> <%= aluno.getRa() %></div>
-                <div class="linha"><span>Email:</span> <%= aluno.getEmail() %></div>
-                <div class="linha"><span>Telefone:</span> <%= aluno.getTelefone() %></div>
+                <div class="linha"><span>RA:</span> <%= aluno.getMatricula() %></div>
+                <div class="linha"><span>Email:</span> <%=usuario.getEmail()%></div>
+                <div class="linha"><span>Telefone:</span> <%= aluno.getTelefonePai() %></div>
             </div>
 
             <div class="perfil-card-info">
                 <h3>Desempenho</h3>
-                <div class="linha"><span>Média Geral:</span> <%= aluno.getMedia() %></div>
-                <div class="linha"><span>Frequência:</span> <%= aluno.getFrequencia() %>%</div>
-                <div class="linha"><span>Turma:</span> <%= aluno.getTurma() %></div>
+                <div class="linha"><span>Média Geral:</span> <%=media%></div>
+                <div class="linha"><span>Frequência:</span> -100</div>
+                <div class="linha"><span>Turma:</span> <%=turma.getSerie()%></div>
             </div>
 
             <div class="perfil-card-info">
@@ -125,6 +128,6 @@
     </div>
 </div>
 
-<script src="notficacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 </html>
