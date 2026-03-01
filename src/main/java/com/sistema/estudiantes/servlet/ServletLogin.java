@@ -34,7 +34,7 @@ public class ServletLogin extends HttpServlet {
             String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
             boolean professor = email.matches(regexFuncionario);
             UsuarioDAO userDAO = new UsuarioDAO();
-            List<Usuario> users = userDAO.listarComFiltro("email",email);
+            List<Usuario> users = userDAO.listarComFiltro("email = ?",email);
             if (!users.isEmpty()) {
                 validarEmail = true;
                 validarSenha = users.getFirst().getSenha().equals(senha);
@@ -66,6 +66,7 @@ public class ServletLogin extends HttpServlet {
                         List<Turma> turmas = turmaDAO.listarComFiltro("id = ? order by 2 desc",turmaAluno.getFirst().getIdTurma().getId());
                         List<Aula> aulas = aulaDAO.listarComFiltro("diasemana = ? order by 2",semana);
                         List<Disciplina> disciplina = disciplinaDAO.listar();
+                        List<Nota> notas = notaDAO.listarComFiltro("idaluno = ?", aluno.getFirst().getMatricula());
 
 
                         String[] materia = new String[6];
@@ -89,6 +90,7 @@ public class ServletLogin extends HttpServlet {
                         request.getSession().setAttribute("media", notaDAO.Media(aluno.getFirst().getMatricula()));
                         request.getSession().setAttribute("data", data);
                         request.getSession().setAttribute("materia", materia);
+                        request.getSession().setAttribute("notas", notas);
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
                     }
                 }

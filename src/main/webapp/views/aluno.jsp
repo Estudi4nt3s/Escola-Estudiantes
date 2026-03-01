@@ -9,7 +9,7 @@
     <title>Colégio Estudiantes - Boletim de ${aluno.nome}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/aluno_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
 </head>
 
 <body>

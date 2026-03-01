@@ -56,15 +56,43 @@ public class UsuarioDAO {
         return lista;
     }
 
-    public List<Usuario> listarComFiltro(String coluna, String filtro) {
+    public List<Usuario> listarComFiltro(String condicao, String filtro) {
         List<Usuario> usuarios = new ArrayList<>();
-
-        String sql = "SELECT * FROM usuario WHERE " + coluna + " = ?";
+        String sql = "SELECT * FROM usuario WHERE " + condicao;
 
         try (Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
 
             stmt.setString(1, filtro);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario user = new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("email"),
+                            rs.getString("senha"),
+                            rs.getBoolean("IsAdm"),
+                            rs.getString("Photo")
+                    );
+                    usuarios.add(user);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return usuarios;
+    }
+
+    public List<Usuario> listarFiltros(String condicao, boolean filtro1, String filtro2) {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM usuario WHERE " + condicao;
+
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setBoolean(1, filtro1);
+            stmt.setString(2, filtro2);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
