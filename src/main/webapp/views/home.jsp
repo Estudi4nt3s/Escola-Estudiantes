@@ -35,10 +35,6 @@
             <a class="menu" href="${pageContext.request.contextPath}/turma">
                 <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
-
-        <div class="config">
-            <i class="material-icons">settings</i>Configurações
-        </div>
     </aside>
 
     <main class="main">
