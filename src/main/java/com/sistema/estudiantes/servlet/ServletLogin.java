@@ -21,8 +21,10 @@ public class ServletLogin extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 //        Pegando os Parâmetros
-        String email = request.getParameter("usuario").strip();
-        String senha = request.getParameter("senha").strip();
+        String email = request.getParameter("usuario");
+        String senha = request.getParameter("senha");
+        senha = senha!=null?senha.strip():"";
+        email = email!=null?email.strip():"";
 
 //        Declarando variáveis com valores padrões
         boolean validarEmail = false;
@@ -96,5 +98,8 @@ public class ServletLogin extends HttpServlet {
                 }
             request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
         }
+            else{
+                request.getRequestDispatcher("WEB-INF/index.jsp").forward(request, response);
+            }
     }
 }

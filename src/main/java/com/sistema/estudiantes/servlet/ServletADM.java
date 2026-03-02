@@ -16,8 +16,10 @@ public class ServletADM extends HttpServlet {
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        String email = request.getParameter("usuario").strip();
-        String senha = request.getParameter("senha").strip();
+        String email = request.getParameter("usuario");
+        String senha = request.getParameter("senha");
+        senha = senha!=null?senha.strip():"";
+        email = email!=null?email.strip():"";
 
         List<Usuario> adm = usuarioDAO.listarFiltros("isadm = ? AND email = ?",true,email);
 
@@ -25,6 +27,12 @@ public class ServletADM extends HttpServlet {
             if (senha.equals(adm.getFirst().getSenha())) {
                 request.getRequestDispatcher("views/inicio_a.jsp").forward(request, response);
             }
+            else {
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
+        }
+        else{
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
     }
 }
