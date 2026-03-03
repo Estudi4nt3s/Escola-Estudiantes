@@ -4,11 +4,15 @@
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.time.format.TextStyle" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
         busca = request.getParameter("busca");
     }
+    @SuppressWarnings("unchecked")
+    List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
     LocalDate hoje = LocalDate.now();
     String dia = String.format("%02d",hoje.getDayOfMonth());
     String mes = String.format("%02d",hoje.getMonthValue());
@@ -44,10 +48,6 @@
         <a class="menu" href="${pageContext.request.contextPath}/turma">
             <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
     </nav>
-
-    <div class="config">
-        <i class="material-icons">settings</i>Configurações
-    </div>
 </aside>
 
 <main class="main">
@@ -62,7 +62,7 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="https://i.pravatar.cc/40?img=12" alt="">
-                <span>Mateus Carlos</span>
+                <span><%=professor.getNome()%></span>
             </div>
         </div>
     </header>
@@ -81,7 +81,6 @@
 
         <div class="turmas">
             <%
-                List<Turma> turmas = (List<Turma>) request.getAttribute("turmas");
                 if (turmas != null && !turmas.isEmpty()) {
                     for (Turma turma : turmas) {
             %>

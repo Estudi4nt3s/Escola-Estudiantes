@@ -49,7 +49,7 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas_p.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
         </nav>
 
         <div class="config">
