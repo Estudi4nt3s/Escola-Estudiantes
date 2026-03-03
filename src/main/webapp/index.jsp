@@ -43,8 +43,8 @@
         %>
 
         <form action="servletLogin" method="post">
-            <label for="matricula">Matrícula</label>
-            <input type="text" name="matricula" id="matricula" required>
+            <label for="usuario">Usuário</label>
+            <input type="text" name="usuario" id="matricula" required>
 
             <label for="senha">Senha</label>
             <input type="password" name="senha" id="senha" required>
