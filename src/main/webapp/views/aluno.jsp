@@ -1,12 +1,14 @@
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
+<%
+    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Boletim de ${aluno.nome}</title>
+    <title>Colégio Estudiantes - Boletim de <%=aluno.getNome()%></title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
@@ -44,7 +46,7 @@
 
             <div class="user">
                 <div class="avatar">
-                    <img src="${professor.fotoUrl}" alt="Avatar">
+                    <img src="" alt="Avatar">
                     <span>${professor.nome}</span>
                 </div>
             </div>

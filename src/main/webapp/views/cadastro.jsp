@@ -17,7 +17,7 @@
     <main>
         <div class="div-overlay">
             <div class="overlay"></div>
-            <img src="${pageContext.request.contextPath}/3b9acabc-be87-4b60-af72-8bc163abe1d6.png" alt="Estudantes">
+            <img src="${pageContext.request.contextPath}/utils/estudiantes.png" alt="Estudantes">
         </div>
 
         <div class="container">
@@ -30,7 +30,7 @@
                 <h1>Cadastro</h1>
 
                 <%-- Início do Formulário --%>
-                <form action="servletCadastro" method="POST">
+                <form action="${pageContext.request.contextPath}/servletCadastro" method="POST">
                     
                     <label for="cpf">CPF</label>
                     <input type="text" id="cpf" name="cpf" required>

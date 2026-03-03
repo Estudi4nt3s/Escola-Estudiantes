@@ -15,15 +15,14 @@ import java.util.List;
 public class UsuarioDAO {
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO Usuario (email, senha, isadm, photo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuario (id, email, senha) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, usuario.getEmail());
-            psmt.setString(2, usuario.getSenha());
-            psmt.setBoolean(3, usuario.getIsAdm());
-            psmt.setString(4, usuario.getFoto());
+            psmt.setInt(1, usuario.getId());
+            psmt.setString(2, usuario.getEmail());
+            psmt.setString(3, usuario.getSenha());
             psmt.executeUpdate();
 
         } catch (SQLException e) {

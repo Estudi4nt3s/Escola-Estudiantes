@@ -61,7 +61,7 @@ public class ProfDisciplinaDAO {
 
 
     public ProfessorDisciplina buscarPorId(int id) {
-        String sql = "SELECT * FROM ProfessorDisciplina WHERE Id = ?";
+        String sql = "SELECT * FROM ProfessorDisciplina WHERE professorid = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
