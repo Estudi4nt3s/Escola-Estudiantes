@@ -36,13 +36,12 @@
     </div>
 
     <nav>
-        <a class="menu" href="${pageContext.request.contextPath}/index.jsp">
-            <i class="material-icons">home</i>Início</a>
+        <a class="menu active"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
             <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu active" href="${pageContext.request.contextPath}/views/turmas.jsp">
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/turma">
             <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
     </nav>
 
@@ -74,7 +73,7 @@
                 Turmas
             </div>
 
-            <form method="get" action="${pageContext.request.contextPath}/turmas" class="barra-pesquisa">
+            <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
                 <input type="text" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
             </form>
@@ -87,8 +86,8 @@
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getAno() + "º" + turma.getLetra() %></h3>
-                <a href="${pageContext.request.contextPath}/views/alunos.jsp?id=<%= turma.getId() %>">
+                <h3><%= turma.getSerie() + " " + turma.getLetra() %></h3>
+                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>">
                     <i class="material-icons">arrow_forward</i>
                 </a>
             </div>

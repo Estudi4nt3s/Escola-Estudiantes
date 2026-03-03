@@ -35,7 +35,7 @@ public class NotaDAO {
 
     public List<Nota> listar() {
         List<Nota> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Nota";
+        String sql = "SELECT *, avg(valor) FROM Nota";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -66,7 +66,7 @@ public class NotaDAO {
 
     public List<Nota> listarComFiltro(String condicao, Object valor){
         List<Nota> listaNota = new ArrayList<>();
-        String sql = "SELECT * FROM Nota WHERE "+condicao;
+        String sql = "SELECT *, avg(valor) FROM Nota WHERE "+condicao;
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
