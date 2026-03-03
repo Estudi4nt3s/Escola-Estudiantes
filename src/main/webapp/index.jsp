@@ -1,3 +1,4 @@
+<%@ page import="com.sistema.estudiantes.model.Admin" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -5,54 +6,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Estudantes</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Inria+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="restricted">acesso restrito</div>
+<div class="secret-trigger" onclick="abrirAdmin()"></div>
+
+<div id="modalAdmin" class="modal-overlay">
+    <div class="modal-content">
+    <h3>Área Administrativa</h3>
+    <form action="<%= request.getContextPath() %>/LoginAdminServlet" method="post">
+        <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
+        <input type="email" id="usuario_admin" placeholder="Usuario" required>
+        <input type="password" id="chaveAcesso" placeholder="Chave de segurança" required>
+        <button class="btn-primary" type="button" onclick="fecharPopup()">Cancelar</button>
+        <p onclick="fecharAdmin()" style="margin-top: 15px; cursor: pointer; font-size: 12px; opacity: 0.5;">Voltar ao login</p>
+    </form>
+        <%
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                response.sendRedirect("../index.jsp");
+                return;
+            }
+        %>
+        <h2>Bem-vindo, <%= admin.getUsuario() %></h2>
+    </div>
+</div>
 
 <div class="container">
     <div class="left">
         <h1>Seja bem-vindo<br>ao Estudantes</h1>
         <hr>
-        <p>
-            A educação é a arma mais poderosa que você pode usar para mudar o mundo.
-        </p>
-
-        <button onclick="window.location.href='cadastro.jsp'">
-            Não tem conta? Cadastrar-se
-        </button>
+        <p>A educação é a arma mais poderosa que você pode usar para mudar o mundo.</p>
+        <a href="${pageContext.request.contextPath}/views/cadastro.jsp" class="btn-primary">Não tem conta? Cadastrar-se</a>
     </div>
 
     <div class="login-box">
         <h2>Login</h2>
 
-        <!-- Exemplo de mensagem de erro via JSP -->
-        <%
-            String erro = request.getParameter("erro");
-            if (erro != null) {
-        %>
-        <p style="color:red;">Matrícula ou senha inválidos!</p>
-        <%
-            }
-        %>
+        <% if (request.getParameter("erro") != null) { %>
+        <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Credenciais inválidas!</p>
+        <% } %>
 
         <form action="servletLogin" method="post">
             <label for="usuario">Usuário</label>
-            <input type="text" name="usuario" id="usuario   " required>
+            <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário">
 
             <label for="senha">Senha</label>
-            <input type="password" name="senha" id="senha" required>
+            <input type="password" name="senha" id="senha" required placeholder="••••••••">
 
-            <button type="submit">Entrar</button>
+            <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
         </form>
     </div>
 </div>
 
+<script>
+    const modal = document.getElementById("modalAdmin");
+
+    function abrirAdmin() {
+        modal.classList.add("active");
+    }
+
+    function fecharAdmin() {
+        modal.classList.remove("active");
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            fecharAdmin();
+        }
+    }
+</script>
 </body>
 </html>
