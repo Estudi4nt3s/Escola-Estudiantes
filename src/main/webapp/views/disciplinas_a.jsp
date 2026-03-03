@@ -28,7 +28,7 @@ ASS GUSTAVO
 <head>
   <meta charset="UTF-8">
   <title>Gerenciar Disciplinas</title>
-  <link rel="stylesheet" href="../css/gerenciarDisciplinas.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gerenciarDisciplinas.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
