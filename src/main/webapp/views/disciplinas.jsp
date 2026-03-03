@@ -54,13 +54,14 @@
 
             <div class="disciplinas-grid">
 
-            <div class="disciplina card1">
+            <a href="aluno.jsp"><div class="disciplina card1">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>
                 </div>
                 <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
             </div>
+            </a>
 
             <div class="disciplina card2">
                 <div class="disciplina-info">

@@ -63,8 +63,8 @@ public class DisciplinaDAO {
 
                     while (rs.next()) {
                         Disciplina disciplina = new Disciplina(
-                                rs.getInt("Id"),
-                                rs.getString("Nome")
+                                rs.getInt("id"),
+                                rs.getString("nome")
                         );
 
                         disciplinas.add(disciplina);

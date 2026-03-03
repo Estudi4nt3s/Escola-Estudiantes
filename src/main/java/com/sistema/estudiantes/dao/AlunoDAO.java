@@ -138,19 +138,14 @@ public class AlunoDAO {
         public boolean atualizar(Aluno aluno) {
 
             String sql = "UPDATE Aluno " +
-                    "SET cpf = ?, nome = ?, datanascimento = ?, usuarioid = ?, telefonepai = ? " +
+                    "SET usuarioid = ?" +
                     "WHERE matricula = ?";
 
             try (
                     Connection conn = new Conexao().conectar();
                     PreparedStatement psmt = conn.prepareStatement(sql)
             ) {
-
-                psmt.setString(1, aluno.getCpf());
-                psmt.setString(2, aluno.getNome());
-                psmt.setObject(3, aluno.getDataNascimento());
                 psmt.setInt(4, aluno.getUsuarioId().getId());
-                psmt.setString(5, aluno.getTelefonePai());
                 psmt.setInt(6, aluno.getMatricula());
 
                 return psmt.executeUpdate() > 0;

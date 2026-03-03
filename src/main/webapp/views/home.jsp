@@ -13,10 +13,10 @@
 
 </head>
 <%
-            //hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");
+    int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
 %>
 <body>
 
@@ -35,10 +35,6 @@
             <a class="menu" href="${pageContext.request.contextPath}/turma">
                 <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
-
-        <div class="config">
-            <i class="material-icons">settings</i>Configurações
-        </div>
     </aside>
 
     <main class="main">
@@ -70,11 +66,11 @@
                 <div class="flex">
                     <%
                         if(!data[2].equals("SÁB") && !data[2].equals("DOM")){
-                            for(int i = 0;i < 6;i++){
+                            for(int i = 0;i < qtdmateria;i++){
                     %>
 
                     <div class="card <%=materia[i].toLowerCase()%>">
-                        <h3><%=materia[i]%></h3>
+                        <h3><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></h3>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
                             nesciunt.</p>
                         <img src="${pageContext.request.contextPath}/utils/<%=materia[i].toLowerCase(java.util.Locale.ROOT)%>.png" alt="<%=materia[i]%>">
@@ -94,9 +90,9 @@
                                 "10:30 às 11:30","11:30 às 12:30","13:30 às 14:30"};
 
                         if(!data[2].equals("SÁB") && !data[2].equals("DOM")){
-                            for(int i = 0;i < 6;i++){
+                            for(int i = 0;i < qtdmateria;i++){
                              %>
-                    <li><strong><%=materia[i]%></strong> - <%=horario[i]%></li>
+                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> - <%=horario[i]%></li>
                     <%
                             }
                         }

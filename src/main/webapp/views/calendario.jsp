@@ -5,11 +5,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendário</title>
-  <link rel="stylesheet" href="calendario.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendario.css">
 </head>
 
 <body>
+<aside class="sidebar">
+    <div class="logo">
+        <i class="material-icons">school</i>
+        <span>Colégio Estudiantes</span>
+    </div>
 
+    <nav>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
+            <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp">
+            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+    </nav>
 <div class="main">
 
   <div class="calendar-layout">

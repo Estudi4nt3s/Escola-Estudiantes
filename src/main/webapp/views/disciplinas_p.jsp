@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -9,9 +9,13 @@
     <title>Colégio Estudiantes - Minhas Disciplinas</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="css/disciplinas_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas_p.css">
 </head>
+<%
+    String[] data = (String[]) request.getSession().getAttribute("data");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
 
+%>
 <body>
 
     <aside class="sidebar">
@@ -22,7 +26,7 @@
 
         <nav>
             <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
-            <a class="menu active" href="disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
+            <a class="menu active"> <i class="material-icons">menu_book</i>Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="turmas_p.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
         </nav>
@@ -39,13 +43,13 @@
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
-                ${dataAtualFormatada}
+                <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
             </div>
 
             <div class="user">
                 <div class="avatar">
-                    <img src="${professor.fotoUrl}" alt="avatar">
-                    <span>${professor.nome}</span>
+                    <img src="perfil.jsp" alt="avatar">
+                    <span><%=professor.getNome()%></span>
                 </div>
             </div>
         </header>
