@@ -1,0 +1,383 @@
+:root {
+    --red: #d11d22;
+    --red-dark: #a5161a;
+    --bg: #efefef;
+    --card: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--red);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 30px 25px;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+}
+
+.menu.active {
+    background: var(--red-dark);
+}
+
+.menu:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.config {
+    margin-top: auto;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: scroll;
+    overflow-x: hidden;
+
+}
+
+.topbar {
+    height: 85px;
+    background: #FFFFFF;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.date {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Overlay */
+#openNotification {
+    font-size: 30px;
+    color: #333;
+    cursor: pointer;
+}
+
+.notification-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease;
+    z-index: 999;
+}
+
+.notification-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.notification-modal {
+    width: 500px;
+    max-height: 70vh;
+    background: white;
+    border-radius: 28px;
+    padding: 35px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    transform: translateY(-30px) scale(0.95);
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-overlay.show .notification-modal {
+    transform: translateY(0) scale(1);
+}
+
+.notification-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.notification-modal-header h2 {
+    font-size: 1.8rem;
+}
+
+.notification-modal-header button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.notification-modal-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+}
+
+.notification-modal-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-modal-list::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+.notification-modal-list li {
+    position: relative;
+    padding: 18px;
+    border-radius: 16px;
+    background: #f6f6f6;
+    transition: 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.confirm-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+
+.notification-modal-list li.denied {
+    background: rgba(209, 29, 34, 0.08);
+    border-left: 5px solid #d11d22;
+}
+
+.notification-modal-list li.denied .confirm-btn {
+    background: #d11d22;
+    color: white;
+}
+.notification-modal-list li.confirmed {
+    background: rgba(0, 160, 80, 0.08);
+    border-left: 5px solid #00a050;
+}
+
+.notification-modal-list li.confirmed .confirm-btn {
+    background: #00a050;
+    color: white;
+}
+
+.confirm-btn:hover {
+    opacity: 0.85;
+}
+
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.avatar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+}
+
+.avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px solid var(--red);
+    object-fit: cover;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    background: var(--bg);
+    width: 100%;
+    max-width: 1100px;
+    margin-left: 40px;
+}
+
+.alunos-topo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.alunos-titulo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    background: #FFFFFF;
+    padding: 12px 30px;
+    border-radius: 12px;
+}
+
+.barra-pesquisa {
+    position: relative;
+    flex: 1;
+    width: 700px;
+}
+
+.barra-pesquisa i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+    font-size: 22px;
+}
+
+.barra-pesquisa input {
+    padding: 12px 15px 12px 45px;
+    border-radius: 8px;
+    border: 2px solid #000000;
+    background: #FFFFFF;
+    outline: none;
+    font-size: 1rem;
+    width: 100%;
+    transition: 0.2s;
+
+}
+
+.barra-pesquisa input:focus {
+    border-color: #c62828;
+    background: #FFFFFF;
+}
+
+.alunos {
+    width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.alunos-card {
+    background: #eeeeee;
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alunos-card:hover {
+    background: #D9D9D9;
+}
+
+.alunos-nome {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.alunos-card a {
+    margin-top: auto;
+    align-self: flex-end;
+    color: black;
+    text-decoration: none;
+}
+
+.alunos-card a i {
+    font-size: 22px;
+}
+
+.alunos p {
+    font-size: 1.1rem;
+    color: #555;
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.opcoes {
+    font-size: 24px;
+    color: #555;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.opcoes:hover {
+    background: #eee;
+}

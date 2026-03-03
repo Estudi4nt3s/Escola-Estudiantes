@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Estudantes</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cadastro.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,9 +24,9 @@
             A educação é a arma mais poderosa que você pode usar para mudar o mundo.
         </p>
 
-        <a href="views/cadastro.jsp"><button>
+        <button onclick="window.location.href='cadastro.jsp'">
             Não tem conta? Cadastrar-se
-        </button></a>
+        </button>
     </div>
 
     <div class="login-box">
@@ -34,17 +34,17 @@
 
         <!-- Exemplo de mensagem de erro via JSP -->
         <%
-            String erro = (String) request.getSession().getAttribute("erro");
+            String erro = request.getParameter("erro");
             if (erro != null) {
         %>
-        <p style="color:red;">usuário ou senha inválidos!</p>
+        <p style="color:red;">Matrícula ou senha inválidos!</p>
         <%
             }
         %>
 
         <form action="servletLogin" method="post">
             <label for="usuario">Usuário</label>
-            <input type="text" name="usuario" id="matricula" required>
+            <input type="text" name="usuario" id="usuario   " required>
 
             <label for="senha">Senha</label>
             <input type="password" name="senha" id="senha" required>

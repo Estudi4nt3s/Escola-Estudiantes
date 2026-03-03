@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.time.format.TextStyle" %>
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
@@ -24,7 +25,7 @@
     <title>Colégio Estudiantes - Início</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notas.css">
 </head>
 
 <body>
@@ -68,34 +69,47 @@
     </header>
 
     <div class="main-content">
-        <div class="turmas-topo">
-            <div class="turmas-titulo">
-                Turmas
+        <div class="alunos-topo">
+            <%
+                Turma turma = (Turma) request.getAttribute("turmaSelecionada");
+                if(turma != null){
+            %>
+
+            <div class="alunos-titulo">
+                <%= turma.getSerie() + " " + turma.getLetra() %>
+                <i class="material-icons">expand_more</i>
             </div>
+
+            <%
+                }
+            %>
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
-                <input type="text" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
+                <input type="text" name="busca" placeholder="Pesquise o aluno" value="<%= busca %>">
             </form>
         </div>
 
-        <div class="turmas">
+        <div class="alunos">
             <%
-                List<Turma> turmas = (List<Turma>) request.getAttribute("turmas");
-                if (turmas != null && !turmas.isEmpty()) {
-                    for (Turma turma : turmas) {
+                List<Aluno> alunos = (List<Aluno>) request.getAttribute("alunos");
+                if (alunos != null && !alunos.isEmpty()) {
+                    for (Aluno aluno : alunos) {
             %>
-            <div class="turmas-card">
-                <h3><%= turma.getSerie() + " " + turma.getLetra() %></h3>
-                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>">
-                    <i class="material-icons">arrow_forward</i>
+            <div class="alunos-card">
+                <div class="alunos-nome">
+                    <%= aluno.getNome() %>
+                </div>
+
+                <a href="${pageContext.request.contextPath}/nota?id=<%= aluno.getMatricula() %>">
+                    <i class="material-icons opcoes">more_vert</i>
                 </a>
             </div>
             <%
                 }
             } else {
             %>
-            <p>Nenhuma turma encontrada.</p>
+            <p>Nenhum aluno encontrado.</p>
             <%
                 }
             %>
