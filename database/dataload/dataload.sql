@@ -1,4 +1,14 @@
-begin;
+INSERT INTO Professor (Id, Nome) VALUES
+ (1, 'Ana Souza'),
+ (2, 'Bruno Almeida'),
+ (3, 'Carla Mendes'),
+ (4, 'Diego Santos'),
+ (5, 'Eduarda Lima'),
+ (6, 'Fernando Rocha'),
+ (7, 'Gabriela Nunes'),
+ (8, 'Henrique Duarte'),
+ (9, 'Isabela Carvalho'),
+ (10, 'João Pedro Martins');
 
 insert into Disciplina (Id, Nome) values
  (1, 'matematica'),

@@ -41,7 +41,6 @@ public class TurmaDAO {
                 Turma t = new Turma(
                         rs.getInt("Id"),
                         rs.getInt("Ano"),
-                        rs.getString("curso"),
                         rs.getString("Serie"),
                         rs.getString("Letra").charAt(0)
                 );

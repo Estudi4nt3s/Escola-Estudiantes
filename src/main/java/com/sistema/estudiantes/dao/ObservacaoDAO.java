@@ -2,32 +2,33 @@ package com.sistema.estudiantes.dao;
 
 
 import com.sistema.estudiantes.conexao.Conexao;
+import com.sistema.estudiantes.model.Aluno;
+import com.sistema.estudiantes.model.Disciplina;
 import com.sistema.estudiantes.model.Observacao;
 import com.sistema.estudiantes.model.Professor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ObservacaoDAO {
 
-    public void inserir(String texto, int idProfessor, int idAluno, int idDisciplina) {
+    public void inserir(Observacao observacao) {
         String sql = """
-            INSERT INTO Observacao (Texto, IdProfessor, IdAluno, IdDisciplina)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO Observacao (Texto, DataCriacao, ProfessorId, IdAluno, DisciplinaId)
+            VALUES (?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, texto);
-            psmt.setInt(2, idProfessor);
-            psmt.setInt(3, idAluno);
-            psmt.setInt(4, idDisciplina);
+            psmt.setString(1, observacao.getTexto());
+            psmt.setObject(2, observacao.getDataCriacao());
+            psmt.setInt(3, observacao.getIdProfessor().getId());
+            psmt.setInt(4, observacao.getIdAluno().getMatricula());
+            psmt.setInt(5, observacao.getIdDisciplina().getId());
 
             psmt.executeUpdate();
 
@@ -45,13 +46,16 @@ public class ObservacaoDAO {
              ResultSet rs = psmt.executeQuery()) {
 
             while (rs.next()) {
+                Professor p = new Professor(rs.getInt("professorid"));
+                Aluno a = new Aluno(rs.getInt("idaluno"));
+                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
                 Observacao o = new Observacao(
-                        rs.getInt("Id"),
-                        rs.getString("Texto"),
-                        rs.getTimestamp("DataCriacao"),
-                        rs.getInt("IdProfessor"),
-                        rs.getInt("IdAluno"),
-                        rs.getInt("IdDisciplina")
+                        rs.getInt("id"),
+                        rs.getString("texto"),
+                        rs.getObject("datacriacao", LocalDate.class),
+                        p,
+                        a,
+                        d
                 );
                 lista.add(o);
             }
@@ -63,13 +67,14 @@ public class ObservacaoDAO {
     }
 
     public boolean atualizar(Observacao o) {
-        String sql = "UPDATE Observacao SET Texto = ? WHERE Id = ?";
+        String sql = "UPDATE Observacao SET Texto = ?, DataCriacao = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setString(1, o.getTexto());
-            psmt.setInt(2, o.getId());
+            psmt.setObject(2, o.getDataCriacao());
+            psmt.setInt(3, o.getId());
 
             return psmt.executeUpdate() > 0;
 

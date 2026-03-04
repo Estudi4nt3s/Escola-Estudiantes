@@ -1,31 +1,26 @@
 package com.sistema.estudiantes.model;
 
-public class Turma extends ModelBase {
+public class Turma {
+    private int id;
     private int ano;
     private String serie;
-    private String curso;
     private char letra;
 
     public Turma() {}
 
-    public Turma(int ano, String serie, String curso, char letra) {
+    public Turma(int id, int ano, String serie, char letra) {
+        this.id = id;
         this.ano = ano;
         this.serie = serie;
-        this.curso = curso;
-        this.letra = letra;
-    }
-
-    public Turma(int id, int ano, String serie, String curso, char letra) {
-        super(id);
-        this.ano = ano;
-        this.serie = serie;
-        this.curso = curso;
         this.letra = letra;
     }
 
     public Turma(int id){
-        int identifier = this.getId();
-        identifier = id;
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public int getAno() {
@@ -34,20 +29,16 @@ public class Turma extends ModelBase {
 
     public String getSerie(){ return this.serie;}
 
-    public String getCurso() {
-        return this.curso;
-    }
-
     public char getLetra() {
         return this.letra;
     }
 
-    public void setAno(int ano) {
-        this.ano = ano;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setCurso(String curso) {
-        this.curso = curso;
+    public void setAno(int ano) {
+        this.ano = ano;
     }
 
     public void setLetra(char letra) {
@@ -55,6 +46,6 @@ public class Turma extends ModelBase {
     }
 
     public String toString() {
-        return "Id: " + getId() + "\nAno: " + this.ano + "\nSérie:" + serie + "\nCurso: " + this.curso + "\nLetra: " + this.letra;
+        return "Id: " + this.id + "\nAno: " + this.ano + "\nSérie:" + serie + "\nLetra: " + this.letra;
     }
 }
