@@ -95,7 +95,8 @@ public class ServletNota extends HttpServlet {
         nota.setIdDisciplina(d);
         nota.setIdAluno(a);
         nota.setIdTurma(t);
-        nota.setValor(valor);
+        nota.setN1(valor);
+        nota.setN2(valor);
 
         notaDAO.inserir(nota);
 
@@ -113,7 +114,8 @@ public class ServletNota extends HttpServlet {
 
             // atualiza só os campos permitidos
             if (request.getParameter("valor") != null) {
-                nota.setValor(Double.parseDouble(request.getParameter("valor")));
+                nota.setN1(Double.parseDouble(request.getParameter("valor")));
+                nota.setN2(Double.parseDouble(request.getParameter("valor")));
             }
 
             notaDAO.atualizar(nota);

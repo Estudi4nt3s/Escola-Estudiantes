@@ -5,26 +5,26 @@ import java.time.LocalDate;
 public class Aluno {
     private int matricula;
     private String cpf;
-    private String nome;
     private LocalDate dataNascimento;
     private Usuario usuario_id;
     private String telefonePai;
+    private int turmaId;
 
     public Aluno() {}
 
-    public Aluno(int matricula, String cpf, String nome, LocalDate dataNascimento, Usuario usuarioId, String telefonePai) {
+    public Aluno(int matricula, String cpf, LocalDate dataNascimento, Usuario usuarioId, String telefonePai, int turmaId) {
         this.matricula = matricula;
         this.cpf = cpf;
-        this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.usuario_id = usuarioId;
         this.telefonePai = telefonePai;
+        this.turmaId = turmaId;
     }
 
-    public Aluno(int matricula, String nome) {
+    public Aluno(int matricula, int turmaId) {
         this.matricula = matricula;
-        this.nome = nome;
+        this.turmaId = turmaId;
     }
 
     public Aluno(int matricula){
@@ -39,9 +39,6 @@ public class Aluno {
         return this.cpf;
     }
 
-    public String getNome() {
-        return this.nome;
-    }
 
     public LocalDate getDataNascimento() {
         return this.dataNascimento;
@@ -55,6 +52,10 @@ public class Aluno {
         return this.telefonePai;
     }
 
+    public int getTurmaId() {
+        return this.turmaId;
+    }
+
 
     public void setMatricula(int matricula) {
         this.matricula = matricula;
@@ -64,9 +65,6 @@ public class Aluno {
         this.cpf = cpf;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
@@ -81,6 +79,6 @@ public class Aluno {
     }
 
     public String toString() {
-        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf  + "\nNome: " + this.nome + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
+        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
     }
 }

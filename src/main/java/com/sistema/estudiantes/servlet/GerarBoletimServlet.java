@@ -7,14 +7,11 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
 import com.itextpdf.layout.borders.*;
 
-import com.sistema.estudiantes.model.Aluno;
-import com.sistema.estudiantes.model.Disciplina;
-import com.sistema.estudiantes.model.Nota;
+import com.sistema.estudiantes.model.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import com.sistema.estudiantes.model.Turma;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -27,6 +24,7 @@ public class GerarBoletimServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Usuario user = (Usuario)request.getSession().getAttribute("usuario");
         Turma serie = (Turma) request.getSession().getAttribute("turma");
         Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
         @SuppressWarnings("unchecked")
@@ -43,8 +41,8 @@ public class GerarBoletimServlet extends HttpServlet {
                 if(nota.getIdDisciplina().getId() == disciplina.getId()){
                     iddisciplina = disciplina.getId();
 
-                    situacao = ((nota.getValor() + nota.getValor())/2 >= 7)?"Aprovado":"Reprovado";
-                    aprovado = (nota.getValor() + nota.getValor())/2 >= 7;
+                    situacao = ((nota.getN1() + nota.getN2())/2 >= 7)?"Aprovado":"Reprovado";
+                    aprovado = (nota.getN1() + nota.getN2())/2 >= 7;
                 }
                 else{
 
@@ -66,7 +64,7 @@ public class GerarBoletimServlet extends HttpServlet {
 
             // 🔥 AQUI VOCÊ COMEÇA A SUBSTITUIR DADOS
 
-            String nomeAluno = aluno.getNome();
+            String nomeAluno = user.getNome();
             String turma = serie.getSerie() + " " + serie.getLetra();
             String anoLetivo = String.valueOf(serie.getAno());
 
@@ -104,15 +102,18 @@ public class GerarBoletimServlet extends HttpServlet {
                 for (Nota nota : notas) {
                     if(nota.getIdDisciplina().getId() == disciplina.getId()){
                         iddisciplina = disciplina.getId();
-                        tabela.addCell(criarCelula(String.valueOf(nota.getValor())));
-                        tabela.addCell(criarCelula(String.valueOf(nota.getValor())));
-                        situacao = (nota.getValor() + nota.getValor()/2 >= 7)?"Aprovado":"Reprovado";
+                        tabela.addCell(criarCelula(String.valueOf(nota.getN1())));
+                        tabela.addCell(criarCelula(String.valueOf(nota.getN2())));
+                        tabela.addCell(criarCelula(String.valueOf((nota.getN1() + nota.getN2())/2)));
+                        situacao = (nota.getN1() + nota.getN2()/2 >= 7)?"Aprovado":"Reprovado";
+                        tabela.addCell(criarCelula(situacao));
                     }
                     else{
                         tabela.addCell(criarCelula(disciplina.getNome()));
-                        tabela.addCell(criarCelula(disciplina.getNome()));
+                        tabela.addCell(criarCelula("-"));
+                        tabela.addCell(criarCelula("-"));
+                        tabela.addCell(criarCelula("-"));
                     }
-                    tabela.addCell(criarCelula(situacao));
                 }
             }
 

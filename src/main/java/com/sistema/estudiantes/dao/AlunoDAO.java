@@ -26,7 +26,6 @@ public class AlunoDAO {
 
             psmt.setInt(1, aluno.getMatricula());
             psmt.setString(2, aluno.getCpf());
-            psmt.setString(3, aluno.getNome());
             psmt.setObject(4, aluno.getDataNascimento());
             psmt.setInt(5, aluno.getUsuarioId().getId());
             psmt.setString(6, aluno.getTelefonePai());
@@ -56,10 +55,10 @@ public class AlunoDAO {
                 Aluno aluno = new Aluno(
                         rs.getInt("matricula"),
                         rs.getString("cpf"),
-                        rs.getString("nome"),
                         rs.getObject("datanascimento", LocalDate.class),
                         u,
-                        rs.getString("telefonepai")
+                        rs.getString("telefonepai"),
+                        rs.getInt("turmaid")
                 );
                 lista.add(aluno);
             }
@@ -86,10 +85,10 @@ public class AlunoDAO {
                     Aluno aluno = new Aluno(
                             rs.getInt("matricula"),
                             rs.getString("cpf"),
-                            rs.getString("nome"),
                             rs.getObject("datanascimento", LocalDate.class),
                             u,
-                            rs.getString("telefonepai")
+                            rs.getString("telefonepai"),
+                            rs.getInt("turmaid")
                     );
                     alunos.add(aluno);
                 }
@@ -105,8 +104,8 @@ public class AlunoDAO {
         String sql = """
                     SELECT a.* 
                     FROM aluno a
-                    INNER JOIN turmaaluno ta ON ta.matriculaaluno = a.matricula
-                    WHERE ta.idturma = ?
+                    INNER JOIN turma t ON t.id = a.turmaid
+                    WHERE t.idturma = ?
         """;
                 try (Connection conn = Conexao.conectar();
                      PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -119,10 +118,10 @@ public class AlunoDAO {
                         Aluno aluno = new Aluno(
                                 rs.getInt("matricula"),
                                 rs.getString("cpf"),
-                                rs.getString("nome"),
                                 rs.getObject("datanascimento", LocalDate.class),
                                 u,
-                                rs.getString("telefonepai")
+                                rs.getString("telefonepai"),
+                                rs.getInt("turmaid")
                         );
 
                         alunos.add(aluno);
