@@ -1,6 +1,7 @@
 package com.sistema.estudiantes.model;
 
 public class Admin{
+
     private int id;
     private String usuario;
     private String senha;
