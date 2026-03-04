@@ -1,5 +1,13 @@
 <%@ page import="com.sistema.estudiantes.model.Admin" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    Admin admin = (Admin) session.getAttribute("admin");
+    if (admin == null) {
+        response.sendRedirect("../index.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,18 +29,11 @@
     <h3>Área Administrativa</h3>
     <form action="<%= request.getContextPath() %>/LoginAdminServlet" method="post">
         <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
-        <input type="email" id="usuario_admin" placeholder="Usuario" required>
-        <input type="password" id="chaveAcesso" placeholder="Chave de segurança" required>
+        <input type="email" name="usuario" required>
+        <input type="password" name="senha" required>
         <button class="btn-primary" type="button" onclick="fecharPopup()">Cancelar</button>
         <p onclick="fecharAdmin()" style="margin-top: 15px; cursor: pointer; font-size: 12px; opacity: 0.5;">Voltar ao login</p>
     </form>
-        <%
-            Admin admin = (Admin) session.getAttribute("admin");
-            if (admin == null) {
-                response.sendRedirect("../index.jsp");
-                return;
-            }
-        %>
         <h2>Bem-vindo, <%= admin.getUsuario() %></h2>
     </div>
 </div>
