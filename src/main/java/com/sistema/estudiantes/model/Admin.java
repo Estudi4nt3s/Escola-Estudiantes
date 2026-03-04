@@ -3,14 +3,14 @@ package com.sistema.estudiantes.model;
 public class Admin{
 
     private int id;
-    private String usuario;
+    private static String usuario;
     private String senha;
 
     public int getId() {
         return id;
     }
 
-    public String getUsuario() {
+    public static String getUsuario() {
         return usuario;
     }
 
