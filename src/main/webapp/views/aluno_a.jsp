@@ -1,13 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
-<%--
-List<Aluno> alunos = alunoDAO.listarTodos();
-request.setAttribute("listaAlunos", alunos);
-request.getRequestDispatcher("gerenciarAlunos.jsp").forward(request, response);
-TEM QUE FAZER O SERVLET
-ASS GUSTAVO
---%>
 
 <%
   String tipo = (String) session.getAttribute("tipoUsuario");
@@ -83,7 +76,7 @@ ASS GUSTAVO
   <div class="page-header">
     <h1>Gerenciar Alunos</h1>
 
-    <form action="ServletAluno" method="get">
+    <form action="${pageContext.request.contextPath}/ServletAluno_a" method="get">
       <button class="btn-primary" name="acao" value="novo">
         <i class="material-icons">add</i>
         Novo Aluno
@@ -115,14 +108,14 @@ ASS GUSTAVO
         <td><%= aluno.getTurma() %></td>
         <td>
 
-          <form action="ServletAluno" method="post" style="display:inline;">
+          <form action="${pageContext.request.contextPath}/ServletAluno_a" method="post" style="display:inline;">
             <input type="hidden" name="id" value="<%= aluno.getId() %>">
             <button class="icon-btn edit" name="acao" value="editar">
               <i class="material-icons">edit</i>
             </button>
           </form>
 
-          <form action="ServletAluno" method="post" style="display:inline;">
+          <form action="${pageContext.request.contextPath}/ServletAluno_a" method="post" style="display:inline;">
             <input type="hidden" name="id" value="<%= aluno.getId() %>">
             <button class="icon-btn delete" name="acao" value="excluir">
               <i class="material-icons">delete</i>

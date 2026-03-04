@@ -7,8 +7,6 @@
 //        response.sendRedirect("login.jsp");
 //        return;
 //    }
-    ASS GUSTAVO
-    CADU TO DEIXANDO AQUI COMO BASE MAS PRECISA TER ALGO ASSIM
 %>
 
 <!DOCTYPE html>
