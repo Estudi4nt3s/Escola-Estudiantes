@@ -112,6 +112,7 @@ public class ServletLogin extends HttpServlet {
                         request.getSession().setAttribute("materia", materia);
                         request.getSession().setAttribute("notas", notas);
                         request.getSession().setAttribute("qtdMateria", qtdMateria);
+                        request.getSession().setAttribute("disciplinas", disciplina);
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
                     }
                 }
