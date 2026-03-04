@@ -1,8 +1,5 @@
 package com.sistema.estudiantes.servlet;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.sistema.estudiantes.dao.AdministradorDAO;
 import com.sistema.estudiantes.model.Admin;
 
@@ -10,9 +7,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-@WebServlet(name = "servletLoginAdmin", value = "/servletLoginAdmin")
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet("/servletLoginAdmin")
 public class ServletLoginAdmin extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -22,30 +23,27 @@ public class ServletLoginAdmin extends HttpServlet {
         usuario = usuario != null ? usuario.strip() : "";
         senha = senha != null ? senha.strip() : "";
 
-        AdministradorDAO adminDAO = new AdministradorDAO();
-        List<Admin> admins = adminDAO.buscarLogin(usuario);
+        AdministradorDAO dao = new AdministradorDAO();
+        List<Admin> admins = dao.buscarLogin(usuario);
 
         if (!admins.isEmpty()) {
 
-            boolean senhaValida = admins.getFirst().getSenha().equals(senha);
+            Admin admin = admins.get(0);
 
-            if (senhaValida) {
+            if (admin.getSenha().equals(senha)) {
 
-                request.getSession().setAttribute("admin", admins.getFirst());
+                // cria sessão
+                HttpSession session = request.getSession();
+                session.setAttribute("admin", admin);
 
-                request.getRequestDispatcher("views/inicio_a.jsp")
-                        .forward(request, response);
+                response.sendRedirect("views/inicio_a.jsp");
 
             } else {
-                request.getSession().setAttribute("erroAdmin", "Senha incorreta");
-                request.getRequestDispatcher("index.jsp")
-                        .forward(request, response);
+                response.sendRedirect("index.jsp?erroAdmin=senha");
             }
 
         } else {
-            request.getSession().setAttribute("erroAdmin", "Usuário não encontrado");
-            request.getRequestDispatcher("index.jsp")
-                    .forward(request, response);
+            response.sendRedirect("index.jsp?erroAdmin=usuario");
         }
     }
 }

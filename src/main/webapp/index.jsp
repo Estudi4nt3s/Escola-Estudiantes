@@ -19,21 +19,24 @@
 <div id="modalAdmin" class="modal-overlay">
     <div class="modal-content">
     <h3>Área Administrativa</h3>
-    <form action="<%= request.getContextPath() %>/LoginAdminServlet" method="post">
-        <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
-        <input type="email" id="usuario_admin" placeholder="Usuario" required>
-        <input type="password" id="chaveAcesso" placeholder="Chave de segurança" required>
-        <button class="btn-primary" type="button" onclick="fecharPopup()">Cancelar</button>
-        <p onclick="fecharAdmin()" style="margin-top: 15px; cursor: pointer; font-size: 12px; opacity: 0.5;">Voltar ao login</p>
-    </form>
-        <%
-            Admin admin = (Admin) session.getAttribute("admin");
-            if (admin == null) {
-                response.sendRedirect("../index.jsp");
-                return;
-            }
-        %>
-        <h2>Bem-vindo, <%= admin.getUsuario() %></h2>
+        <form action="${pageContext.request.contextPath}/LoginAdminServlet" method="post">
+            <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
+
+            <input type="email" name="usuario" id="usuario" placeholder="Usuário" required>
+            <input type="password" name="senha" id="senha" placeholder="Senha" required>
+
+            <button type="submit" class="btn-primary">Entrar</button>
+            <button type="button" class="btn-primary" onclick="fecharAdmin()">Cancelar</button>
+
+            <p onclick="fecharAdmin()"
+               style="margin-top: 15px; cursor: pointer; font-size: 12px; opacity: 0.5;">
+                Voltar ao login
+            </p>
+            <a href="${pageContext.request.contextPath}/views/inicio_a.jsp">
+                    Entrar direto (modo dev
+            </a>
+        </form>
+        <h2>Bem-vindo, <%= Admin.getUsuario() %></h2>
     </div>
 </div>
 
