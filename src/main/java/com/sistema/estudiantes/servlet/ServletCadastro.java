@@ -16,25 +16,28 @@ public class ServletCadastro extends HttpServlet {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         List<Aluno> alunos = alunoDAO.listar();
 
-        int matricula = Integer.parseInt(request.getParameter("matricula"));
-        String cpf = request.getParameter("cpf");
-        List<Aluno> alunos1 = alunoDAO.listarComFiltro(matricula);
+        String email = request.getParameter("email");
+        String senha = request.getParameter("senha");
 
-        if (alunos1.getFirst().getMatricula() == matricula){
-            if(alunos1.getFirst().getCpf().equals(cpf)){
-                String email = request.getParameter("email");
-                String senha = request.getParameter("senha");
-                String isAdmStr = request.getParameter("isadm");
-                boolean isAdm = Boolean.parseBoolean(isAdmStr);
-                String foto = request.getParameter("photo");
-                Usuario usuario = new Usuario(email, senha, isAdm, foto);
-                usuarioDAO.inserir(usuario);
-            }
-            //CPF não compativel
+        System.out.println("email: " + email);
+        System.out.println("senha: " + senha);
+
+        int matricula = Integer.parseInt(request.getParameter("matricula"));
+        String cpf = request.getParameter("cpf").replace(".", "").replace("-", "");
+        List<Aluno> alunos1 = alunoDAO.listarComFiltro(matricula);
+        List<Usuario> usuarios = usuarioDAO.listarComFiltro("email = ?", email);
+        System.out.println(alunos1.isEmpty());
+        if(!alunos1.isEmpty()) {
+                if (alunos1.getFirst().getCpf().equals(cpf)) {
+                    //Alterar dps
+                    Usuario usuario = new Usuario(100, email, senha);
+                    usuarioDAO.inserir(usuario);
+                    alunos1.getFirst().setUsuarioId(usuarios.getFirst());
+                    alunoDAO.atualizar(alunos1.getFirst());
+                }
+                //CPF não compativel
         }
-        else{
-            //Matrícula não encontrada
-        }
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }
 

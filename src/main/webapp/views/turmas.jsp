@@ -1,11 +1,23 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.time.format.TextStyle" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
         busca = request.getParameter("busca");
     }
+    @SuppressWarnings("unchecked")
+    List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
+    LocalDate hoje = LocalDate.now();
+    String dia = String.format("%02d",hoje.getDayOfMonth());
+    String mes = String.format("%02d",hoje.getMonthValue());
+    Locale ptBr = new Locale("pt", "BR");
+    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -28,19 +40,14 @@
     </div>
 
     <nav>
-        <a class="menu" href="${pageContext.request.contextPath}/index.jsp">
-            <i class="material-icons">home</i>Início</a>
+        <a class="menu active"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
             <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu active" href="${pageContext.request.contextPath}/views/turmas.jsp">
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/turma">
             <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
     </nav>
-
-    <div class="config">
-        <i class="material-icons">settings</i>Configurações
-    </div>
 </aside>
 
 <main class="main">
@@ -48,14 +55,14 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            Seg, 09/02
+            <%=semana.toUpperCase().charAt(0) + semana.toLowerCase().substring(1) + ", " + dia + "/" + mes%>
         </div>
 
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12">
-                <span>Mateus Carlos</span>
+                <img src="https://i.pravatar.cc/40?img=12" alt="">
+                <span><%=professor.getNome()%></span>
             </div>
         </div>
     </header>
@@ -66,7 +73,7 @@
                 Turmas
             </div>
 
-            <form method="get" action="${pageContext.request.contextPath}/turmas" class="barra-pesquisa">
+            <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
                 <input type="text" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
             </form>
@@ -74,13 +81,12 @@
 
         <div class="turmas">
             <%
-                List<Turma> turmas = (List<Turma>) request.getAttribute("turmas");
                 if (turmas != null && !turmas.isEmpty()) {
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getAno() + "º" + turma.getLetra() %></h3>
-                <a href="${pageContext.request.contextPath}/alunos.jsp?id=<%= turma.getId() %>">
+                <h3><%= turma.getSerie() + " " + turma.getLetra() %></h3>
+                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>">
                     <i class="material-icons">arrow_forward</i>
                 </a>
             </div>

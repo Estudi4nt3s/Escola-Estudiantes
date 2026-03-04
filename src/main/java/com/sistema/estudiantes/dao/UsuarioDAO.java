@@ -15,15 +15,14 @@ import java.util.List;
 public class UsuarioDAO {
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO Usuario (email, senha, isadm, photo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuario (id, email, senha) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, usuario.getEmail());
-            psmt.setString(2, usuario.getSenha());
-            psmt.setBoolean(3, usuario.getIsAdm());
-            psmt.setString(4, usuario.getFoto());
+            psmt.setInt(1, usuario.getId());
+            psmt.setString(2, usuario.getEmail());
+            psmt.setString(3, usuario.getSenha());
             psmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -56,15 +55,43 @@ public class UsuarioDAO {
         return lista;
     }
 
-    public List<Usuario> listarComFiltro(int id) {
+    public List<Usuario> listarComFiltro(String condicao, String filtro) {
         List<Usuario> usuarios = new ArrayList<>();
-
-        String sql = "SELECT * FROM usuario WHERE id = ?";
+        String sql = "SELECT * FROM usuario WHERE " + condicao;
 
         try (Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setInt(1, id);
+            stmt.setString(1, filtro);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario user = new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("email"),
+                            rs.getString("senha"),
+                            rs.getBoolean("IsAdm"),
+                            rs.getString("Photo")
+                    );
+                    usuarios.add(user);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return usuarios;
+    }
+
+    public List<Usuario> listarFiltros(String condicao, boolean filtro1, String filtro2) {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM usuario WHERE " + condicao;
+
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setBoolean(1, filtro1);
+            stmt.setString(2, filtro2);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {

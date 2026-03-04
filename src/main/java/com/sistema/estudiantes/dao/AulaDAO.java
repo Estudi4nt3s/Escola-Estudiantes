@@ -65,16 +65,16 @@ public class AulaDAO {
         return lista;
     }
 
-    public List<Aula> listarComFiltro(int id) {
+    public List<Aula> listarComFiltro(String condicao, String valor) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM Aula WHERE id = ?";
+        String sql = "SELECT * FROM Aula WHERE " + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-                stmt.setObject(1, id);
+                stmt.setString(1, valor);
 
             try (ResultSet rs = stmt.executeQuery()) {
 
@@ -88,6 +88,45 @@ public class AulaDAO {
                             d,
                             t,
                             rs.getString("diasemana")
+
+
+                    );
+                    aulas.add(aula);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return aulas;
+    }
+
+    public List<Aula> listarComFiltro(String condicao, int valor, String data) {
+
+        List<Aula> aulas = new ArrayList<>();
+        String sql = "SELECT * FROM Aula WHERE " + condicao;
+
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, valor);
+            stmt.setString(2, data);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                    Turma t = new Turma(rs.getInt("turmaid"));
+                    Aula aula = new Aula(
+                            rs.getInt("id"),
+                            rs.getObject("horarioinicio", LocalTime.class),
+                            rs.getObject("horariofim", LocalTime.class),
+                            d,
+                            t,
+                            rs.getString("diasemana")
+
 
                     );
                     aulas.add(aula);
