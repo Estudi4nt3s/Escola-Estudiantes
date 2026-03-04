@@ -38,8 +38,10 @@ public class ServletLogin extends HttpServlet {
             boolean professor = email.matches(regexFuncionario);
             UsuarioDAO userDAO = new UsuarioDAO();
             List<Usuario> users = userDAO.listarComFiltro("email = ?",email);
+        System.out.println(email);
             if (!users.isEmpty()) {
                 validarSenha = users.getFirst().getSenha().equals(senha);
+                System.out.println("tem coisa ai");
                 if (validarSenha) {
                     //Valida que o usuário está cadastrado
                     LocalDate hoje = LocalDate.now();
@@ -83,8 +85,7 @@ public class ServletLogin extends HttpServlet {
 
 
                         List<Aluno> aluno = alunoDAO.listarComFiltro(users.getFirst().getId());
-                        List<TurmaAluno> turmaAluno = turmaAlunoDAO.listarComFiltro("matriculaaluno = ?",aluno.getFirst().getMatricula());
-                        List<Turma> turmas = turmaDAO.listarComFiltro("id = ? order by 2 desc",turmaAluno.getFirst().getIdTurma().getId());
+                        List<Turma> turmas = turmaDAO.listarComFiltro("id = ? order by 2 desc",aluno.getFirst().getTurmaId());
                         List<Aula> aulas = aulaDAO.listarComFiltro("diasemana = ? order by 2",semana);
                         List<Disciplina> disciplina = disciplinaDAO.listar();
                         List<Nota> notas = notaDAO.listarComFiltro("idaluno = ?", aluno.getFirst().getMatricula());

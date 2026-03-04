@@ -14,8 +14,8 @@ public class NotaDAO {
 
     public void inserir(Nota nota) {
         String sql = """
-            INSERT INTO Nota (disciplinaid, idaluno, idturma, valor)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO Nota (disciplinaid, idaluno, idturma, N1, N2)
+            VALUES (?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = Conexao.conectar();
@@ -24,7 +24,8 @@ public class NotaDAO {
             psmt.setInt(1, nota.getIdDisciplina().getId());
             psmt.setInt(2, nota.getIdAluno().getMatricula());
             psmt.setInt(3, nota.getIdTurma().getId());
-            psmt.setDouble(4, nota.getValor());
+            psmt.setDouble(4, nota.getN1());
+            psmt.setDouble(5, nota.getN2());
 
             psmt.executeUpdate();
 
@@ -52,7 +53,8 @@ public class NotaDAO {
                         d,
                         a,
                         t,
-                        rs.getDouble("Valor")
+                        rs.getDouble("N1"),
+                        rs.getDouble("N2")
                 );
 
                 lista.add(n);
@@ -84,7 +86,8 @@ public class NotaDAO {
                             disciplina,
                             aluno,
                             turma,
-                            rs.getDouble("Valor")
+                            rs.getDouble("N1"),
+                            rs.getDouble("N2")
                     );
 
                     listaNota.add(nota);
@@ -117,7 +120,7 @@ public class NotaDAO {
     public boolean atualizar(Nota n) {
         String sql = """
         UPDATE Nota
-           SET disciplinaid = ?, IdAluno = ?, IdTurma = ?, Valor = ?
+           SET disciplinaid = ?, IdAluno = ?, IdTurma = ?, N1 = ?, N2
          WHERE Id = ?
     """;
 
@@ -127,8 +130,9 @@ public class NotaDAO {
             psmt.setInt(1, n.getIdDisciplina().getId());
             psmt.setInt(2, n.getIdAluno().getMatricula());
             psmt.setInt(3, n.getIdTurma().getId());
-            psmt.setDouble(4, n.getValor());
-            psmt.setInt(5, n.getId());
+            psmt.setDouble(4, n.getN1());
+            psmt.setDouble(5, n.getN2());
+            psmt.setInt(6, n.getId());
 
             return psmt.executeUpdate() > 0;
 

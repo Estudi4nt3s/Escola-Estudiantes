@@ -27,7 +27,6 @@ public class AlunoAdminDAO {
 
                 aluno.setMatricula(rs.getInt("matricula"));
                 aluno.setCpf(rs.getString("cpf"));
-                aluno.setNome(rs.getString("nome"));
 
                 Date dataSql = rs.getDate("data_nascimento");
                 if (dataSql != null) {

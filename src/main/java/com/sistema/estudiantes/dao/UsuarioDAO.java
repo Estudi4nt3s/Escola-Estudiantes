@@ -41,9 +41,10 @@ public class UsuarioDAO {
             while (rs.next()) {
                 Usuario u = new Usuario(
                         rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sobrenome"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getBoolean("isadm"),
                         rs.getString("photo")
                 );
                 lista.add(u);
@@ -68,9 +69,10 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("sobrenome"),
                             rs.getString("email"),
                             rs.getString("senha"),
-                            rs.getBoolean("IsAdm"),
                             rs.getString("Photo")
                     );
                     usuarios.add(user);
@@ -97,9 +99,10 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("sobrenome"),
                             rs.getString("email"),
                             rs.getString("senha"),
-                            rs.getBoolean("IsAdm"),
                             rs.getString("Photo")
                     );
                     usuarios.add(user);
@@ -120,7 +123,6 @@ public class UsuarioDAO {
 
             psmt.setString(1, u.getEmail());
             psmt.setString(2, u.getSenha());
-            psmt.setBoolean(3, u.getIsAdm());
             psmt.setString(4, u.getFoto());
             psmt.setInt(5, u.getId());
 
