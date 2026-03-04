@@ -25,12 +25,12 @@ create table Professor ( Id     	    serial          not null
                        , UsuarioId	    int					null
                        , DisciplinaId   int             not null
                        , constraint pk_Professor primary key (Id)
-                       )
+                       );
 
 create table Disciplina ( Id    serial      not null
                         , Nome  varchar(60) not null
                         , constraint pk_Disciplina primary key (Id)
-                        )
+                        );
 
 create table Aula	( Id 			serial 	    not null
                     , Horario		hour        not null
@@ -39,7 +39,7 @@ create table Aula	( Id 			serial 	    not null
                     , diaSemana     char(3)     not null
                     , constraint fk_Aula_Disciplina  foreign key (DisciplinaId)   references Disciplina(Id)
                     , constraint fk_Aula_Turma  foreign key (TurmaId)   references Turma(Id)
-					)
+					);
 
 create table Aluno ( Matricula      serial          not null
 			       , Cpf			varchar(11)     not null
@@ -48,14 +48,14 @@ create table Aluno ( Matricula      serial          not null
                    , TelefonePai    varchar(15)     not null
                    , TurmaId        int                 null
                    , constraint pk_aluno primary key (Matricula)
-                   )
+                   );
 
 create table Turma ( Id     	serial      not null
                    , Ano    	int         not null
                    , Serie  	varchar(20) not null
                    , Letra  	char(1)     not null
                    , constraint pk_Turma primary key (Id)
-                   )
+                   );
 
 create table Observacao ( Id            serial          not null
                         , Texto         varchar(2000)   not null
@@ -65,7 +65,7 @@ create table Observacao ( Id            serial          not null
                         , constraint pk_Observacao              primary key (Id)
                         , constraint fk_Observacao_Aluno        foreign key (IdAluno)       references Aluno(Matricula)
                         , constraint fk_Observacao_Disciplina   foreign key (DisciplinaId)  references Disciplina(Id)
-                        )
+                        );
 
 create table Nota ( Id              serial  not null
                   , DisciplinaId    int     not null
