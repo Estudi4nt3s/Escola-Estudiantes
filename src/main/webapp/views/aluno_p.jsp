@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Gestão de Notas</title>
+    <title>Estudiantes - Gestão de Notas</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/aluno_p.css">

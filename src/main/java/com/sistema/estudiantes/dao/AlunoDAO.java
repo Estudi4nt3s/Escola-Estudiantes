@@ -17,7 +17,7 @@ public class AlunoDAO {
 
     public boolean inserir(Aluno aluno) {
 
-        String sql = "INSERT INTO Aluno (matricula, cpf, nome, datanascimento, usuarioid, telefonepai) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Alunos (matricula, cpf, datanascimento, usuarioid, telefonepai, turmaid) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -26,9 +26,10 @@ public class AlunoDAO {
 
             psmt.setInt(1, aluno.getMatricula());
             psmt.setString(2, aluno.getCpf());
-            psmt.setObject(4, aluno.getDataNascimento());
-            psmt.setInt(5, aluno.getUsuarioId().getId());
-            psmt.setString(6, aluno.getTelefonePai());
+            psmt.setObject(3, aluno.getDataNascimento());
+            psmt.setInt(4, aluno.getUsuarioId().getId());
+            psmt.setString(5, aluno.getTelefonePai());
+            psmt.setInt(6, aluno.getTurmaId());
 
             return psmt.executeUpdate() > 0;
 
@@ -42,7 +43,7 @@ public class AlunoDAO {
     public List<Aluno> listar() {
 
         List<Aluno> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aluno";
+        String sql = "SELECT * FROM Alunos";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -72,7 +73,7 @@ public class AlunoDAO {
 
     public List<Aluno> listarComFiltro(int matricula) {
         List<Aluno> alunos = new ArrayList<>();
-        String sql = "SELECT * FROM aluno WHERE matricula = ?";
+        String sql = "SELECT * FROM alunos WHERE matricula = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -102,10 +103,10 @@ public class AlunoDAO {
     public List<Aluno> listarPorTurma(int turmaId) {
         List<Aluno> alunos = new ArrayList<>();
         String sql = """
-                    SELECT a.* 
-                    FROM aluno a
-                    INNER JOIN turma t ON t.id = a.turmaid
-                    WHERE t.idturma = ?
+                    SELECT a.*, u.nome, u.sobrenome
+                    FROM alunos a
+                    INNER JOIN usuarios u ON a.usuarioid = u.id
+                    WHERE a.turmaid = ?;
         """;
                 try (Connection conn = Conexao.conectar();
                      PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -115,6 +116,8 @@ public class AlunoDAO {
                     ResultSet rs = stmt.executeQuery();
                     while (rs.next()) {
                         Usuario u = new Usuario(rs.getInt("usuarioid"));
+                        u.setNome(rs.getString("nome"));
+                        u.setSobrenome(rs.getString("sobrenome"));
                         Aluno aluno = new Aluno(
                                 rs.getInt("matricula"),
                                 rs.getString("cpf"),
@@ -136,7 +139,7 @@ public class AlunoDAO {
 
         public boolean atualizar(Aluno aluno) {
 
-            String sql = "UPDATE Aluno " +
+            String sql = "UPDATE Alunos " +
                     "SET usuarioid = ?" +
                     "WHERE matricula = ?";
 
@@ -156,7 +159,7 @@ public class AlunoDAO {
         }
 
         public int excluir(int matricula){
-            String sql = "DELETE FROM Aluno WHERE matricula = ?";
+            String sql = "DELETE FROM Alunos WHERE matricula = ?";
 
             try(   Connection conn = new Conexao().conectar();
                    PreparedStatement psmt = conn.prepareStatement(sql)

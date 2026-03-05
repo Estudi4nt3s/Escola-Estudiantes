@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Minhas Disciplinas</title>
+    <title>Estudiantes - Minhas Disciplinas</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
@@ -54,14 +55,13 @@
 
             <div class="disciplinas-grid">
 
-            <a href="aluno.jsp"><div class="disciplina card1">
+            <div class="disciplina card1">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>
                 </div>
                 <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
             </div>
-            </a>
 
             <div class="disciplina card2">
                 <div class="disciplina-info">

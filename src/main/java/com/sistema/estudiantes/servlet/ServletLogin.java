@@ -4,6 +4,7 @@ import java.io.*;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -20,111 +21,119 @@ public class ServletLogin extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-//        Pegando os Parâmetros
+        // Pegando os Parâmetros
         String email = request.getParameter("usuario");
         String senha = request.getParameter("senha");
-        senha = senha!=null?senha.strip():"";
-        email = email!=null?email.strip():"";
+        senha = (senha != null) ? senha.strip() : "";
+        email = (email != null) ? email.strip() : "";
 
-//        Declarando variáveis com valores padrões
-        boolean validarEmail = false;
-        boolean validarSenha;
+        System.out.println("Tentativa de login: " + email);
 
-        System.out.println("Entrou no servlet");
-//        Validando para ver se nós estamos tentando logar
-            System.out.println("Não é adm 💔");
-            String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
-            boolean professor = email.matches(regexFuncionario);
-            UsuarioDAO userDAO = new UsuarioDAO();
-            List<Usuario> users = userDAO.listarComFiltro("email = ?",email);
-        System.out.println(email);
-            if (!users.isEmpty()) {
-                validarSenha = users.getFirst().getSenha().equals(senha);
-                System.out.println("tem coisa ai");
-                if (validarSenha) {
-                    //Valida que o usuário está cadastrado
-                    LocalDate hoje = LocalDate.now();
-                    String dia = String.format("%02d",hoje.getDayOfMonth());
-                    String mes = String.format("%02d",hoje.getMonthValue());
-                    Locale ptBr = new Locale("pt", "BR");
-                    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
-                    String[] data = {dia,mes,semana};
+        UsuarioDAO userDAO = new UsuarioDAO();
+        List<Usuario> users = userDAO.listarComFiltro("email = ?", email);
 
-                    request.getSession().setAttribute("usuario", users.getFirst());
-                    request.getSession().setAttribute("data", data);
+        if (!users.isEmpty()) {
+            Usuario usuarioLogado = users.getFirst();
+            boolean validarSenha = usuarioLogado.getSenha().equals(senha);
 
-                    if (professor) {
-                        //Dataload professor
-                        ProfessorDAO profDAO = new ProfessorDAO();
-                        ProfDisciplinaDAO profDisciplinaDAO = new ProfDisciplinaDAO();
-                        DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
-                        AulaDAO  aulaDAO = new AulaDAO();
-                        TurmaDAO turmaDAO = new TurmaDAO();
+            if (validarSenha) {
+                // Configuração de Data para a Sessão
+                LocalDate hoje = LocalDate.now();
+                String dia = String.format("%02d", hoje.getDayOfMonth());
+                String mes = String.format("%02d", hoje.getMonthValue());
+                Locale ptBr = new Locale("pt", "BR");
+                String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+                String[] data = {dia, mes, semana};
 
-                        List<Professor> profs = profDAO.listarComFiltro(users.getFirst().getId());
-                        ProfessorDisciplina profdisciplinas = profDisciplinaDAO.buscarPorId(users.getFirst().getId());
-                        List<Disciplina> disciplinas = disciplinaDAO.listarComFiltro("id",String.valueOf(profdisciplinas.getIdDisciplina().getId()));
-                        List<Aula> aulas = aulaDAO.listarComFiltro("disciplinaid = ? AND diasemana = ? order by 2",disciplinas.getFirst().getId(), data[2]);
+                request.getSession().setAttribute("usuario", usuarioLogado);
+                request.getSession().setAttribute("data", data);
+
+                String regexFuncionario = "^[a-zA-Z]+\\.[a-zA-Z]+$";
+                boolean ehProfessor = email.matches(regexFuncionario);
+
+                if (ehProfessor) {
+                    ProfessorDAO profDAO = new ProfessorDAO();
+                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+                    AulaDAO aulaDAO = new AulaDAO();
+                    TurmaDAO turmaDAO = new TurmaDAO();
+                    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
+
+                    // Busca na tabela Professor usando usuarioid
+                    List<Professor> profs = profDAO.listarComFiltro(usuarioLogado.getId());
+
+                    if (!profs.isEmpty()) {
+                        Professor prof = profs.getFirst();
+                        Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplinaId().getId()));
+                        List<Aula> aulas = aulaDAO.listarComFiltro("professorid = ? AND diasemana = ? order by horarioinicio", prof.getId(), semana);
                         List<Turma> turmas = turmaDAO.listar();
 
-                        request.getSession().setAttribute("professor", profs.getFirst());
-                        request.getSession().setAttribute("disciplina", disciplinas.getFirst());
+                        request.getSession().setAttribute("professor", prof);
+                        request.getSession().setAttribute("disciplina", disc);
                         request.getSession().setAttribute("aulas", aulas);
                         request.getSession().setAttribute("turmas", turmas);
 
                         request.getRequestDispatcher("views/home_p.jsp").forward(request, response);
-                    } else {
-                        //Dataload aluno
-                        AlunoDAO alunoDAO = new AlunoDAO();
-                        NotaDAO notaDAO = new NotaDAO();
-                        TurmaAlunoDAO turmaAlunoDAO = new TurmaAlunoDAO();
-                        TurmaDAO turmaDAO = new TurmaDAO();
-                        AulaDAO aulaDAO = new AulaDAO();
-                        DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+                        return;
+                    }
+                } else {
+                    AlunoDAO alunoDAO = new AlunoDAO();
+                    NotaDAO notaDAO = new NotaDAO();
+                    TurmaDAO turmaDAO = new TurmaDAO();
+                    AulaDAO aulaDAO = new AulaDAO();
+                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+                    ProfessorDAO profDAO = new ProfessorDAO();
+                    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
+                    List<Aluno> alunos = alunoDAO.listarComFiltro(usuarioLogado.getId());
 
-                        List<Aluno> aluno = alunoDAO.listarComFiltro(users.getFirst().getId());
-                        List<Turma> turmas = turmaDAO.listarComFiltro("id = ? order by 2 desc",aluno.getFirst().getTurmaId());
-                        List<Aula> aulas = aulaDAO.listarComFiltro("diasemana = ? order by 2",semana);
-                        List<Disciplina> disciplina = disciplinaDAO.listar();
-                        List<Nota> notas = notaDAO.listarComFiltro("idaluno = ?", aluno.getFirst().getMatricula());
+                    if (!alunos.isEmpty()) {
+                        Aluno aluno = alunos.getFirst();
+                        List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", aluno.getTurmaId());
+                        List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
+                        List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
+                        List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
+                        List<ObservacaoProfessor> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];
-                        for(int i = 0;i < 6;i++) {
-                            int id = aulas.get(i).getDisciplinaId().getId();
-                            for (Disciplina value : disciplina) {
-                                if (value.getId() == id) {
-                                    String disciplinas = disciplina.get(i).getNome();
-                                    String nfdNormalizedString = Normalizer.normalize(disciplinas, Normalizer.Form.NFD);
 
-                                    // 2. Cria regex para encontrar os diacríticos (acentos)
+                        int limite = Math.min(aulas.size(), 6);
+                        for (int i = 0; i < limite; i++) {
+                            int profId = aulas.get(i).getProfessorId().getId();
+                            Professor p = profDAO.buscarPorId(profId);
+                            int discId = p.getDisciplinaId().getId();
+
+                            for (Disciplina d : todasDisciplinas) {
+                                if (d.getId() == discId) {
+                                    String nomeDisc = d.getNome();
+                                    String nfd = Normalizer.normalize(nomeDisc, Normalizer.Form.NFD);
                                     Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-                                    materia[i] = pattern.matcher(nfdNormalizedString).replaceAll("");
+                                    materia[i] = pattern.matcher(nfd).replaceAll("");
                                     qtdMateria++;
                                     break;
                                 }
                             }
                         }
-                        request.getSession().setAttribute("aluno", aluno.getFirst());
-                        request.getSession().setAttribute("turma", turmas.getFirst());
-                        request.getSession().setAttribute("media", notaDAO.Media(aluno.getFirst().getMatricula()));
+
+                        request.getSession().setAttribute("aluno", aluno);
+                        request.getSession().setAttribute("turma", !turmas.isEmpty() ? turmas.getFirst() : null);
                         request.getSession().setAttribute("materia", materia);
                         request.getSession().setAttribute("notas", notas);
                         request.getSession().setAttribute("qtdMateria", qtdMateria);
-                        request.getSession().setAttribute("disciplinas", disciplina);
+                        request.getSession().setAttribute("disciplinas", todasDisciplinas);
+                        request.getSession().setAttribute("observacoes", observacoes);
+
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
+                        return;
                     }
                 }
-            else {
-                    request.getSession().setAttribute("erro","CPF");
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
-                }
+            } else {
+                request.getSession().setAttribute("erro", "Senha Incorreta");
+            }
+        } else {
+            request.getSession().setAttribute("erro", "Usuário não encontrado");
         }
-        else{
-            request.getSession().setAttribute("erro","Matricula");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        }
+
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

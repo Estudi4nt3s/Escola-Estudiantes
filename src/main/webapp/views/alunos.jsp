@@ -5,6 +5,7 @@
 <%@ page import="java.time.format.TextStyle" %>
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
@@ -22,7 +23,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Alunos</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/alunos.css">
@@ -37,12 +39,12 @@
     </div>
 
     <nav>
-        <a class="menu active"><i class="material-icons">home</i>Início</a>
+        <a class="menu"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
             <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu" href="${pageContext.request.contextPath}/turma">
+        <a class="menu active" href="${pageContext.request.contextPath}/turma">
             <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
     </nav>
 
@@ -98,10 +100,10 @@
             %>
             <div class="alunos-card">
                 <div class="alunos-nome">
-                    <%= aluno.getNome() %>
+                    <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
                 </div>
 
-                <a href="${pageContext.request.contextPath}/nota?id=<%= aluno.getMatricula() %>">
+                <a href="${pageContext.request.contextPath}/nota?id=">
                     <i class="material-icons opcoes">more_vert</i>
                 </a>
             </div>

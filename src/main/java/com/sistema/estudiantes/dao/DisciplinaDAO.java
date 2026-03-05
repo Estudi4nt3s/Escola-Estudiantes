@@ -27,7 +27,7 @@ public class DisciplinaDAO {
 
         public List<Disciplina> listar() {
             List<Disciplina> lista = new ArrayList<>();
-            String sql = "SELECT * FROM Disciplina";
+            String sql = "SELECT * FROM disciplinas";
 
             try (Connection conn = new Conexao().conectar();
                  PreparedStatement psmt = conn.prepareStatement(sql);
@@ -48,7 +48,7 @@ public class DisciplinaDAO {
         }
 
         public List<Disciplina> listarComFiltro(String coluna, String filtro) {
-
+            System.out.println("entrou");
             List<Disciplina> disciplinas = new ArrayList<>();
             String sql = "SELECT * FROM Disciplina WHERE " + coluna + " = ?";
 
@@ -77,6 +77,31 @@ public class DisciplinaDAO {
 
             return disciplinas;
         }
+
+    public Disciplina buscarComFiltro(String coluna, String filtro) {
+        String sql = "SELECT * FROM Disciplinas WHERE " + coluna + " = ?";
+
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setInt(1, Integer.parseInt(filtro));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Disciplina (
+                        rs.getInt("id"),
+                        rs.getString("nome")
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
         public boolean atualizar(Disciplina d) {
             String sql = "UPDATE Disciplina SET Nome = ? WHERE Id = ?";

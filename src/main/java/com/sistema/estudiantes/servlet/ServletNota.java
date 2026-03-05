@@ -4,7 +4,6 @@ import com.sistema.estudiantes.dao.NotaDAO;
 import com.sistema.estudiantes.model.Aluno;
 import com.sistema.estudiantes.model.Disciplina;
 import com.sistema.estudiantes.model.Nota;
-import com.sistema.estudiantes.model.Turma;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -84,17 +83,14 @@ public class ServletNota extends HttpServlet {
 
         int disciplinaId = Integer.parseInt(request.getParameter("disciplinaid"));
         int alunoId = Integer.parseInt(request.getParameter("idaluno"));
-        int turmaId = Integer.parseInt(request.getParameter("idturma"));
         double valor = Double.parseDouble(request.getParameter("valor"));
 
         Nota nota = new Nota();
         Disciplina d = new Disciplina(disciplinaId);
         Aluno a = new Aluno(alunoId);
-        Turma t = new Turma(turmaId);
 
         nota.setIdDisciplina(d);
         nota.setIdAluno(a);
-        nota.setIdTurma(t);
         nota.setN1(valor);
         nota.setN2(valor);
 
