@@ -395,8 +395,8 @@ nav {
 }
 
 .card img {
-    width: 140px;
-    height: auto;
+    width: 120px;
+    height: 120px;
     display: block;
     margin: 100px auto 0 100px;
 }

@@ -54,7 +54,7 @@
 
             <div class="disciplinas-grid">
 
-            <a href="aluno.jsp"><div class="disciplina card1">
+            <a href="${pageContext.request.contextPath}/views/aluno.jsp?materia=matematica"><div class="disciplina card1">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>

@@ -44,7 +44,7 @@ public class NotaDAO {
             while (rs.next()) {
 
                 Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
-                Aluno a = new Aluno(rs.getInt("idaluno"));
+                Aluno a = new Aluno(rs.getInt("alunoid"));
 
                 Nota n = new Nota(
                         rs.getInt("Id"),
@@ -63,19 +63,19 @@ public class NotaDAO {
         return lista;
     }
 
-    public List<Nota> listarComFiltro(String condicao, Object valor){
+    public List<Nota> listarComFiltro(String condicao, int valor){
         List<Nota> listaNota = new ArrayList<>();
-        String sql = "SELECT *, avg(valor) FROM Notas WHERE "+condicao;
+        String sql = "SELECT * FROM notas WHERE "+condicao;
 
         try(Connection conn = Conexao.conectar();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setObject(1, valor);
+            stmt.setInt(1, valor);
 
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
 
                     Disciplina disciplina = new Disciplina(rs.getInt("disciplinaid"));
-                    Aluno aluno = new Aluno(rs.getInt("idaluno"));
+                    Aluno aluno = new Aluno(rs.getInt("alunoid"));
 
                     Nota nota = new Nota(
                             rs.getInt("id"),
@@ -92,24 +92,6 @@ public class NotaDAO {
             e.printStackTrace();
         }
         return listaNota;
-    }
-
-    public double Media(int id){
-        String sql = "SELECT avg(valor) as media FROM Notas WHERE idaluno = ?";
-        double media = 0;
-        try(Connection conn = Conexao.conectar();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-
-            try(ResultSet rs = stmt.executeQuery()){
-                while (rs.next()) {
-                    media = rs.getDouble("media");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return media;
     }
 
     public boolean atualizar(Nota n) {

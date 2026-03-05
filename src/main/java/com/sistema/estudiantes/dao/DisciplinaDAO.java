@@ -27,7 +27,7 @@ public class DisciplinaDAO {
 
         public List<Disciplina> listar() {
             List<Disciplina> lista = new ArrayList<>();
-            String sql = "SELECT * FROM Disciplina";
+            String sql = "SELECT * FROM disciplinas";
 
             try (Connection conn = new Conexao().conectar();
                  PreparedStatement psmt = conn.prepareStatement(sql);

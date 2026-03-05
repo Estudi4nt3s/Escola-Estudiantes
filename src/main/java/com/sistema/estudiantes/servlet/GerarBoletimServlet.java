@@ -34,19 +34,14 @@ public class GerarBoletimServlet extends HttpServlet {
 
         int iddisciplina;
         String situacao = "-";
+
         boolean aprovado = true;
 
-        for (Disciplina disciplina : disciplinas) {
-            for (Nota nota : notas) {
-                if(nota.getIdDisciplina().getId() == disciplina.getId()){
-                    iddisciplina = disciplina.getId();
-
-                    situacao = ((nota.getN1() + nota.getN2())/2 >= 7)?"Aprovado":"Reprovado";
-                    aprovado = (nota.getN1() + nota.getN2())/2 >= 7;
-                }
-                else{
-
-                }
+        for (Nota nota : notas) {
+            double media = (nota.getN1() + nota.getN2()) / 2;
+            if (media < 7) {
+                aprovado = false;
+                break;
             }
         }
 
@@ -78,7 +73,7 @@ public class GerarBoletimServlet extends HttpServlet {
             cabecalho.addCell(criarCelulaCabecalho("ANO LETIVO: " + anoLetivo));
 
             cabecalho.addCell(criarCelulaCabecalho("TURMA: " + turma));
-            cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado?"Aprovado":"Reprovado")));
+            cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado ? "Aprovado" : "Reprovado")));
 
             cabecalho.addCell(criarCelulaCabecalho("UNIDADE: Escola Germinare"));
             cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + LocalDate.now()));
@@ -96,24 +91,36 @@ public class GerarBoletimServlet extends HttpServlet {
             tabela.addHeaderCell(criarHeader("2ºSem"));
             tabela.addHeaderCell(criarHeader("MF"));
             tabela.addHeaderCell(criarHeader("Situação"));
-
             for (Disciplina disciplina : disciplinas) {
+
                 tabela.addCell(criarCelula(disciplina.getNome()));
+
+                Nota notaEncontrada = null;
+
                 for (Nota nota : notas) {
-                    if(nota.getIdDisciplina().getId() == disciplina.getId()){
-                        iddisciplina = disciplina.getId();
-                        tabela.addCell(criarCelula(String.valueOf(nota.getN1())));
-                        tabela.addCell(criarCelula(String.valueOf(nota.getN2())));
-                        tabela.addCell(criarCelula(String.valueOf((nota.getN1() + nota.getN2())/2)));
-                        situacao = (nota.getN1() + nota.getN2()/2 >= 7)?"Aprovado":"Reprovado";
-                        tabela.addCell(criarCelula(situacao));
+                    if (nota.getIdDisciplina().getId() == disciplina.getId()) {
+                        notaEncontrada = nota;
+                        break;
                     }
-                    else{
-                        tabela.addCell(criarCelula(disciplina.getNome()));
-                        tabela.addCell(criarCelula("-"));
-                        tabela.addCell(criarCelula("-"));
-                        tabela.addCell(criarCelula("-"));
-                    }
+                }
+
+                if (notaEncontrada != null) {
+
+                    double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+
+                    tabela.addCell(criarNota(String.valueOf(notaEncontrada.getN1())));
+                    tabela.addCell(criarNota(String.valueOf(notaEncontrada.getN2())));
+                    tabela.addCell(criarNota(String.valueOf(media)));
+
+                    situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                    tabela.addCell(criarCelula(situacao));
+
+                } else {
+
+                    tabela.addCell(criarNota("-"));
+                    tabela.addCell(criarNota("-"));
+                    tabela.addCell(criarNota("-"));
+                    tabela.addCell(criarCelula("-"));
                 }
             }
 
