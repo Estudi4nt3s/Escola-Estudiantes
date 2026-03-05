@@ -13,7 +13,7 @@ public class TurmaAdmDAO {
 
         List<TurmaAdm> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM turma";
+        String sql = "SELECT * FROM turmaadm";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -42,7 +42,7 @@ public class TurmaAdmDAO {
 
         TurmaAdm turma = null;
 
-        String sql = "SELECT * FROM turma WHERE id = ?";
+        String sql = "SELECT * FROM turmaadm WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -70,7 +70,7 @@ public class TurmaAdmDAO {
 
     public void excluir(int id) {
 
-        String sql = "DELETE FROM turma WHERE id = ?";
+        String sql = "DELETE FROM turmaadm WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
