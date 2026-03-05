@@ -87,10 +87,10 @@ public class ServletLogin extends HttpServlet {
 
                     if (!alunos.isEmpty()) {
                         Aluno aluno = alunos.getFirst();
-                        List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", String.valueOf(aluno.getTurmaId()));
+                        List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", aluno.getTurmaId());
                         List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
-                        List<Nota> notas = notaDAO.listarComFiltro("idaluno = ?", String.valueOf(aluno.getMatricula()));
+                        List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];
@@ -115,7 +115,6 @@ public class ServletLogin extends HttpServlet {
 
                         request.getSession().setAttribute("aluno", aluno);
                         request.getSession().setAttribute("turma", !turmas.isEmpty() ? turmas.getFirst() : null);
-                        request.getSession().setAttribute("media", notaDAO.Media(aluno.getMatricula()));
                         request.getSession().setAttribute("materia", materia);
                         request.getSession().setAttribute("notas", notas);
                         request.getSession().setAttribute("qtdMateria", qtdMateria);

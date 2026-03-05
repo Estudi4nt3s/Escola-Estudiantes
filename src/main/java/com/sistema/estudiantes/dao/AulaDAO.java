@@ -12,7 +12,7 @@ import java.util.List;
 public class AulaDAO {
     public void inserir(Aula aula) {
         String sql = """
-            INSERT INTO Aulas (horarioinicio, horariofim, professorid, turmaid, diasemana)
+            INSERT INTO aulas (horarioinicio, horariofim, professorid, turmaid, diasemana)
             VALUES (?, ?, ?, ?, ?)
         """;
 
@@ -35,7 +35,7 @@ public class AulaDAO {
     public List<Aula> listar() {
 
         List<Aula> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aulas";
+        String sql = "SELECT * FROM aulas";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -68,7 +68,7 @@ public class AulaDAO {
     public List<Aula> listarComFiltro(String condicao, String valor) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM Aula WHERE " + condicao;
+        String sql = "SELECT * FROM aulas WHERE " + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -105,7 +105,7 @@ public class AulaDAO {
     public List<Aula> listarComFiltro(String condicao, int valor, String data) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM Aula WHERE " + condicao;
+        String sql = "SELECT * FROM aulas WHERE " + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
