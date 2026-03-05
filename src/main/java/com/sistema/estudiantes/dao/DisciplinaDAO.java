@@ -78,6 +78,31 @@ public class DisciplinaDAO {
             return disciplinas;
         }
 
+    public Disciplina buscarComFiltro(String coluna, String filtro) {
+        String sql = "SELECT * FROM Disciplina WHERE " + coluna + " = ?";
+
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setInt(1, Integer.parseInt(filtro));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Disciplina (
+                        rs.getInt("id"),
+                        rs.getString("nome")
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
         public boolean atualizar(Disciplina d) {
             String sql = "UPDATE Disciplina SET Nome = ? WHERE Id = ?";
 

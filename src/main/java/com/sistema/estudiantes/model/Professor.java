@@ -5,13 +5,15 @@ public class Professor {
     private int id;
     private String nome;
     private Usuario usuarioId;
+    private Disciplina disciplinaId;
 
     public Professor() {}
 
-    public Professor(int id, String nome, Usuario usuarioId) {
+    public Professor(int id, String nome, Usuario usuarioId, Disciplina disciplinaId) {
         this.id = id;
         this.nome = nome;
         this.usuarioId = usuarioId;
+        this.disciplinaId = disciplinaId;
     }
 
     public Professor(int id){
@@ -28,6 +30,10 @@ public class Professor {
         return this.usuarioId;
     }
 
+    public Disciplina getDisciplinaId() {
+        return this.disciplinaId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -40,7 +46,11 @@ public class Professor {
         this.usuarioId = usuarioId;
     }
 
+    public void setDisciplinaId(Disciplina disciplinaId) {
+        this.disciplinaId = disciplinaId;
+    }
+
     public String toString() {
-        return "Id: " + this.id + "\nNome: " + this.nome + "\nId Usuário: " + this.usuarioId;
+        return "Id: " + this.id + "\nNome: " + this.nome + "\nId Usuário: " + this.usuarioId + "\nId Disciplina: " + this.disciplinaId;
     }
 }

@@ -15,7 +15,7 @@ public class AdministradorDAO {
 
         List<Admin> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM admin WHERE usuario = ?";
+        String sql = "SELECT * FROM admins WHERE usuario = ?";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql)) {

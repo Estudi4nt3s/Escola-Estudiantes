@@ -15,7 +15,7 @@ public class AlunoAdminDAO {
 
         List<Aluno> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM aluno";
+        String sql = "SELECT * FROM alunos";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class AlunoAdminDAO {
 
     public void excluir(int matricula) {
 
-        String sql = "DELETE FROM aluno WHERE matricula = ?";
+        String sql = "DELETE FROM alunos WHERE matricula = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

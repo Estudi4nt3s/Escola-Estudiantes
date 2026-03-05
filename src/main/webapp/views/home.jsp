@@ -1,4 +1,4 @@
-<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -13,7 +13,7 @@
 
 </head>
 <%
-    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+    Usuario aluno = (Usuario) request.getSession().getAttribute("aluno");
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");
     int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
