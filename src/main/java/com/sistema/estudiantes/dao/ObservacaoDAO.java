@@ -2,10 +2,7 @@ package com.sistema.estudiantes.dao;
 
 
 import com.sistema.estudiantes.conexao.Conexao;
-import com.sistema.estudiantes.model.Aluno;
-import com.sistema.estudiantes.model.Disciplina;
-import com.sistema.estudiantes.model.Observacao;
-import com.sistema.estudiantes.model.Professor;
+import com.sistema.estudiantes.model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -65,6 +62,45 @@ public class ObservacaoDAO {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public List<ObservacaoProfessor> listarComFiltro(String condicao, int valor){
+        List<ObservacaoProfessor> observacaos = new ArrayList<>();
+        String sql = """
+        SELECT * FROM observacoes o
+        Join professores p On o.professorid = p.id
+        Join disciplinas d On o.disciplinaid = d.id
+        WHERE o.alunomatricula = ?
+        """;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, valor);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    Aluno a = new Aluno(rs.getInt("alunomatricula"));
+                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+
+                    ObservacaoProfessor o = new ObservacaoProfessor(
+                            rs.getInt("o.id"),
+                            rs.getString("texto"),
+                            rs.getObject("datacriacao", LocalDate.class),
+                            p,
+                            a,
+                            d,
+                            rs.getString("p.nome"),
+                            rs.getString("d.nome")
+                    );
+
+                    observacaos.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return observacaos;
     }
 
     public boolean atualizar(Observacao o) {

@@ -1,5 +1,7 @@
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -19,6 +21,15 @@
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");
     int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
+    Map<String,String> conteudo = new HashMap<>();
+    conteudo.put("Matematica", "Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.");
+    conteudo.put("Português","Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.");
+    conteudo.put("História","Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.");
+    conteudo.put("Geografia","Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.");
+    conteudo.put("Inglês","Aprendizado de vocabulário, gramática básica, leitura, escrita e conversação na língua inglesa.");
+    conteudo.put("Ciências","Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.");
+
+
 %>
 <body>
 
@@ -32,6 +43,7 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/alunos.jsp"> <i class="material-icons">menu_book</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
         </nav>
