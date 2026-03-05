@@ -34,8 +34,6 @@
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-            <a class="menu" href="${pageContext.request.contextPath}/turma">
-                <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
     </aside>
 
@@ -51,7 +49,7 @@
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
                     <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="https://i.pravatar.cc/40?img=12" alt="avatar"></a>
-                    <span><%=aluno.getNome()%></span>
+                    <span><%=usuario.getNome()%></span>
                 </div>
             </div>
         </header>
@@ -61,7 +59,7 @@
             <div class="left">
 
                 <div class="welcome">
-                    <h2>Olá, <%=aluno.getNome()%>!</h2>
+                    <h2>Olá, <%=usuario.getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 

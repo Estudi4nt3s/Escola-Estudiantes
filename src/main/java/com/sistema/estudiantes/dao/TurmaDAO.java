@@ -56,13 +56,13 @@ public class TurmaDAO {
         return lista;
     }
 
-    public List<Turma> listarComFiltro(String condicao, Object valor) {
+    public List<Turma> listarComFiltro(String condicao, int valor) {
         List<Turma> turmas = new ArrayList<>();
-        String sql = "SELECT * FROM Turma WHERE " + condicao;
+        String sql = "SELECT * FROM turmas WHERE " + condicao;
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-             stmt.setObject(1, valor);
+             stmt.setInt(1, valor);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Turma turma = new Turma(
