@@ -36,6 +36,7 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/alunos.jsp"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>

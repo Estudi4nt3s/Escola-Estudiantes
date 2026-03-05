@@ -1,8 +1,5 @@
-<%@ page import="com.sistema.estudiantes.model.Aluno" %>
-<%@ page import="com.sistema.estudiantes.model.Usuario" %>
-<%@ page import="com.sistema.estudiantes.model.Disciplina" %>
-<%@ page import="com.sistema.estudiantes.model.Nota" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.sistema.estudiantes.model.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -12,6 +9,7 @@
     String[] data = (String[]) request.getSession().getAttribute("data");
     List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
     List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
+    List<ObservacaoProfessor> observacaos = (List<ObservacaoProfessor>) request.getSession().getAttribute("observacoes");
 
 %>
 <head>
@@ -32,18 +30,13 @@
         </div>
 
         <nav>
-            <a class="menu" href="${pageContext.request.contextPath}/views/home_p.jsp"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <a class="menu"> <i class="material-icons">menu_book</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu active" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
 
         </nav>
-
-        <div class="config">
-            <a class="menu" style="margin-left: -25px;" href="perfil_p.jsp">
-                <i class="material-icons">person</i>Perfil
-            </a>
-        </div>
     </aside>
 
     <main class="main">
@@ -97,14 +90,6 @@
 
                                     situacao = media >= 7 ? "Aprovado" : "Reprovado";
 
-//                                else {
-//
-//                                    tabela.addCell(criarNota("-"));
-//                                    tabela.addCell(criarNota("-"));
-//                                    tabela.addCell(criarNota("-"));
-//                                    tabela.addCell(criarCelula("-"));
-//                                }
-
                         %>
                             <tr>
                                 <td><strong><%=disciplina.getNome()%></strong></td>
@@ -140,21 +125,27 @@
                     <h3>Observações do Professor</h3>
                 </div>
                 <div class="obs-content">
-                    <c:forEach var="obs" items="${aluno.observacoes}" varStatus="status">
-                        <p><strong>Prof. ${obs.professorNome} (${obs.materia}):</strong> "${obs.texto}"</p>
-                        <c:if test="${!status.last}">
-                            <hr>
-                        </c:if>
-                    </c:forEach>
-                    
-                    <c:if test="${empty aluno.observacoes}">
+                    <%
+                        for(int i = 0;i < observacaos.size();i++){
+                    %>
+                            <p><strong>Prof. <%=observacaos.get(i).getNomeProfessor()%> (<%=observacaos.get(i).getNomeDisciplina()%>:</strong> "<%=observacaos.get(i).getTexto()%>"</p>
+                    <%
+                            if((i + 1) == observacaos.size()){
+                    %>
+                                <hr>
+                    <%
+                            }
+                        }
+                        if(observacaos.isEmpty()){%>
                         <p>Nenhuma observação registrada para este aluno.</p>
-                    </c:if>
+                    <%
+                        }
+                    %>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/notificacoes.js"></script>
+    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 </html>
