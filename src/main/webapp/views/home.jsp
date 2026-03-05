@@ -23,12 +23,12 @@
     String[] materia = (String[]) request.getSession().getAttribute("materia");
     int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
     Map<String,String> conteudo = new HashMap<>();
-    conteudo.put("Matematica", "Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.");
-    conteudo.put("Português","Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.");
-    conteudo.put("História","Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.");
-    conteudo.put("Geografia","Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.");
-    conteudo.put("Inglês","Aprendizado de vocabulário, gramática básica, leitura, escrita e conversação na língua inglesa.");
-    conteudo.put("Ciências","Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.");
+    conteudo.put("matematica", "Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.");
+    conteudo.put("portugues","Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.");
+    conteudo.put("historia","Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.");
+    conteudo.put("geografia","Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.");
+    conteudo.put("ingles","Aprendizado de vocabulário, gramática básica, leitura, escrita e conversação na língua inglesa.");
+    conteudo.put("ciencias","Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.");
 
 
 %>
@@ -44,7 +44,7 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/alunos.jsp"> <i class="material-icons">menu_book</i>Notas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
         </nav>

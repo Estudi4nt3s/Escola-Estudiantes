@@ -54,11 +54,11 @@
     <div class="login-box">
         <h2>Login</h2>
 
-        <% if (request.getParameter("erro") != null) { %>
-        <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Credenciais inválidas!</p>
+        <% if (request.getSession().getAttribute("erro") != null) { %>
+        <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Usuário ou senha inválidos!</p>
         <% } %>
 
-        <form action="servletLogin" method="post">
+        <form action="${pageContext.request.contextPath}/views/loading.jsp" method="post">
             <label for="usuario">Usuário</label>
             <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário">
 

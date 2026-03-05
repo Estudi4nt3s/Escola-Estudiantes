@@ -73,7 +73,7 @@ public class AlunoDAO {
 
     public List<Aluno> listarComFiltro(int matricula) {
         List<Aluno> alunos = new ArrayList<>();
-        String sql = "SELECT * FROM alunos WHERE matricula = ?";
+        String sql = "SELECT * FROM alunos WHERE usuarioid = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
