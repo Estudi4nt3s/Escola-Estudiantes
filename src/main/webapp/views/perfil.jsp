@@ -9,7 +9,6 @@
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     Turma turma = (Turma) request.getSession().getAttribute("turma");
     String[] data = (String[]) request.getSession().getAttribute("data");
-    double media = (Double) request.getSession().getAttribute("media");
 %>
 
 <!DOCTYPE html>
@@ -36,7 +35,7 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/alunos.jsp"> <i class="material-icons">menu_book</i>Notas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/alunosjsp"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
@@ -68,7 +67,7 @@
 
             <div class="perfil-info-principal">
                 <h2><%= usuario.getNome() %></h2>
-                <p> <%=turma.getSerie()%></p>
+                <p> <%=turma.getSerie() + turma.getLetra()%></p>
 
                 <div class="perfil-status ativo">
                     ● Aluno Ativo
@@ -83,23 +82,8 @@
                 <div class="linha"><span>RA:</span> <%= aluno.getMatricula() %></div>
                 <div class="linha"><span>Email:</span> <%=usuario.getEmail()%></div>
                 <div class="linha"><span>Telefone:</span> <%= aluno.getTelefonePai() %></div>
-            </div>
-
-            <div class="perfil-card-info">
-                <h3>Desempenho</h3>
-                <div class="linha"><span>Média Geral:</span> <%=media%></div>
-                <div class="linha"><span>Frequência:</span> -100</div>
                 <div class="linha"><span>Turma:</span> <%=turma.getSerie() + " " + turma.getLetra()%></div>
-            </div>
 
-            <div class="perfil-card-info">
-                <h3>Melhores Notas</h3>
-                <div class="tags">
-                    <span>Matemática - Excelente Raciocínio Lógico</span>
-                    <span>Português - Boa Interpretação</span>
-                    <span>História - Participativo</span>
-                    <span>Alta Performance em Avaliações</span>
-                </div>
             </div>
 
         </div>
