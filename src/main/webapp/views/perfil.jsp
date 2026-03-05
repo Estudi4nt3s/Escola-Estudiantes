@@ -35,7 +35,7 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/alunosjsp"> <i class="material-icons">menu_book</i>Notas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
@@ -67,7 +67,7 @@
 
             <div class="perfil-info-principal">
                 <h2><%= usuario.getNome() %></h2>
-                <p> <%=turma.getSerie() + turma.getLetra()%></p>
+                <p> <%=turma.getSerie()%></p>
 
                 <div class="perfil-status ativo">
                     ● Aluno Ativo
@@ -85,7 +85,6 @@
                 <div class="linha"><span>Turma:</span> <%=turma.getSerie() + " " + turma.getLetra()%></div>
 
             </div>
-
         </div>
 
     </div>

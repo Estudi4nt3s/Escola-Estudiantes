@@ -33,9 +33,9 @@
         <nav>
             <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu"> <i class="material-icons">menu_book</i>Notas</a>
+            <a class="menu active"> <i class="material-icons">menu_book</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu active" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
 
         </nav>
     </aside>
@@ -93,12 +93,12 @@
 
                         %>
                             <tr>
-                                <td><strong><%=disciplina.getNome()%></strong></td>
-                                <td><%=notaEncontrada.getN1()%></td>
-                                <td><%=notaEncontrada.getN2()%></td>
-                                <td><%=media%></td>
+                                <td><strong><%=disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())%></strong></td>
+                                <td><%=String.format("%.2f",notaEncontrada.getN1())%></td>
+                                <td><%=String.format("%.2f",notaEncontrada.getN2())%></td>
+                                <td><%=String.format("%.2f",media)%></td>
                                 <td>
-                                    <span class="status <%=media >= 7?"attention":"approved"%>"><%=situacao%></span>
+                                    <span class="status <%=media >= 7?"approved":"attention"%>"><%=situacao%></span>
                                 </td>
                             </tr>
                         <%
@@ -146,6 +146,10 @@
             </div>
         </div>
     </main>
+
+    <a href="${pageContext.request.contextPath}/gerarBoletim">
+        Gerar Boletim
+    </a>
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>

@@ -45,7 +45,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
         <a class="menu active" href="${pageContext.request.contextPath}/turma">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+            <i class="material-icons">groups</i>Turmas</a>
     </nav>
 
     <div class="config">
