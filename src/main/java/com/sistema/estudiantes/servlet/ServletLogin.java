@@ -4,6 +4,7 @@ import java.io.*;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -55,15 +56,14 @@ public class ServletLogin extends HttpServlet {
                     DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
                     AulaDAO aulaDAO = new AulaDAO();
                     TurmaDAO turmaDAO = new TurmaDAO();
+                    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
                     // Busca na tabela Professor usando usuarioid
                     List<Professor> profs = profDAO.listarComFiltro(usuarioLogado.getId());
 
                     if (!profs.isEmpty()) {
                         Professor prof = profs.getFirst();
-                        // Busca disciplina usando o disciplinaid da tabela Professor
                         Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplinaId().getId()));
-                        // Busca aulas usando o professorid (como está no seu banco)
                         List<Aula> aulas = aulaDAO.listarComFiltro("professorid = ? AND diasemana = ? order by horarioinicio", prof.getId(), semana);
                         List<Turma> turmas = turmaDAO.listar();
 
@@ -82,6 +82,7 @@ public class ServletLogin extends HttpServlet {
                     AulaDAO aulaDAO = new AulaDAO();
                     DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
                     ProfessorDAO profDAO = new ProfessorDAO();
+                    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
                     List<Aluno> alunos = alunoDAO.listarComFiltro(usuarioLogado.getId());
 
@@ -91,6 +92,7 @@ public class ServletLogin extends HttpServlet {
                         List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
                         List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
+                        List<ObservacaoProfessor> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];
@@ -119,6 +121,7 @@ public class ServletLogin extends HttpServlet {
                         request.getSession().setAttribute("notas", notas);
                         request.getSession().setAttribute("qtdMateria", qtdMateria);
                         request.getSession().setAttribute("disciplinas", todasDisciplinas);
+                        request.getSession().setAttribute("observacoes", observacoes);
 
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
                         return;
