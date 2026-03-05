@@ -83,8 +83,7 @@
 
                     <div class="card <%=materia[i].toLowerCase()%>">
                         <h3><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
+                        <p><%=conteudo.get(materia[i].toLowerCase())%></p>
                         <img src="${pageContext.request.contextPath}/utils/<%=materia[i].toLowerCase(java.util.Locale.ROOT)%>.png" alt="<%=materia[i]%>">
                     </div>
                 <%
