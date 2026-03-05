@@ -25,7 +25,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Início</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas.css">
@@ -40,10 +41,10 @@
     </div>
 
     <nav>
-        <a class="menu active" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu">
+        <a class="menu active">
             <i class="material-icons">calendar_month</i>Turmas</a>
     </nav>
 </aside>

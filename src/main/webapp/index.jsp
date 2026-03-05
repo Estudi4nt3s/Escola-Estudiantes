@@ -5,12 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Estudantes</title>
-
+    <title>Estudiantes - Login</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Inria+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
 
@@ -23,8 +24,10 @@
             <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
 
             <input type="email" name="usuario" id="usuario" placeholder="Usuário" required>
-            <input type="password" name="senha" id="senha" placeholder="Senha" required>
-
+            <div class="input-wrapper">
+                <input type="password" name="senha" id="senha" placeholder="Senha" required>
+                <i class="material-icons olho" onclick="alternarVisibilidade(event)">visibility</i>
+            </div>
             <button type="submit" class="btn-primary">Entrar</button>
             <button type="button" class="btn-primary" onclick="fecharAdmin()">Cancelar</button>
 
@@ -60,8 +63,10 @@
             <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário">
 
             <label for="senha">Senha</label>
-            <input type="password" name="senha" id="senha" required placeholder="••••••••">
-
+            <div class="input-wrapper">
+                <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
+                <i class="material-icons" onclick="alternarVisibilidade(event)">visibility</i>
+            </div>
             <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
         </form>
     </div>
@@ -81,6 +86,19 @@
     window.onclick = function(event) {
         if (event.target == modal) {
             fecharAdmin();
+        }
+    }
+
+    function alternarVisibilidade(event) {
+        const icone = event.target;
+        const input = icone.closest('.input-wrapper').querySelector('input');
+
+        if (input.type === "password") {
+            input.type = "text";
+            icone.textContent = "visibility_off";
+        } else {
+            input.type = "password";
+            icone.textContent = "visibility";
         }
     }
 </script>

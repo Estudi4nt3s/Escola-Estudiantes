@@ -48,7 +48,7 @@ public class DisciplinaDAO {
         }
 
         public List<Disciplina> listarComFiltro(String coluna, String filtro) {
-
+            System.out.println("entrou");
             List<Disciplina> disciplinas = new ArrayList<>();
             String sql = "SELECT * FROM Disciplina WHERE " + coluna + " = ?";
 
@@ -79,7 +79,7 @@ public class DisciplinaDAO {
         }
 
     public Disciplina buscarComFiltro(String coluna, String filtro) {
-        String sql = "SELECT * FROM Disciplina WHERE " + coluna + " = ?";
+        String sql = "SELECT * FROM Disciplinas WHERE " + coluna + " = ?";
 
         try (
                 Connection conn = new Conexao().conectar();
