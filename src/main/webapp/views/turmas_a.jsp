@@ -18,7 +18,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gerenciar Turmas</title>
+  <title>Estudiantes - Gerenciar Turmas</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
