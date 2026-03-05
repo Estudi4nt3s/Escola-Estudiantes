@@ -21,7 +21,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gerenciar Disciplinas</title>
+  <title>Estudiantes - Gerenciar Disciplinas</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
