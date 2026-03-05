@@ -39,7 +39,6 @@ public class Aluno {
         return this.cpf;
     }
 
-
     public LocalDate getDataNascimento() {
         return this.dataNascimento;
     }
@@ -56,7 +55,6 @@ public class Aluno {
         return this.turmaId;
     }
 
-
     public void setMatricula(int matricula) {
         this.matricula = matricula;
     }
@@ -64,7 +62,6 @@ public class Aluno {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
@@ -79,6 +76,6 @@ public class Aluno {
     }
 
     public String toString() {
-        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai;
+        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai + "\nId Turma: " + this.turmaId;
     }
 }

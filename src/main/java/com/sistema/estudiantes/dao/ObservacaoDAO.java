@@ -17,7 +17,7 @@ public class ObservacaoDAO {
 
     public void inserir(Observacao observacao) {
         String sql = """
-            INSERT INTO Observacao (Texto, DataCriacao, ProfessorId, IdAluno, DisciplinaId)
+            INSERT INTO Observacoes (Texto, DataCriacao, ProfessorId, alunomatricula, DisciplinaId)
             VALUES (?, ?, ?, ?, ?)
         """;
 
@@ -39,7 +39,7 @@ public class ObservacaoDAO {
 
     public List<Observacao> listar() {
         List<Observacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Observacao";
+        String sql = "SELECT * FROM Observacoes";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -47,8 +47,9 @@ public class ObservacaoDAO {
 
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
-                Aluno a = new Aluno(rs.getInt("idaluno"));
+                Aluno a = new Aluno(rs.getInt("alunomatricula"));
                 Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+
                 Observacao o = new Observacao(
                         rs.getInt("id"),
                         rs.getString("texto"),
@@ -67,7 +68,7 @@ public class ObservacaoDAO {
     }
 
     public boolean atualizar(Observacao o) {
-        String sql = "UPDATE Observacao SET Texto = ?, DataCriacao = ? WHERE Id = ?";
+        String sql = "UPDATE Observacoes SET Texto = ?, DataCriacao = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -85,7 +86,7 @@ public class ObservacaoDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Observacao WHERE Id = ?";
+        String sql = "DELETE FROM Observacoes WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
