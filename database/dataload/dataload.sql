@@ -1,16 +1,4 @@
-INSERT INTO Professor (Id, Nome) VALUES
- (1, 'Ana Souza'),
- (2, 'Bruno Almeida'),
- (3, 'Carla Mendes'),
- (4, 'Diego Santos'),
- (5, 'Eduarda Lima'),
- (6, 'Fernando Rocha'),
- (7, 'Gabriela Nunes'),
- (8, 'Henrique Duarte'),
- (9, 'Isabela Carvalho'),
- (10, 'João Pedro Martins');
-
-insert into Disciplina (Id, Nome) values
+insert into Disciplinas (Id, Nome) values
  (1, 'matematica'),
  (2, 'portugues'),
  (3, 'historia'),
@@ -18,7 +6,7 @@ insert into Disciplina (Id, Nome) values
  (5, 'ciencias'),
  (6, 'ingles');
 
-insert into Usuario (Nome, Sobrenome, Email, Senha, Photo) values
+insert into Usuarios (Nome, Sobrenome, Email, Senha, Photo) values
  ('Ana'             , 'Martins'     , 'ana.mat'                         , '123456'  , null),
  ('Bruno'           , 'Lima'        , 'bruno.port'                      , '123456'  , null),
  ('Carla'           , 'Souza'       , 'carla.hist'                      , '123456'  , null),
@@ -38,7 +26,7 @@ insert into Usuario (Nome, Sobrenome, Email, Senha, Photo) values
  ('Renato'          , 'Russo'       , 'renatorusso@escola.com'          , 'senha'   , null),
  ('Michael'         , 'Jackson'     , 'michaeljackson@escola.com'       , 'senha'   , null);
 
-insert into Professor (Nome, UsuarioId, DisciplinaId) values
+insert into Professores (Nome, UsuarioId, DisciplinaId) values
  ('Ana Martins',     1, 1), -- matemática
  ('Bruno Lima',      2, 2), -- português
  ('Carla Souza',     3, 3), -- história
@@ -46,10 +34,10 @@ insert into Professor (Nome, UsuarioId, DisciplinaId) values
  ('Érika Santos',    5, 5), -- ciências
  ('Fábio Almeida',   6, 6); -- inglês
 
-insert into Turma (Ano, Serie, Letra) values
+insert into Turmas (Ano, Serie, Letra) values
  (2026, '1º EM', 'A');
 
-insert into Aluno (Matricula, Cpf, DataNascimento, UsuarioId, TelefonePai, TurmaId) values
+insert into Alunos (Matricula, Cpf, DataNascimento, UsuarioId, TelefonePai, TurmaId) values
  (1,  '11111111111', '2011-05-10', 7     , '(11)90000-0001', 1),
  (2,  '22222222222', '2010-08-22', 8     , '(11)90000-0002', 1),
  (3,  '33333333333', '2011-01-14', 9     , '(11)90000-0003', 1),
@@ -63,7 +51,7 @@ insert into Aluno (Matricula, Cpf, DataNascimento, UsuarioId, TelefonePai, Turma
  (11, '12345678910', '2010-04-25', 17    , '(11)90000-0011', 1),
  (12, '23456789101', '2010-04-25', 18    , '(11)90000-0012', 1);
 
-insert into Aula (HorarioInicio, HorarioFim, ProfessorId, TurmaId, diaSemana) values
+insert into Aulas (HorarioInicio, HorarioFim, ProfessorId, TurmaId, diaSemana) values
  ('07:00','07:50',1,1,'SEG'),
  ('07:50','08:40',2,1,'SEG'),
  ('08:40','09:30',3,1,'SEG'),
@@ -95,6 +83,6 @@ insert into Aula (HorarioInicio, HorarioFim, ProfessorId, TurmaId, diaSemana) va
  ('10:50','11:40',1,1,'SEX'),
  ('11:40','12:30',2,1,'SEX');
 
-insert into Admin (Usuario, Senha) values ('admin', 'admin123');
+insert into Admins (Usuario, Senha) values ('admin', 'admin123');
 
 end;
