@@ -40,13 +40,11 @@
     </div>
 
     <nav>
-        <a class="menu active"><i class="material-icons">home</i>Início</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
-            <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu active" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu" href="${pageContext.request.contextPath}/turma">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu">
+            <i class="material-icons">calendar_month</i>Turmas</a>
     </nav>
 </aside>
 
@@ -61,7 +59,7 @@
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12" alt="">
+                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
                 <span><%=professor.getNome()%></span>
             </div>
         </div>
