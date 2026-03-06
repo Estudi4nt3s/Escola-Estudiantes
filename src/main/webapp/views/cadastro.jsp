@@ -40,13 +40,16 @@
             }
         %>
 
-        <form action="servletCadastro" method="post">
+        <form action="${pageContext.request.contextPath}/servletCadastro" method="post">
 
             <label for="nome">Nome Completo</label>
             <input type="text" name="nome" id="nome" required>
 
             <label for="matricula">Matrícula</label>
             <input type="text" name="matricula" id="matricula" required>
+
+            <label>CPF:</label>
+            <input type="text" name="cpf" placeholder="000.000.000-00">
 
             <label for="email">E-mail</label>
             <input type="email" name="email" id="email" required>

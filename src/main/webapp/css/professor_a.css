@@ -1,0 +1,181 @@
+:root {
+    --red: #d11d22;
+    --red-dark: #a5161a;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    --radius: 16px;
+}
+
+/* RESET E BASE */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Roboto', sans-serif; }
+
+body { display: flex; height: 100vh; background: var(--bg); color: #333; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, var(--red), var(--red-dark));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Impede que a sidebar encolha */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 30px 25px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+}
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+    border-left: 3px solid transparent;
+}
+
+.menu.active {
+    background: rgba(255, 255, 255, 0.12);
+    border-left: 3px solid white;
+}
+
+.menu:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+.config {
+    margin-top: auto;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    opacity: 0.8;
+    transition: 0.3s;
+}
+.config:hover {
+    opacity: 1;
+}
+/* MAIN CONTENT */
+.main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+
+/* TOPBAR */
+.topbar {
+    height: 85px;
+    background: white;
+    box-shadow: var(--soft-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+/* TABELA E CONTAINER */
+.page-header { margin: 30px 40px; display: flex; justify-content: space-between; align-items: center; }
+
+.card {
+    background: white; border-radius: var(--radius);
+    padding: 25px; box-shadow: var(--shadow);
+    margin: 0 40px 30px 40px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+th { color: #888; font-weight: 600; padding: 16px; text-transform: uppercase; font-size: 0.8rem; text-align: left; border-bottom: 2px solid #f0f0f0; }
+
+td { padding: 16px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+
+input, select {
+    padding: 12px; border: 1.5px solid #e0e0e0; border-radius: 10px;
+    width: 100%; outline: none; transition: 0.3s;
+}
+.input[typeof="email"]{
+    margin-top: 10px;
+}
+input:focus { border-color: var(--red); box-shadow: 0 0 0 4px rgba(209, 29, 34, 0.1); }
+
+.btn-primary {
+    background: var(--red); color: white; border: none;
+    padding: 12px 24px; border-radius: 10px; cursor: pointer;
+    font-weight: 600; display: inline-flex; align-items: center; gap: 8px;
+}
+
+.btn-primary:hover { background: var(--red-dark); }
+
+.icon-btn { border: none; background: none; cursor: pointer; color: #666; transition: 0.3s; }
+.icon-btn.edit:hover { color: #007bff; }
+.icon-btn.delete:hover { color: var(--red); }
+
+/* MODAL */
+.overlay {
+    position: fixed; top:0; left:0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+
+.modal {
+    background: white; width: 450px; padding: 30px; border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px; }
+
+.btn-cancelar {
+    background: #e0e0e0; color: #555; padding: 10px 20px;
+    border-radius: 8px; text-decoration: none; font-weight: 600;
+}
+.form-group{
+    margin-top: 40px;
+}
+select {
+    appearance: none; /* Remove a seta padrão do navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Adiciona nossa própria seta personalizada via background */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center; /* Afasta a seta da borda */
+    background-size: 12px;
+
+    padding: 12px 35px 12px 15px; /* Padding direito maior para a seta não encostar no texto */
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 100%;
+    cursor: pointer;
+    background-color: white;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+select:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(209, 29, 34, 0.1);
+}
+select:hover {
+    border-color: #ccc;
+}
+input{
+    margin-top: 10px;
+}

@@ -63,7 +63,7 @@ public class ServletLogin extends HttpServlet {
 
                     if (!profs.isEmpty()) {
                         Professor prof = profs.getFirst();
-                        Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplinaId().getId()));
+                        Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplina().getId()));
                         List<Aula> aulas = aulaDAO.listarComFiltro("professorid = ? AND diasemana = ? order by horarioinicio", prof.getId(), semana);
                         List<Turma> turmas = turmaDAO.listar();
 
@@ -101,7 +101,7 @@ public class ServletLogin extends HttpServlet {
                         for (int i = 0; i < limite; i++) {
                             int profId = aulas.get(i).getProfessorId().getId();
                             Professor p = profDAO.buscarPorId(profId);
-                            int discId = p.getDisciplinaId().getId();
+                            int discId = p.getDisciplina().getId();
 
                             for (Disciplina d : todasDisciplinas) {
                                 if (d.getId() == discId) {
