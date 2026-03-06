@@ -42,11 +42,12 @@
         </div>
 
             <div class="user">
-                <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
-                <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
-                    <span>Mateus Carlos</span>
-                </div>
+                <a href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
+                    <div class="avatar">
+                        <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
+                        <span>Mateus Carlos</span>
+                    </div>
+                </a>
             </div>
         </header>
 

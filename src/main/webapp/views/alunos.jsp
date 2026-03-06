@@ -12,8 +12,8 @@
         busca = request.getParameter("busca");
     }
     LocalDate hoje = LocalDate.now();
-    String dia = String.format("%02d",hoje.getDayOfMonth());
-    String mes = String.format("%02d",hoje.getMonthValue());
+    String dia = String.format("%02d", hoje.getDayOfMonth());
+    String mes = String.format("%02d", hoje.getMonthValue());
     Locale ptBr = new Locale("pt", "BR");
     String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
 %>
@@ -45,7 +45,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
         <a class="menu active" href="${pageContext.request.contextPath}/turma">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+            <i class="material-icons">groups</i>Turmas</a>
     </nav>
 
     <div class="config">
@@ -54,7 +54,6 @@
 </aside>
 
 <main class="main">
-
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
@@ -76,15 +75,11 @@
                 Turma turma = (Turma) request.getAttribute("turmaSelecionada");
                 if(turma != null){
             %>
-
             <div class="alunos-titulo">
                 <%= turma.getSerie() + " " + turma.getLetra() %>
                 <i class="material-icons">expand_more</i>
             </div>
-
-            <%
-                }
-            %>
+            <% } %>
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
@@ -103,18 +98,27 @@
                     <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
                 </div>
 
-                <a href="${pageContext.request.contextPath}/nota?id=">
-                    <i class="material-icons opcoes">more_vert</i>
-                </a>
+                <div class="acoes-container">
+                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>
+
+                    <div class="popup">
+                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card">
+                            <i class="material-icons popup-icones">edit_note</i>
+                            <span>Notas</span>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/observacao?id=<%= aluno.getMatricula() %>" class="popup-card">
+                            <i class="material-icons popup-icones">assignment</i>
+                            <span>Observações</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <%
                 }
             } else {
             %>
             <p>Nenhum aluno encontrado.</p>
-            <%
-                }
-            %>
+            <% } %>
         </div>
     </div>
 </main>
@@ -163,6 +167,7 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/popup.js"></script>
 </body>
 
 </html>

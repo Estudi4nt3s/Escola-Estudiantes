@@ -92,7 +92,7 @@ public class ServletLogin extends HttpServlet {
                         List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
                         List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
-                        List<ObservacaoProfessor> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
+                        List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];

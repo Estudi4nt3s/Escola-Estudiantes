@@ -7,9 +7,9 @@
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     String[] data = (String[]) request.getSession().getAttribute("data");
-    List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
-    List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
-    List<ObservacaoProfessor> observacaos = (List<ObservacaoProfessor>) request.getSession().getAttribute("observacoes");
+    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
+    List<Nota> notas = (List<Nota>) request.getAttribute("notas");
+    List<Observacao> observacaos = (List<Observacao>) request.getAttribute("observacoes");
 
 %>
 <head>
@@ -129,7 +129,7 @@
                     <%
                         for(int i = 0;i < observacaos.size();i++){
                     %>
-                            <p><strong>Prof. <%=observacaos.get(i).getNomeProfessor()%> (<%=observacaos.get(i).getNomeDisciplina()%>:</strong> "<%=observacaos.get(i).getTexto()%>"</p>
+                            <p><strong>Prof. <%=observacaos.get(i).getIdProfessor().getNome()%> (<%=observacaos.get(i).getIdDisciplina().getNome()%>:</strong> "<%=observacaos.get(i).getTexto()%>"</p>
                     <%
                             if((i + 1) == observacaos.size()){
                     %>

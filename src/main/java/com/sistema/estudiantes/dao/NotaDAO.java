@@ -14,7 +14,7 @@ public class NotaDAO {
 
     public void inserir(Nota nota) {
         String sql = """
-            INSERT INTO Notas (disciplinaid, idaluno, N1, N2)
+            INSERT INTO Notas (disciplinaid, alunoid, N1, N2)
             VALUES (?, ?, ?, ?)
         """;
 
@@ -35,7 +35,7 @@ public class NotaDAO {
 
     public List<Nota> listar() {
         List<Nota> lista = new ArrayList<>();
-        String sql = "SELECT *, avg(valor) FROM Notas";
+        String sql = "SELECT * FROM Notas";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -95,7 +95,7 @@ public class NotaDAO {
     public boolean atualizar(Nota n) {
         String sql = """
         UPDATE Notas
-           SET disciplinaid = ?, IdAluno = ?, N1 = ?, N2 = ?
+           SET disciplinaid = ?, alunoid = ?, N1 = ?, N2 = ?
          WHERE Id = ?
     """;
 
