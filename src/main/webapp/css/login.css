@@ -147,6 +147,34 @@ input[type="text"], input[type="password"],input[type="email"] {
 
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.olho {
+    margin-top: 20px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding-right: 45px;
+    margin-bottom: 0;
+}
+
+.input-wrapper .material-icons {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    z-index: 10;
+    user-select: none;
+    font-size: 22px;
+}
+
+
 @media (max-width: 900px) {
     .container { flex-direction: column; text-align: center; }
     .left { width: 100%; margin-bottom: 40px; }

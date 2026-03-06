@@ -5,22 +5,22 @@
 <%
   String tipo = (String) session.getAttribute("tipoUsuario");
   String adminNome = (String) session.getAttribute("adminNome");
-
-  if (tipo == null || !tipo.equals("admin")) {
-    response.sendRedirect("login.jsp");
-    return;
-  }
+//
+//  if (tipo == null || !tipo.equals("admin")) {
+//    response.sendRedirect("views/cadastro.jsp");
+//    return;
+//  }
 
   List<Aluno> listaAlunos = (List<Aluno>) request.getAttribute("listaAlunos");
 %>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <title>Gerenciar Alunos</title>
-  <link rel="stylesheet" href="css/aluno_a.css">
+  <title>Estudiantes - Gerenciar Alunos</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -33,28 +33,28 @@
   </div>
 
   <nav>
-    <a class="menu" href="inicio_a.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/views/inicio_a.jsp">
       <i class="material-icons">home</i>Inicio
     </a>
 
-    <a class="menu active" href="aluno_a.jsp">
+    <a class="menu active" href="${pageContext.request.contextPath}/AlunoAdminServlet">
       <i class="material-icons">groups</i>Alunos
     </a>
 
-    <a class="menu" href="turmas_a.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/TurmaAdminServlet">
       <i class="material-icons">school</i>Turmas
     </a>
 
-    <a class="menu" href="disciplinas_a.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
       <i class="material-icons">menu_book</i>Disciplinas
     </a>
 
-    <a class="menu" href="configuracoes_a.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes">
       <i class="material-icons">settings</i>Configurações
     </a>
   </nav>
 
-  <a class="config" href="LogoutServlet">
+  <a class="config" href="${pageContext.request.contextPath}/servletLogout">
     <i class="material-icons">logout</i>Sair
   </a>
 </aside>
@@ -76,7 +76,7 @@
   <div class="page-header">
     <h1>Gerenciar Alunos</h1>
 
-    <form action="${pageContext.request.contextPath}/ServletAluno_a" method="get">
+    <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get">
       <button class="btn-primary" name="acao" value="novo">
         <i class="material-icons">add</i>
         Novo Aluno
@@ -88,35 +88,43 @@
     <table>
       <thead>
       <tr>
-        <th>ID</th>
+        <th>Matrícula</th>
         <th>Nome</th>
-        <th>Email</th>
-        <th>Turma</th>
+        <th>CPF</th>
+        <th>Data Nasc.</th>
+        <th>Telefone Pai</th>
         <th>Ações</th>
       </tr>
       </thead>
-      <tbody>
 
+      <tbody>
       <%
         if (listaAlunos != null && !listaAlunos.isEmpty()) {
           for (Aluno aluno : listaAlunos) {
       %>
       <tr>
-        <td><%= aluno.getId() %></td>
+        <td><%= aluno.getMatricula() %></td>
         <td><%= aluno.getNome() %></td>
-        <td><%= aluno.getEmail() %></td>
-        <td><%= aluno.getTurma() %></td>
+        <td><%= aluno.getCpf() %></td>
+        <td><%= aluno.getDataNascimento() %></td>
+        <td><%= aluno.getTelefonePai() %></td>
         <td>
 
-          <form action="${pageContext.request.contextPath}/ServletAluno_a" method="post" style="display:inline;">
-            <input type="hidden" name="id" value="<%= aluno.getId() %>">
+          <!-- EDITAR -->
+          <form action="${pageContext.request.contextPath}/AlunoAdminServlet"
+                method="post" style="display:inline;">
+            <input type="hidden" name="matricula"
+                   value="<%= aluno.getMatricula() %>">
             <button class="icon-btn edit" name="acao" value="editar">
               <i class="material-icons">edit</i>
             </button>
           </form>
 
-          <form action="${pageContext.request.contextPath}/ServletAluno_a" method="post" style="display:inline;">
-            <input type="hidden" name="id" value="<%= aluno.getId() %>">
+          <!-- EXCLUIR -->
+          <form action="${pageContext.request.contextPath}/AlunoAdminServlet"
+                method="post" style="display:inline;">
+            <input type="hidden" name="matricula"
+                   value="<%= aluno.getMatricula() %>">
             <button class="icon-btn delete" name="acao" value="excluir">
               <i class="material-icons">delete</i>
             </button>
@@ -129,18 +137,82 @@
       } else {
       %>
       <tr>
-        <td colspan="5" style="text-align:center;">
+        <td colspan="6" style="text-align:center;">
           Nenhum aluno encontrado.
         </td>
       </tr>
       <%
         }
       %>
-
       </tbody>
+
     </table>
   </div>
+  <%
+    String acao = request.getParameter("acao");
+    Aluno alunoEditar = (Aluno) request.getAttribute("alunoEditar");
+    boolean abrirModal = "novo".equals(acao) || "editar".equals(acao);
+  %>
 
+  <% if (abrirModal) { %>
+  <div class="overlay">
+    <div class="modal">
+
+      <h2>
+        <%= "editar".equals(acao) ? "Editar Aluno" : "Novo Aluno" %>
+      </h2>
+
+      <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="post">
+
+        <% if ("editar".equals(acao)) { %>
+        <input type="hidden" name="matricula"
+               value="<%= alunoEditar.getMatricula() %>">
+        <% } %>
+
+        <div class="form-group">
+          <label>Nome</label>
+          <input type="text" name="nome"
+                 value="<%= alunoEditar != null ? alunoEditar.getNome() : "" %>"
+                 required>
+        </div>
+
+        <div class="form-group">
+          <label>CPF</label>
+          <input type="text" name="cpf"
+                 value="<%= alunoEditar != null ? alunoEditar.getCpf() : "" %>"
+                 required>
+        </div>
+
+        <div class="form-group">
+          <label>Data de Nascimento</label>
+          <input type="date" name="dataNascimento"
+                 value="<%= alunoEditar != null ? alunoEditar.getDataNascimento() : "" %>"
+                 required>
+        </div>
+
+        <div class="form-group">
+          <label>Telefone Pai</label>
+          <input type="text" name="telefonePai"
+                 value="<%= alunoEditar != null ? alunoEditar.getTelefonePai() : "" %>"
+                 required>
+        </div>
+
+        <div class="modal-buttons">
+          <button type="submit" name="acao"
+                  value="<%= acao %>"
+                  class="btn-primary">
+            Salvar
+          </button>
+
+          <a href="AlunoAdminServlet" class="btn-cancelar">
+            Cancelar
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <% } %>
 </main>
 
 </body>

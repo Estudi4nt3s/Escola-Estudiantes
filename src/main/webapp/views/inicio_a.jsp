@@ -1,20 +1,23 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
-//    // Proteção de acesso (verifica se está logado como admin)
-//    String adminNome = (String) session.getAttribute("adminNome");
-//
-//    if (adminNome == null) {
-//        response.sendRedirect("login.jsp");
+    // Proteção de acesso (verifica se está logado como admin)
+    String tipo = (String) session.getAttribute("tipoUsuario");
+    String adminNome = (String) session.getAttribute("adminNome");
+
+//    if (tipo == null || !tipo.equals("admin")) {
+//        response.sendRedirect("cadastro.jsp");
 //        return;
-//    }
+// }
+
 %>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel Administrativo</title>
-    <link rel="stylesheet" href="css/inicio_p.css">
+    <title>Estudiantes - Painel Administrativo</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/inicio_a.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
@@ -26,28 +29,28 @@
     </div>
 
     <nav>
-        <a class="menu active" href="admin.jsp">
+        <a class="menu active" href="">
             <i class="material-icons">home</i>Inicio
         </a>
 
-        <a class="menu" href="gerenciarAlunos.jsp">
+        <a class="menu" href="${pageContext.request.contextPath}/AlunoAdminServlet">
             <i class="material-icons">groups</i>Alunos
         </a>
 
-        <a class="menu" href="gerenciarTurmas.jsp">
+        <a class="menu" href="${pageContext.request.contextPath}/TurmaAdminServlet">
             <i class="material-icons">school</i>Turmas
         </a>
 
-        <a class="menu" href="gerenciarDisciplinas.jsp">
+        <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
             <i class="material-icons">menu_book</i>Disciplinas
         </a>
 
-        <a class="menu" href="configuracoes.jsp">
+        <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes">
             <i class="material-icons">settings</i>Configurações
         </a>
     </nav>
 
-    <a class="config" href="LogoutServlet">
+    <a class="config" href="${pageContext.request.contextPath}/servletLogout">
         <i class="material-icons">logout</i>Sair
     </a>
 </aside>
@@ -81,7 +84,7 @@
                 </div>
                 <h3>Gerenciar Alunos</h3>
                 <p>Adicionar, editar ou remover alunos.</p>
-                <a href="gerenciarAlunos.jsp">Acessar</a>
+                <a href="${pageContext.request.contextPath}/AlunoAdminServlet">Acessar</a>
             </div>
 
             <div class="admin-card">
@@ -90,7 +93,7 @@
                 </div>
                 <h3>Gerenciar Turmas</h3>
                 <p>Organizar turmas e vincular alunos.</p>
-                <a href="gerenciarTurmas.jsp">Acessar</a>
+                <a href="turmas_a.jsp">Acessar</a>
             </div>
 
             <div class="admin-card">
@@ -98,8 +101,8 @@
                     <i class="material-icons">menu_book</i>
                 </div>
                 <h3>Gerenciar Disciplinas</h3>
-                <p>Criar,remover ou editar disciplinas.</p>
-                <a href="gerenciarDisciplinas.jsp">Acessar</a>
+                <p>Criar, remover ou editar disciplinas.</p>
+                <a href="disciplinas_a.jsp">Acessar</a>
             </div>
 
             <div class="admin-card danger">
@@ -108,7 +111,7 @@
                 </div>
                 <h3>Configurações</h3>
                 <p>Alterações avançadas do sistema.</p>
-                <a href="configuracoes.jsp">Configurar</a>
+                <a href="configuracoes_a.jsp">Configurar</a>
             </div>
 
         </div>

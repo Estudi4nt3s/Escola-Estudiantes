@@ -5,14 +5,15 @@
 <%@ page import="java.time.format.TextStyle" %>
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
         busca = request.getParameter("busca");
     }
     LocalDate hoje = LocalDate.now();
-    String dia = String.format("%02d",hoje.getDayOfMonth());
-    String mes = String.format("%02d",hoje.getMonthValue());
+    String dia = String.format("%02d", hoje.getDayOfMonth());
+    String mes = String.format("%02d", hoje.getMonthValue());
     Locale ptBr = new Locale("pt", "BR");
     String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
 %>
@@ -22,7 +23,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Alunos</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/alunos.css">
@@ -37,13 +39,13 @@
     </div>
 
     <nav>
-        <a class="menu active"><i class="material-icons">home</i>Início</a>
+        <a class="menu"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
             <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu" href="${pageContext.request.contextPath}/turma">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+        <a class="menu active" href="${pageContext.request.contextPath}/turma">
+            <i class="material-icons">groups</i>Turmas</a>
     </nav>
 
     <div class="config">
@@ -52,7 +54,6 @@
 </aside>
 
 <main class="main">
-
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
@@ -74,15 +75,11 @@
                 Turma turma = (Turma) request.getAttribute("turmaSelecionada");
                 if(turma != null){
             %>
-
             <div class="alunos-titulo">
                 <%= turma.getSerie() + " " + turma.getLetra() %>
                 <i class="material-icons">expand_more</i>
             </div>
-
-            <%
-                }
-            %>
+            <% } %>
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
@@ -98,21 +95,30 @@
             %>
             <div class="alunos-card">
                 <div class="alunos-nome">
-                    <%= aluno.getNome() %>
+                    <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
                 </div>
 
-                <a href="${pageContext.request.contextPath}/nota?id=<%= aluno.getMatricula() %>">
-                    <i class="material-icons opcoes">more_vert</i>
-                </a>
+                <div class="acoes-container">
+                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>
+
+                    <div class="popup">
+                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card">
+                            <i class="material-icons popup-icones">edit_note</i>
+                            <span>Notas</span>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/observacao?id=<%= aluno.getMatricula() %>" class="popup-card">
+                            <i class="material-icons popup-icones">assignment</i>
+                            <span>Observações</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <%
                 }
             } else {
             %>
             <p>Nenhum aluno encontrado.</p>
-            <%
-                }
-            %>
+            <% } %>
         </div>
     </div>
 </main>
@@ -161,6 +167,7 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/popup.js"></script>
 </body>
 
 </html>

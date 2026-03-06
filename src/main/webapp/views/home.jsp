@@ -1,4 +1,7 @@
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -6,17 +9,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Início</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
 
 </head>
 <%
+    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");
     int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
+    Map<String,String> conteudo = new HashMap<>();
+    conteudo.put("matematica", "Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.");
+    conteudo.put("portugues","Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.");
+    conteudo.put("historia","Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.");
+    conteudo.put("geografia","Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.");
+    conteudo.put("ingles","Aprendizado de vocabulário, gramática básica, leitura, escrita e conversação na língua inglesa.");
+    conteudo.put("ciencias","Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.");
+
+
 %>
 <body>
 
@@ -30,10 +44,9 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">menu_book</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-            <a class="menu" href="${pageContext.request.contextPath}/turma">
-                <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
         </nav>
     </aside>
 
@@ -49,7 +62,7 @@
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
                     <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="https://i.pravatar.cc/40?img=12" alt="avatar"></a>
-                    <span><%=aluno.getNome()%></span>
+                    <span><%=usuario.getNome()%></span>
                 </div>
             </div>
         </header>
@@ -59,7 +72,7 @@
             <div class="left">
 
                 <div class="welcome">
-                    <h2>Olá, <%=aluno.getNome()%>!</h2>
+                    <h2>Olá, <%=usuario.getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 
@@ -71,8 +84,7 @@
 
                     <div class="card <%=materia[i].toLowerCase()%>">
                         <h3><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></h3>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                            nesciunt.</p>
+                        <p><%=conteudo.get(materia[i].toLowerCase())%></p>
                         <img src="${pageContext.request.contextPath}/utils/<%=materia[i].toLowerCase(java.util.Locale.ROOT)%>.png" alt="<%=materia[i]%>">
                     </div>
                 <%

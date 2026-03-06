@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Admin implements Serializable {
 
     private int id;
-    private String usuario;
+    private static String usuario;
     private String senha;
 
     public Admin() {
@@ -23,7 +23,7 @@ public class Admin implements Serializable {
         return id;
     }
 
-    public String getUsuario() {
+    public static String getUsuario() {
         return usuario;
     }
 

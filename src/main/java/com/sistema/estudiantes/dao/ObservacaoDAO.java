@@ -2,10 +2,7 @@ package com.sistema.estudiantes.dao;
 
 
 import com.sistema.estudiantes.conexao.Conexao;
-import com.sistema.estudiantes.model.Aluno;
-import com.sistema.estudiantes.model.Disciplina;
-import com.sistema.estudiantes.model.Observacao;
-import com.sistema.estudiantes.model.Professor;
+import com.sistema.estudiantes.model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -17,7 +14,7 @@ public class ObservacaoDAO {
 
     public void inserir(Observacao observacao) {
         String sql = """
-            INSERT INTO Observacao (Texto, DataCriacao, ProfessorId, IdAluno, DisciplinaId)
+            INSERT INTO Observacoes (Texto, DataCriacao, alunomatricula, ProfessorId, DisciplinaId)
             VALUES (?, ?, ?, ?, ?)
         """;
 
@@ -39,7 +36,7 @@ public class ObservacaoDAO {
 
     public List<Observacao> listar() {
         List<Observacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Observacao";
+        String sql = "SELECT * FROM Observacoes";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -47,14 +44,15 @@ public class ObservacaoDAO {
 
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
-                Aluno a = new Aluno(rs.getInt("idaluno"));
+                Aluno a = new Aluno(rs.getInt("alunomatricula"));
                 Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+
                 Observacao o = new Observacao(
                         rs.getInt("id"),
                         rs.getString("texto"),
                         rs.getObject("datacriacao", LocalDate.class),
-                        p,
                         a,
+                        p,
                         d
                 );
                 lista.add(o);
@@ -66,8 +64,40 @@ public class ObservacaoDAO {
         return lista;
     }
 
+    public List<Observacao> listarComFiltro(String condicao, int valor){
+        List<Observacao> observacaos = new ArrayList<>();
+        String sql = " SELECT * FROM observacoes WHERE " + condicao;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, valor);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    Aluno a = new Aluno(rs.getInt("alunomatricula"));
+                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+
+                    Observacao o = new Observacao(
+                            rs.getInt("id"),
+                            rs.getString("texto"),
+                            rs.getObject("datacriacao", LocalDate.class),
+                            a,
+                            p,
+                            d
+                    );
+
+                    observacaos.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return observacaos;
+    }
+
     public boolean atualizar(Observacao o) {
-        String sql = "UPDATE Observacao SET Texto = ?, DataCriacao = ? WHERE Id = ?";
+        String sql = "UPDATE Observacoes SET Texto = ?, DataCriacao = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -85,7 +115,7 @@ public class ObservacaoDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Observacao WHERE Id = ?";
+        String sql = "DELETE FROM Observacoes WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

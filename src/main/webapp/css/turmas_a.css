@@ -229,6 +229,7 @@ nav {
     border-radius: 12px;
     text-align: center;
     font-weight: 600;
+    text-decoration: none;
     transition: 0.3s;
 }
 

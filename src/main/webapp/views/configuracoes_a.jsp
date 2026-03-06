@@ -1,15 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--
-JA FIZ OS SERVLETS ( EU ACHO VERIFICAR )
-ASS GUSTAVO
---%>
-<%
-  String nome = (String) session.getAttribute("nome");
 
-  if (nome == null) {
-    response.sendRedirect("../login.jsp");
-    return;
-  }
+<%
+  String nome = (String) session.getAttribute("adminNome");
+//    if (tipo == null || !tipo.equals("admin")) {
+//        response.sendRedirect("cadastro.jsp");
+//        return;
+// }
 %>
 
 <!DOCTYPE html>
@@ -17,8 +13,9 @@ ASS GUSTAVO
 
 <head>
   <meta charset="UTF-8">
-  <title>Painel Administrativo</title>
-  <link rel="stylesheet" href="../css/configuracoes.css">
+  <title>Estudiantes - Painel Administrativo</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/configuracoes_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -31,28 +28,28 @@ ASS GUSTAVO
   </div>
 
   <nav>
-    <a class="menu active" href="admin.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/views/inicio_a.jsp">
       <i class="material-icons">home</i>Início
     </a>
 
-    <a class="menu" href="gerenciarAlunos.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/AlunoAdminServlet">
       <i class="material-icons">groups</i>Alunos
     </a>
 
-    <a class="menu" href="gerenciarTurmas.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/TurmaAdminServlet">
       <i class="material-icons">school</i>Turmas
     </a>
 
-    <a class="menu" href="gerenciarDisciplinas.jsp">
+    <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
       <i class="material-icons">menu_book</i>Disciplinas
     </a>
 
-    <a class="menu" href="configuracoes.jsp">
+    <a class="menu active" href="${pageContext.request.contextPath}/servletConfiguracoes">
       <i class="material-icons">settings</i>Configurações
     </a>
   </nav>
 
-  <a class="config" href="../servletLogout">
+  <a class="config" href="${pageContext.request.contextPath}/servletLogout">
     <i class="material-icons">logout</i>Sair
   </a>
 </aside>
@@ -74,8 +71,7 @@ ASS GUSTAVO
   <div class="card">
     <h2>Configurações do Sistema</h2>
 
-    <form action="../servletConfiguracoes" method="post">
-
+    <form action="${pageContext.request.contextPath}/servletConfiguracoes" method="post">
       <div class="form-group">
         <label>Nome da Escola</label>
         <input type="text" name="nomeEscola" placeholder="Digite o nome">

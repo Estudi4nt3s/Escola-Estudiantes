@@ -10,7 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Início</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home_p.css">
@@ -49,7 +50,7 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
         </nav>
 
         <div class="config">
@@ -88,7 +89,7 @@
                 <div class="flex">
                     <%-- Loop para gerar os cards de conteúdo das aulas --%>
                     <%
-                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) || qtdmateria != 0){
+                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) || !(materia == null)){
                             for(int i = 0;i < Math.min(aulas.size(),6);i++){
                     %>
                         <div class="card card<%=materia.getNome().toLowerCase()%>">
