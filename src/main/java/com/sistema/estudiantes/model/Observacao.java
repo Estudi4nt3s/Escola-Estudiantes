@@ -6,26 +6,26 @@ public class Observacao {
     private int id;
     private String texto;
     private LocalDate dataCriacao;
-    private Professor idProfessor;
     private Aluno idAluno;
+    private Professor idProfessor;
     private Disciplina idDisciplina;
 
     public Observacao() {}
 
-    public Observacao(String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor, Disciplina idDisciplina) {
         this.texto = texto;
         this.dataCriacao = dataCriacao;
-        this.idProfessor = idProfessor;
         this.idAluno = idAluno;
+        this.idProfessor = idProfessor;
         this.idDisciplina = idDisciplina;
     }
 
-    public Observacao(int id, String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(int id, String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor, Disciplina idDisciplina) {
         this.id = id;
         this.texto = texto;
         this.dataCriacao = dataCriacao;
-        this.idProfessor = idProfessor;
         this.idAluno = idAluno;
+        this.idProfessor = idProfessor;
         this.idDisciplina = idDisciplina;
     }
 
