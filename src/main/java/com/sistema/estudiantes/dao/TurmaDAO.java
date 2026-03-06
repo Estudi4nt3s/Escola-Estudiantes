@@ -16,7 +16,7 @@ import java.util.List;
 public class TurmaDAO {
 
     public void inserir(int ano, String serie, char letra) {
-        String sql = "INSERT INTO Turma (Ano, Serie, Letra) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Turmas (Ano, Serie, Letra) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -34,7 +34,7 @@ public class TurmaDAO {
 
     public List<Turma> listar() {
         List<Turma> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Turma";
+        String sql = "SELECT * FROM Turmas";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -56,13 +56,13 @@ public class TurmaDAO {
         return lista;
     }
 
-    public List<Turma> listarComFiltro(String condicao, Object valor) {
+    public List<Turma> listarComFiltro(String condicao, int valor) {
         List<Turma> turmas = new ArrayList<>();
-        String sql = "SELECT * FROM Turma WHERE " + condicao;
+        String sql = "SELECT * FROM turmas WHERE " + condicao;
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-             stmt.setObject(1, valor);
+             stmt.setInt(1, valor);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Turma turma = new Turma(
@@ -83,7 +83,7 @@ public class TurmaDAO {
     }
 
     public boolean atualizar(Turma t) {
-        String sql = "UPDATE Turma SET Ano = ?, Serie = ?, Letra = ? WHERE Id = ?";
+        String sql = "UPDATE Turmas SET Ano = ?, Serie = ?, Letra = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public class TurmaDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Turma WHERE Id = ?";
+        String sql = "DELETE FROM Turmas WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

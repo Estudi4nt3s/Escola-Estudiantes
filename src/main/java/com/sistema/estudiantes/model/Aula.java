@@ -7,17 +7,17 @@ public class Aula {
     private int id;
     private LocalTime horarioInicio;
     private LocalTime horarioFim;
-    private Disciplina disciplinaId;
+    private Professor professorId;
     private Turma turmaId;
     private String diaSemana;
 
     public Aula() {}
 
-    public Aula(int id, LocalTime horarioInicio, LocalTime horarioFim, Disciplina disciplinaId, Turma turmaId, String diaSemana) {
+    public Aula(int id, LocalTime horarioInicio, LocalTime horarioFim, Professor professorId, Turma turmaId, String diaSemana) {
         this.id = id;
         this.horarioInicio = horarioInicio;
         this.horarioFim = horarioFim;
-        this.disciplinaId = disciplinaId;
+        this.professorId = professorId;
         this.turmaId = turmaId;
         this.diaSemana = diaSemana;
     }
@@ -43,8 +43,8 @@ public class Aula {
         return this.horarioFim;
     }
 
-    public Disciplina getDisciplinaId() {
-        return this.disciplinaId;
+    public Professor getProfessorId() {
+        return this.professorId;
     }
 
     public Turma getTurmaId() {
@@ -67,8 +67,8 @@ public class Aula {
         this.horarioFim = horarioFim;
     }
 
-    public void setDisciplinaId(Disciplina disciplinaId) {
-        this.disciplinaId = disciplinaId;
+    public void setProfessorId(Professor professorId) {
+        this.professorId = professorId;
     }
 
     public void setTurmaId(Turma turmaId) {
@@ -84,7 +84,7 @@ public class Aula {
         return "Id: " + this.id +
                 "\nHorário Início: " + this.horarioInicio +
                 "\nHorário Fim: " + this.horarioFim +
-                "\nId Disciplina: " + this.disciplinaId +
+                "\nId Professor: " + this.professorId +
                 "\nId Turma: " + this.turmaId +
                 "\nDia da Semana: " + this.diaSemana;
     }

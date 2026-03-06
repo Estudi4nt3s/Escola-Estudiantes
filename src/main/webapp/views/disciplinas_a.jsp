@@ -13,14 +13,15 @@
   boolean abrirModalForm = "novo".equals(acao) || "editar".equals(acao);
   boolean abrirModalExcluir = "pre-excluir".equals(acao);
     List<com.sistema.estudiantes.model.Professor> todosProfessores = (List<com.sistema.estudiantes.model.Professor>) request.getAttribute("listaProfessoresAuto");
-    List<Object> todasTurmas = (List<Object>) request.getAttribute("listaTurmasAuto");
+    List<TurmaAdm> todasTurmas = (List<TurmaAdm>) request.getAttribute("listaTurmasAuto");
 %>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gerenciar Disciplinas</title>
+  <title>Estudiantes - Gerenciar Disciplinas</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -93,7 +94,7 @@
           <input type="text" name="nome" id="inputNomeDisc" placeholder="Ex: Matemática"
                  style="padding: 12px; border: 1px solid #ddd; border-radius: 10px;"
                  value="<%= dEdit != null ? dEdit.getNome() : "" %>" required>
-          <small id="feedbackDisc" style="color: #666; display:block; margin-top:5px;">Aguardando validação...</small>
+          <small id="feedbackDisc" style="color: #666; display:block; margin-top:5px;">Verificando..</small>
         </div>
 
         <div class="form-group" style="margin-bottom: 15px; display: flex; flex-direction: column;">
@@ -116,20 +117,21 @@
               </datalist>
           </div>
 
-          <div class="form-group" style="margin-bottom: 15px; display: flex; flex-direction: column;">
-              <label style="font-weight: 600; margin-bottom: 8px;">Turma</label>
-              <input type="text" name="turmaNome" list="listaTurmas"
-                     style="padding: 12px; border: 1px solid #ddd; border-radius: 10px;"
-                     value="<%= dEdit != null ? dEdit.getTurmaNome() : "" %>" required>
-              <datalist id="listaTurmas">
-                  <% if (todasTurmas != null) {
-                      for (Object t : todasTurmas) {
-                  %>
-                  <option value="<%=((TurmaAdm)t).getNome() %>" />
-                  <%  }
-                  } %>
-              </datalist>
-          </div>
+        <div class="form-group" style="margin-bottom: 15px; display: flex; flex-direction: column;">
+          <label style="font-weight: 600; margin-bottom: 8px;">Turma</label>
+          <input type="text" name="turmaNome" list="listaTurmas"
+                 style="padding: 12px; border: 1px solid #ddd; border-radius: 10px;"
+                 value="<%= dEdit != null ? dEdit.getTurmaNome() : "" %>"
+                 placeholder="Selecione ou digite a turma" required>
+
+          <datalist id="listaTurmas">
+            <% if (todasTurmas != null) {
+              for (TurmaAdm t : todasTurmas) { %>
+            <option value="<%= t.getNome() %>"></option>
+            <%  }
+            } %>
+          </datalist>
+        </div>
 
         <div class="modal-buttons" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px;">
           <button type="submit" name="acao" value="<%= acao %>" id="btnSalvar" class="btn-primary">Salvar</button>
@@ -140,7 +142,6 @@
   </div>
   <% } %>
 
-  <%-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO --%>
   <% if (abrirModalExcluir && dEdit != null) { %>
   <div class="overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 10000;">
     <div class="modal" style="background: white; width: 90%; max-width: 400px; padding: 35px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); text-align: center;">

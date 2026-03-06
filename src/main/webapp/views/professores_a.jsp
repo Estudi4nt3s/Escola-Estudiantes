@@ -1,17 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Professor" %>
+<%@ page import="com.sistema.estudiantes.model.Disciplina" %>
 
 <%
-    String tipo = (String) session.getAttribute("tipoUsuario");
     String adminNome = (String) session.getAttribute("adminNome");
-
-//    if (tipo == null || !tipo.equals("admin")) {
-//        response.sendRedirect(request.getContextPath() + "/views/cadastro.jsp");
-//        return;
-//    }
-
     List<Professor> listaProfessores = (List<Professor>) request.getAttribute("listaProfessores");
+    String acaoModal = request.getParameter("acao");
+    Professor profEdit = (Professor) request.getAttribute("professorEditar");
+
+    boolean modalSalvar = "novo".equals(acaoModal) || "editar".equals(acaoModal);
+    boolean modalExcluir = "pre-excluir".equals(acaoModal);
 %>
 
 <!DOCTYPE html>
@@ -57,92 +56,94 @@
         </form>
     </div>
 
+    <%-- TABELA COM SCROLL --%>
     <div class="card">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>E-mail (Login)</th>
-                <th>Ações</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% if (listaProfessores != null && !listaProfessores.isEmpty()) {
-                for (Professor p : listaProfessores) { %>
-            <tr>
-                <td><%= p.getId() %></td>
-                <td><%= p.getNome() %></td>
-                <td><%= p.getUsuarioId() != null ? p.getUsuarioId().getEmail() : "Sem e-mail" %></td>
-                <td style="display: flex; gap: 10px;">
-                    <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= p.getId() %>">
-                        <button type="submit" name="acao" value="editar" class="icon-btn edit">
-                            <i class="material-icons">edit</i>
-                        </button>
-                    </form>
-
-                    <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= p.getId() %>">
-                        <button type="submit" name="acao" value="pre-excluir" class="icon-btn delete">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            <% } } else { %>
-            <tr><td colspan="4" style="text-align:center;">Nenhum professor encontrado.</td></tr>
-            <% } %>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Disciplina</th>
+                    <th>E-mail</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% if (listaProfessores != null && !listaProfessores.isEmpty()) {
+                    for (Professor p : listaProfessores) { %>
+                <tr>
+                    <td><%= p.getId() %></td>
+                    <td><%= p.getNome() %></td>
+                    <td><%= p.getDisciplina() != null ? p.getDisciplina().getNome() : "N/A" %></td>
+                    <td><%= p.getUsuario() != null ? p.getUsuario().getEmail() : "Sem e-mail" %></td>
+                    <td style="display: flex; gap: 10px;">
+                        <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= p.getId() %>">
+                            <button type="submit" name="acao" value="editar" class="icon-btn edit">
+                                <i class="material-icons">edit</i>
+                            </button>
+                        </form>
+                        <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= p.getId() %>">
+                            <button type="submit" name="acao" value="pre-excluir" class="icon-btn delete">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <% } } else { %>
+                <tr><td colspan="5" style="text-align:center;">Nenhum professor encontrado.</td></tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <%
-        String acaoModal = request.getParameter("acao");
-        Professor profEdit = (Professor) request.getAttribute("professorEditar");
-        boolean modalSalvar = "novo".equals(acaoModal) || "editar".equals(acaoModal);
-        boolean modalExcluir = "pre-excluir".equals(acaoModal);
-    %>
-
-    <%-- MODAL DE SALVAR (NOVO/EDITAR) --%>
+    <%-- MODAL DE SALVAR --%>
     <% if (modalSalvar) { %>
     <div class="overlay">
         <div class="modal">
             <h2><%= "editar".equals(acaoModal) ? "Editar Professor" : "Novo Professor" %></h2>
+
             <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="post">
-                <input type="hidden" name="acao" value="<%= acaoModal %>">
+                <input type="hidden" name="acao" value="<%= "editar".equals(acaoModal) ? "editar" : "cadastrar" %>">
 
                 <% if ("editar".equals(acaoModal) && profEdit != null) { %>
                 <input type="hidden" name="id" value="<%= profEdit.getId() %>">
-                <input type="hidden" name="usuarioId" value="<%= profEdit.getUsuarioId().getId() %>">
                 <% } %>
 
                 <div class="form-group">
                     <label>Nome</label>
-                    <input type="text" name="nome" value="<%= profEdit != null ? profEdit.getNome() : "" %>" required>
-                </div>
-
-                <%-- Exibe sobrenome apenas no cadastro novo --%>
-                <% if ("novo".equals(acaoModal)) { %>
-                <div class="form-group">
-                    <label>Sobrenome</label>
-                    <input type="text" name="sobrenome" required>
-                </div>
-                <% } %>
-
-                <div class="form-group">
-                    <label>E-mail (Login)</label>
-                    <input type="email" name="email" value="<%= (profEdit != null && profEdit.getUsuarioId() != null) ? profEdit.getUsuarioId().getEmail() : "" %>" required>
+                    <input type="text" id="inputNome" name="nome" value="<%= profEdit != null ? profEdit.getNome() : "" %>" required>
                 </div>
 
                 <div class="form-group">
-                    <label><%= "editar".equals(acaoModal) ? "Nova Senha (deixe em branco para manter)" : "Senha" %></label>
-                    <input type="password" name="senha" <%= "editar".equals(acaoModal) ? "" : "required" %>>
+                    <label>Disciplina</label>
+                    <select id="selectDisciplina" name="disciplinaId" required onchange="gerarEmail()">
+                        <option value="">Selecione uma matéria:</option>
+                        <%
+                            List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("listaDisciplinas");
+                            if (disciplinas != null) {
+                                for (Disciplina d : disciplinas) {
+                                    boolean isSelected = (profEdit != null && profEdit.getDisciplina() != null && profEdit.getDisciplina().getId() == d.getId());
+                        %>
+                        <option value="<%= d.getId() %>" <%= isSelected ? "selected" : "" %>><%= d.getNome() %></option>
+                        <%
+                                }
+                            }
+                        %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>E-mail (Login Sugerido)</label>
+                    <input type="email" id="inputEmail" name="email" value="<%= (profEdit != null && profEdit.getUsuario() != null) ? profEdit.getUsuario().getEmail() : "" %>" readonly>
                 </div>
 
                 <div class="modal-buttons">
-                    <button type="submit" class="btn-primary">Salvar</button>
                     <a href="${pageContext.request.contextPath}/ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
+                    <button type="submit" class="btn-primary">Salvar</button>
                 </div>
             </form>
         </div>
@@ -154,20 +155,32 @@
     <div class="overlay">
         <div class="modal" style="text-align: center;">
             <i class="material-icons" style="font-size: 56px; color: #e74c3c;">warning</i>
-            <h2 style="margin: 15px 0;">Você tem certeza?</h2>
-            <p>Deseja realmente excluir o professor <strong><%= profEdit.getNome() %></strong>?</p>
-
+            <h2>Excluir?</h2>
             <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="post">
                 <input type="hidden" name="id" value="<%= profEdit.getId() %>">
-                <div class="modal-buttons" style="justify-content: center; margin-top: 25px;">
-                    <button type="submit" name="acao" value="excluir" class="btn-primary" style="background: #e74c3c;">Sim, Excluir</button>
-                    <a href="${pageContext.request.contextPath}/ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
-                </div>
+                <button type="submit" name="acao" value="excluir" class="btn-primary" style="background: #e74c3c;">Confirmar</button>
+                <a href="${pageContext.request.contextPath}/ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
             </form>
         </div>
     </div>
     <% } %>
 
 </main>
+<script>
+    function gerarEmail() {
+        const nome = document.getElementById('inputNome').value.toLowerCase().split(' ')[0];
+        const select = document.getElementById('selectDisciplina');
+
+        const materia = select.options[select.selectedIndex].text.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+
+        if(nome && materia) {
+            document.getElementById('inputEmail').value = nome + "." + materia ;
+        }
+    }
+
+    // Também gera se o usuário digitar o nome
+    document.getElementById('inputNome').addEventListener('input', gerarEmail);
+</script>
 </body>
 </html>

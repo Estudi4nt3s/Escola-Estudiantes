@@ -18,7 +18,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gerenciar Alunos</title>
+  <title>Estudiantes - Gerenciar Alunos</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -203,7 +204,7 @@
     <button type="button" onclick="this.parentElement.style.display='none'">&times;</button>
   </div>
   <%
-      session.removeAttribute("mensagemErro"); // Remove para não repetir ao atualizar
+      session.removeAttribute("mensagemErro");
     }
     if (msgSucesso != null) {
   %>

@@ -12,8 +12,8 @@ import java.util.List;
 public class AulaDAO {
     public void inserir(Aula aula) {
         String sql = """
-            INSERT INTO Aula (horarioinicio, horariofim, disciplinaid, turmaid, diasemana)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO aulas (horarioinicio, horariofim, professorid, turmaid, diasemana)
+            VALUES (?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
@@ -21,9 +21,9 @@ public class AulaDAO {
 
             psmt.setObject(1, aula.getHorarioInicio());
             psmt.setObject(2, aula.getHorarioFim());
-            psmt.setInt(3, aula.getDisciplinaId().getId());
-            psmt.setInt(3, aula.getTurmaId().getId());
-            psmt.setString(4, aula.getDiaSemana());
+            psmt.setInt(3, aula.getProfessorId().getId());
+            psmt.setInt(4, aula.getTurmaId().getId());
+            psmt.setString(5, aula.getDiaSemana());
 
             psmt.executeUpdate();
 
@@ -35,7 +35,7 @@ public class AulaDAO {
     public List<Aula> listar() {
 
         List<Aula> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aula";
+        String sql = "SELECT * FROM aulas";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -44,13 +44,13 @@ public class AulaDAO {
         ) {
 
             while (rs.next()) {
-                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                Professor p = new Professor(rs.getInt("professorid"));
                 Turma t = new Turma(rs.getInt("turmaid"));
                 Aula aula = new Aula(
                         rs.getInt("id"),
                         rs.getObject("horarioinicio", LocalTime.class),
                         rs.getObject("horariofim", LocalTime.class),
-                        d,
+                        p,
                         t,
                         rs.getString("diasemana")
 
@@ -68,7 +68,7 @@ public class AulaDAO {
     public List<Aula> listarComFiltro(String condicao, String valor) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM Aula WHERE " + condicao;
+        String sql = "SELECT * FROM aulas WHERE " + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -79,13 +79,13 @@ public class AulaDAO {
             try (ResultSet rs = stmt.executeQuery()) {
 
                 while (rs.next()) {
-                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                    Professor p = new Professor(rs.getInt("professorid"));
                     Turma t = new Turma(rs.getInt("turmaid"));
                     Aula aula = new Aula(
                             rs.getInt("id"),
                             rs.getObject("horarioinicio", LocalTime.class),
                             rs.getObject("horariofim", LocalTime.class),
-                            d,
+                            p,
                             t,
                             rs.getString("diasemana")
 
@@ -105,7 +105,7 @@ public class AulaDAO {
     public List<Aula> listarComFiltro(String condicao, int valor, String data) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM Aula WHERE " + condicao;
+        String sql = "SELECT * FROM aulas WHERE " + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -117,13 +117,13 @@ public class AulaDAO {
             try (ResultSet rs = stmt.executeQuery()) {
 
                 while (rs.next()) {
-                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                    Professor p = new Professor(rs.getInt("professorid"));
                     Turma t = new Turma(rs.getInt("turmaid"));
                     Aula aula = new Aula(
                             rs.getInt("id"),
                             rs.getObject("horarioinicio", LocalTime.class),
                             rs.getObject("horariofim", LocalTime.class),
-                            d,
+                            p,
                             t,
                             rs.getString("diasemana")
 
@@ -144,8 +144,8 @@ public class AulaDAO {
 
     public boolean atualizar(Aula a) {
         String sql = """
-        UPDATE Aula
-           SET horarioinicio = ?, horariofim = ?, disciplinaid = ?, turmaid = ?, diasemana = ?
+        UPDATE Aulas
+           SET horarioinicio = ?, horariofim = ?, professorid = ?, turmaid = ?, diasemana = ?
          WHERE Id = ?
     """;
 
@@ -155,7 +155,7 @@ public class AulaDAO {
 
             psmt.setObject(1, a.getHorarioInicio());
             psmt.setObject(2, a.getHorarioFim());
-            psmt.setInt(3, a.getDisciplinaId().getId());
+            psmt.setInt(3, a.getProfessorId().getId());
             psmt.setInt(4, a.getTurmaId().getId());
             psmt.setString(5, a.getDiaSemana());
             psmt.setInt(6, a.getId());
@@ -170,7 +170,7 @@ public class AulaDAO {
 
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Aula WHERE Id = ?";
+        String sql = "DELETE FROM Aulas WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

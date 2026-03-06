@@ -1,10 +1,13 @@
 package com.sistema.estudiantes.servlet;
 
+import com.sistema.estudiantes.dao.AlunoDAO;
+import com.sistema.estudiantes.dao.DisciplinaDAO;
 import com.sistema.estudiantes.dao.NotaDAO;
+import com.sistema.estudiantes.dao.ObservacaoDAO;
 import com.sistema.estudiantes.model.Aluno;
 import com.sistema.estudiantes.model.Disciplina;
 import com.sistema.estudiantes.model.Nota;
-import com.sistema.estudiantes.model.Turma;
+import com.sistema.estudiantes.model.Observacao;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,18 +16,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/nota")
 public class ServletNota extends HttpServlet {
 
     private final NotaDAO notaDAO = new NotaDAO();
+    private final ObservacaoDAO observacaoDAO = new ObservacaoDAO();
+    private final DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String acao = request.getParameter("acao");
         String subAcao = request.getParameter("sub_acao");
 
         if ("buscar_todos".equals(subAcao)) {
@@ -57,7 +62,16 @@ public class ServletNota extends HttpServlet {
             throws ServletException, IOException {
 
         List<Nota> notas = notaDAO.listar();
+        List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
+        List<Observacao> observacoes = observacaoDAO.listar();
+
+        if(observacoes == null){
+            observacoes = new ArrayList<>();
+        }
+
         request.setAttribute("notas", notas);
+        request.setAttribute("disciplinas", todasDisciplinas);
+        request.setAttribute("observacoes", observacoes);
 
         encaminhar(request, response, "/views/notas.jsp");
     }
@@ -65,18 +79,25 @@ public class ServletNota extends HttpServlet {
     private void buscarPorId(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String idStr = request.getParameter("id");
-        if (idStr == null || idStr.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/nota?sub_acao=buscar_todos");
-            return;
+        int alunoId = Integer.parseInt(request.getParameter("id"));
+
+        List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunoid = ?", alunoId);
+        List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
+        List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
+
+        if(observacoes == null){
+            observacoes = new ArrayList<>();
         }
 
-        int id = Integer.parseInt(idStr);
-        List<Nota> lista = notaDAO.listarComFiltro("id=?", id);
-        Nota nota = lista.isEmpty() ? null : lista.get(0);
+        request.setAttribute("notas", notasDoAluno);
+        request.setAttribute("disciplinas", todasDisciplinas);
+        request.setAttribute("observacoes", observacoes);
 
-        request.setAttribute("nota", nota);
-        encaminhar(request, response, "/views/notas.jsp");
+        if (request.getSession().getAttribute("professor") != null) {
+            encaminhar(request, response, "/views/notas.jsp");
+        } else {
+            encaminhar(request, response, "/views/aluno.jsp");
+        }
     }
 
     private void inserir(HttpServletRequest request, HttpServletResponse response)
@@ -84,18 +105,17 @@ public class ServletNota extends HttpServlet {
 
         int disciplinaId = Integer.parseInt(request.getParameter("disciplinaid"));
         int alunoId = Integer.parseInt(request.getParameter("idaluno"));
-        int turmaId = Integer.parseInt(request.getParameter("idturma"));
-        double valor = Double.parseDouble(request.getParameter("valor"));
+        double n1 = Double.parseDouble(request.getParameter("n1"));
+        double n2 = Double.parseDouble(request.getParameter("n2"));
 
         Nota nota = new Nota();
         Disciplina d = new Disciplina(disciplinaId);
         Aluno a = new Aluno(alunoId);
-        Turma t = new Turma(turmaId);
 
         nota.setIdDisciplina(d);
         nota.setIdAluno(a);
-        nota.setIdTurma(t);
-        nota.setValor(valor);
+        nota.setN1(n1);
+        nota.setN2(n2);
 
         notaDAO.inserir(nota);
 
@@ -111,15 +131,22 @@ public class ServletNota extends HttpServlet {
 
         if (nota != null) {
 
-            // atualiza só os campos permitidos
-            if (request.getParameter("valor") != null) {
-                nota.setValor(Double.parseDouble(request.getParameter("valor")));
+            String campo = request.getParameter("campo");
+            double valor = Double.parseDouble(request.getParameter("valor"));
+
+            if ("n1".equals(campo)) {
+                nota.setN1(valor);
+            }
+            else if ("n2".equals(campo)) {
+                nota.setN2(valor);
             }
 
             notaDAO.atualizar(nota);
-        }
 
-        response.sendRedirect(request.getContextPath() + "/nota?sub_acao=buscar_todos");
+            int alunoId = nota.getIdAluno().getMatricula();
+
+            response.sendRedirect(request.getContextPath() + "/nota?sub_acao=buscar_por_id&id=" + alunoId);
+        }
     }
 
     private void excluir(HttpServletRequest request, HttpServletResponse response)

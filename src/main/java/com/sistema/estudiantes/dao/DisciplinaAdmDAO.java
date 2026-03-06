@@ -1,5 +1,6 @@
 package com.sistema.estudiantes.dao;
 
+import com.sistema.estudiantes.model.Disciplina;
 import com.sistema.estudiantes.model.DisciplinasAdm;
 import com.sistema.estudiantes.conexao.Conexao;
 import java.sql.*;
@@ -7,8 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisciplinaAdmDAO {
+    // Retorna a lista simples de disciplinas para o SELECT do formulário
+    public List<Disciplina> listar() {
+        List<Disciplina> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Disciplinas ORDER BY Nome ASC";
 
-    // --- MÉTODOS EXISTENTES (AJUSTADOS) ---
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement psmt = conn.prepareStatement(sql);
+             ResultSet rs = psmt.executeQuery()) {
+            while (rs.next()) {
+                Disciplina d = new Disciplina();
+                d.setId(rs.getInt("Id"));
+                d.setNome(rs.getString("Nome"));
+                lista.add(d);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return lista;
+    }
 
     public List<DisciplinasAdm> listarTodasComRelacionamentos() {
         List<DisciplinasAdm> lista = new ArrayList<>();
@@ -30,6 +46,11 @@ public class DisciplinaAdmDAO {
     }
 
     public void salvar(DisciplinasAdm d, String acao) {
+        try (Connection conn = Conexao.conectar()) {
+            garantirDisciplinaReal(d.getNome(), conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String sql = "novo".equals(acao)
                 ? "INSERT INTO DisciplinaAdm (Nome, CargaHoraria, ProfessorNome, TurmaNome) VALUES (?, ?, ?, ?)"
                 : "UPDATE DisciplinaAdm SET Nome=?, CargaHoraria=?, ProfessorNome=?, TurmaNome=? WHERE Id=?";
@@ -45,11 +66,6 @@ public class DisciplinaAdmDAO {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // --- NOVOS MÉTODOS PARA INTEGRAÇÃO REAL ---
-
-    /**
-     * Verifica se o professor existe na tabela real de Professores (pelo nome).
-     */
     public boolean professorExisteNoBancoReal(String nomeProfessor) {
         String sql = "SELECT COUNT(*) FROM Professores WHERE Nome ILIKE ?";
         try (Connection conn = Conexao.conectar();
@@ -63,17 +79,12 @@ public class DisciplinaAdmDAO {
         return false;
     }
 
-    /**
-     * Cria um Usuário e um Professor vinculados no banco de dados real.
-     * Usa transação para garantir que ou cria os dois, ou nenhum.
-     */
     public void criarProfessorCompleto(String nome, String sobrenome, String email) {
         Connection conn = null;
         try {
             conn = Conexao.conectar();
-            conn.setAutoCommit(false); // Inicia transação
+            conn.setAutoCommit(false);
 
-            // 1. Inserir na tabela Usuarios
             String sqlUser = "INSERT INTO Usuarios (Nome, Sobrenome, Email, Senha) VALUES (?, ?, ?, ?)";
             int usuarioId = -1;
 
@@ -88,9 +99,7 @@ public class DisciplinaAdmDAO {
                 if (rs.next()) usuarioId = rs.getInt(1);
             }
 
-            // 2. Inserir na tabela Professores (e opcionalmente criar a Disciplina real)
             if (usuarioId != -1) {
-                // Primeiro criamos a Disciplina na tabela real se ela não existir
                 int disciplinaId = garantirDisciplinaReal(nome, conn);
 
                 String sqlProf = "INSERT INTO Professores (Nome, UsuarioId, DisciplinaId) VALUES (?, ?, ?)";
@@ -111,10 +120,6 @@ public class DisciplinaAdmDAO {
         }
     }
 
-    /**
-     * Método auxiliar para garantir que a disciplina exista na tabela 'Disciplinas'
-     * (usada pelo Aluno) e retorne o ID dela.
-     */
     private int garantirDisciplinaReal(String nomeDisc, Connection conn) throws SQLException {
         String sqlBusca = "SELECT Id FROM Disciplinas WHERE Nome ILIKE ?";
         try (PreparedStatement stmt = conn.prepareStatement(sqlBusca)) {
@@ -160,4 +165,5 @@ public class DisciplinaAdmDAO {
             stmt.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
+
 }

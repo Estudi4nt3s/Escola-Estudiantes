@@ -9,7 +9,6 @@
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     Turma turma = (Turma) request.getSession().getAttribute("turma");
     String[] data = (String[]) request.getSession().getAttribute("data");
-    double media = (Double) request.getSession().getAttribute("media");
 %>
 
 <!DOCTYPE html>
@@ -19,7 +18,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colégio Estudiantes - Perfil</title>
-
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil.css">
@@ -36,8 +35,9 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu active" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
 </aside>
 
@@ -53,7 +53,7 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="https://i.pravatar.cc/40?img=12">
-                <span><%= aluno.getNome() %></span>
+                <span><%= usuario.getNome() %></span>
             </div>
         </div>
     </header>
@@ -66,7 +66,7 @@
             </div>
 
             <div class="perfil-info-principal">
-                <h2><%= aluno.getNome() %></h2>
+                <h2><%= usuario.getNome() %></h2>
                 <p> <%=turma.getSerie()%></p>
 
                 <div class="perfil-status ativo">
@@ -82,25 +82,9 @@
                 <div class="linha"><span>RA:</span> <%= aluno.getMatricula() %></div>
                 <div class="linha"><span>Email:</span> <%=usuario.getEmail()%></div>
                 <div class="linha"><span>Telefone:</span> <%= aluno.getTelefonePai() %></div>
-            </div>
+                <div class="linha"><span>Turma:</span> <%=turma.getSerie() + " " + turma.getLetra()%></div>
 
-            <div class="perfil-card-info">
-                <h3>Desempenho</h3>
-                <div class="linha"><span>Média Geral:</span> <%=media%></div>
-                <div class="linha"><span>Frequência:</span> -100</div>
-                <div class="linha"><span>Turma:</span> <%=turma.getSerie()%></div>
             </div>
-
-            <div class="perfil-card-info">
-                <h3>Melhores Notas</h3>
-                <div class="tags">
-                    <span>Matemática - Excelente Raciocínio Lógico</span>
-                    <span>Português - Boa Interpretação</span>
-                    <span>História - Participativo</span>
-                    <span>Alta Performance em Avaliações</span>
-                </div>
-            </div>
-
         </div>
 
     </div>

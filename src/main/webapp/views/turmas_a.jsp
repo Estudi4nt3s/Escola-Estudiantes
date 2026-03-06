@@ -16,7 +16,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Gerenciar Turmas</title>
+  <title>Estudiantes - Gerenciar Turmas</title>
+  <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -82,7 +83,7 @@
           <label>Nome da Turma</label>
           <input type="text"
                  name="nome"
-                 id="inputNomeTurma" <%-- O ID É ESSENCIAL PARA O SCRIPT --%>
+                 id="inputNomeTurma"
                  list="sugestoes-turmas"
                  placeholder="Ex: 2º Ano EM - D"
                  value="<%= tEdit != null ? tEdit.getNome() : "" %>"
@@ -139,9 +140,7 @@
       const feedback = document.getElementById('feedbackNome');
       const btnSalvar = document.querySelector('button[value="novo"], button[value="editar"]');
 
-      if (!inputNome) return; // Segurança caso o modal não esteja aberto
-
-      // Expressão Regular: Exige o padrão "Xº Ano EM - Letra"
+      if (!inputNome) return;
       const regexTurma = /^[1-9]º Ano EM - [A-Z]$/;
 
       function validar() {

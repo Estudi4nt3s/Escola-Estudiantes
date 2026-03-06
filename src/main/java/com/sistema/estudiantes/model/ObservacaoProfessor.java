@@ -2,31 +2,37 @@ package com.sistema.estudiantes.model;
 
 import java.time.LocalDate;
 
-public class Observacao {
+public class ObservacaoProfessor {
     private int id;
     private String texto;
     private LocalDate dataCriacao;
-    private Aluno idAluno;
     private Professor idProfessor;
+    private Aluno idAluno;
     private Disciplina idDisciplina;
+    private String nomeProfessor;
+    private String nomeDisciplina;
 
-    public Observacao() {}
+    public ObservacaoProfessor() {}
 
-    public Observacao(String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor, Disciplina idDisciplina) {
+    public ObservacaoProfessor(String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina, String nomeProfessor, String nomeDisciplina) {
         this.texto = texto;
         this.dataCriacao = dataCriacao;
-        this.idAluno = idAluno;
         this.idProfessor = idProfessor;
+        this.idAluno = idAluno;
         this.idDisciplina = idDisciplina;
+        this.nomeProfessor = nomeProfessor;
+        this.nomeDisciplina = nomeDisciplina;
     }
 
-    public Observacao(int id, String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor, Disciplina idDisciplina) {
+    public ObservacaoProfessor(int id, String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina, String nomeProfessor, String nomeDisciplina) {
         this.id = id;
         this.texto = texto;
         this.dataCriacao = dataCriacao;
-        this.idAluno = idAluno;
         this.idProfessor = idProfessor;
+        this.idAluno = idAluno;
         this.idDisciplina = idDisciplina;
+        this.nomeProfessor = nomeProfessor;
+        this.nomeDisciplina = nomeDisciplina;
     }
 
     public int getId() {
@@ -53,6 +59,14 @@ public class Observacao {
         return this.idDisciplina;
     }
 
+    public  String getNomeProfessor() {
+        return this.nomeProfessor;
+    }
+
+    public String getNomeDisciplina() {
+        return this.nomeDisciplina;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -77,8 +91,11 @@ public class Observacao {
         this.idDisciplina = idDisciplina;
     }
 
-    public String toString() {
-        return "Id: " + this.id + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno + "\nId Disciplina: " + this.idDisciplina;
+    public void setNomeProfessor(String nomeProfessor) {
+        this.nomeProfessor = nomeProfessor;
     }
 
+    public void setNomeDisciplina(String nomeDisciplina) {
+        this.nomeDisciplina = nomeDisciplina;
+    }
 }

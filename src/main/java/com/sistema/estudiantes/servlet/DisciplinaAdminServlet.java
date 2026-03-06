@@ -25,35 +25,39 @@ public class DisciplinaAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Professor> listaProfessores = professorDao.listarComUsuarios(); // Pega todos
-        List<TurmaAdm> listaTurmas = turmaDao.listarTodas(); // Pega todas
 
-        request.setAttribute("listaProfessoresAuto", listaProfessores);
+        // 1. Carregar dados auxiliares (Professores e Turmas)
+        List<TurmaAdm> listaTurmas = turmaDao.listarTodas();
         request.setAttribute("listaTurmasAuto", listaTurmas);
+        request.setAttribute("listaProfessoresAuto", professorDao.listarComTudo());
+        request.setAttribute("listaTurmasAuto", turmaDao.listarTodas());
+
         String acao = request.getParameter("acao");
         String idParam = request.getParameter("id");
-        String nomeVerificar = request.getParameter("nome");
 
-        // 1. Lógica AJAX: Verificação de existência do Professor
+        // 2. Lógica AJAX (Verificação)
         if ("verificarProfessor".equals(acao)) {
+            String nomeVerificar = request.getParameter("nome");
             boolean existe = dao.professorExisteNoBancoReal(nomeVerificar);
             response.setContentType("application/json");
             response.getWriter().write("{\"existe\": " + existe + "}");
             return;
         }
 
-        // 2. Lógica de Carregamento para Edição ou Exclusão
+        // 3. Carregar Disciplina para Edição/Exclusão
         if (idParam != null && ("editar".equals(acao) || "pre-excluir".equals(acao))) {
-            DisciplinasAdm d = dao.buscarPorId(Integer.parseInt(idParam));
-            request.setAttribute("disciplinaEditar", d);
+            request.setAttribute("disciplinaEditar", dao.buscarPorId(Integer.parseInt(idParam)));
         }
 
-        // 3. Listagem Geral
+        // 4. GARANTIR A LISTAGEM (O ponto onde você dizia que não aparecia)
         List<DisciplinasAdm> lista = dao.listarTodasComRelacionamentos();
+
+        // Log para depuração (se aparecer no console do servidor, o banco está ok)
+        System.out.println("Disciplinas encontradas: " + (lista != null ? lista.size() : "null"));
+
         request.setAttribute("listaDisciplinas", lista);
         request.getRequestDispatcher("/views/disciplinas_a.jsp").forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

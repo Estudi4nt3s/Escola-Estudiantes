@@ -1,14 +1,22 @@
-<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.sistema.estudiantes.model.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+    String[] data = (String[]) request.getSession().getAttribute("data");
+    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
+    List<Nota> notas = (List<Nota>) request.getAttribute("notas");
+    List<Observacao> observacaos = (List<Observacao>) request.getAttribute("observacoes");
+
 %>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Boletim de <%=aluno.getNome()%></title>
+    <title>Estudiantes - Boletim de <%=usuario.getNome()%></title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
@@ -23,17 +31,13 @@
         </div>
 
         <nav>
-            <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
-            <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="turmas_p.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
-        </nav>
+            <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+            <a class="menu active"> <i class="material-icons">menu_book</i>Notas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
 
-        <div class="config">
-            <a class="menu" style="margin-left: -25px;" href="perfil_p.jsp">
-                <i class="material-icons">person</i>Perfil
-            </a>
-        </div>
+        </nav>
     </aside>
 
     <main class="main">
@@ -41,20 +45,20 @@
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
-                ${dataAtualFormatada}
+                <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
             </div>
 
             <div class="user">
                 <div class="avatar">
-                    <img src="" alt="Avatar">
-                    <span>${professor.nome}</span>
+                    <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
+                    <span><%=usuario.getNome()%></span>
                 </div>
             </div>
         </header>
 
         <div class="main-content">
             <div class="page-header">
-                <h2 class="page-title">Boletim Escolar: ${aluno.nome}</h2>
+                <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
             </div>
 
             <div class="table-container">
@@ -69,25 +73,49 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="nota" items="${aluno.notas}">
+                        <%
+                            String situacao;
+                            for (Disciplina disciplina : disciplinas) {
+                                Nota notaEncontrada = null;
+
+                                for (Nota nota : notas) {
+                                    if (nota.getIdDisciplina().getId() == disciplina.getId()) {
+                                        notaEncontrada = nota;
+                                        break;
+                                    }
+                                }
+
+                                if (notaEncontrada != null) {
+
+                                    double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+
+                                    situacao = media >= 7 ? "Aprovado" : "Reprovado";
+
+                        %>
                             <tr>
-                                <td><strong>${nota.disciplinaNome}</strong></td>
-                                <td>${nota.n1}</td>
-                                <td>${nota.n2}</td>
-                                <td>${nota.media}</td>
+                                <td><strong><%=disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())%></strong></td>
+                                <td><%=String.format("%.2f",notaEncontrada.getN1())%></td>
+                                <td><%=String.format("%.2f",notaEncontrada.getN2())%></td>
+                                <td><%=String.format("%.2f",media)%></td>
                                 <td>
-                                    <%-- Lógica de cores baseada no status --%>
-                                    <c:choose>
-                                        <c:when test="${nota.media >= 6.0}">
-                                            <span class="status approved">Aprovado</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="status attention">Recuperação</span>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <span class="status <%=media >= 7?"approved":"attention"%>"><%=situacao%></span>
                                 </td>
                             </tr>
-                        </c:forEach>
+                        <%
+                                }
+                                else{
+                        %>
+                        <tr>
+                            <td><strong><%=disciplina.getNome()%></strong></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    <%
+                            }
+                        }
+                    %>
                     </tbody>
                 </table>
             </div>
@@ -98,21 +126,31 @@
                     <h3>Observações do Professor</h3>
                 </div>
                 <div class="obs-content">
-                    <c:forEach var="obs" items="${aluno.observacoes}" varStatus="status">
-                        <p><strong>Prof. ${obs.professorNome} (${obs.materia}):</strong> "${obs.texto}"</p>
-                        <c:if test="${!status.last}">
-                            <hr>
-                        </c:if>
-                    </c:forEach>
-                    
-                    <c:if test="${empty aluno.observacoes}">
+                    <%
+                        for(int i = 0;i < observacaos.size();i++){
+                    %>
+                            <p><strong>Prof. <%=observacaos.get(i).getIdProfessor().getNome()%> (<%=observacaos.get(i).getIdDisciplina().getNome()%>:</strong> "<%=observacaos.get(i).getTexto()%>"</p>
+                    <%
+                            if((i + 1) == observacaos.size()){
+                    %>
+                                <hr>
+                    <%
+                            }
+                        }
+                        if(observacaos.isEmpty()){%>
                         <p>Nenhuma observação registrada para este aluno.</p>
-                    </c:if>
+                    <%
+                        }
+                    %>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/notificacoes.js"></script>
+    <a href="${pageContext.request.contextPath}/gerarBoletim">
+        Gerar Boletim
+    </a>
+
+    <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
 </html>

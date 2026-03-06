@@ -2,6 +2,7 @@ package com.sistema.estudiantes.servlet;
 
 import com.sistema.estudiantes.dao.AlunoDAO;
 import com.sistema.estudiantes.dao.TurmaDAO;
+import com.sistema.estudiantes.dao.UsuarioDAO;
 import com.sistema.estudiantes.model.Aluno;
 import com.sistema.estudiantes.model.Turma;
 import jakarta.servlet.RequestDispatcher;
@@ -17,7 +18,7 @@ import java.util.List;
 @WebServlet("/aluno")
 public class ServletAluno extends HttpServlet {
 
-    private final AlunoDAO alunoDAO = new AlunoDAO();
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -51,17 +52,14 @@ public class ServletAluno extends HttpServlet {
     }
 
     private void preencherTabela(HttpServletRequest request, int id) {
-        List<Aluno> alunos = alunoDAO.listarPorTurma(id);
-        request.setAttribute("alunos", alunos);
+        AlunoDAO alunoDAO = new AlunoDAO();
+
+        List<Aluno> alunosDaTurma = alunoDAO.listarPorTurma(id);
+        request.setAttribute("alunos", alunosDaTurma);
 
         TurmaDAO turmaDAO = new TurmaDAO();
-
         List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", id);
-
-        Turma turma = null;
-        if (turmas != null && !turmas.isEmpty()) {
-            turma = turmas.get(0);
-        }
+        Turma turma = (turmas != null && !turmas.isEmpty()) ? turmas.get(0) : null;
 
         request.setAttribute("turmaSelecionada", turma);
     }

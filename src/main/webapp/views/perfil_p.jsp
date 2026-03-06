@@ -13,8 +13,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Perfil de <%=professor.getNome()%></title>
-
+    <title>Estudiantes - Perfil de <%=professor.getNome()%></title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil_p.css">
@@ -32,7 +32,7 @@
             <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="turmas_p.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
+            <a class="menu" href="turmas_p.jsp"><i class="material-icons">groups</i>Turmas</a>
         </nav>
     </aside>
 

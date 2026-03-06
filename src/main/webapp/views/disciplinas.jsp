@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Minhas Disciplinas</title>
+    <title>Estudiantes - Minhas Disciplinas</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
@@ -26,6 +27,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp">
         <i class="material-icons">home</i>Início</a>
         <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
@@ -40,11 +42,12 @@
         </div>
 
             <div class="user">
-                <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
-                <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
-                    <span>Mateus Carlos</span>
-                </div>
+                <a href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
+                    <div class="avatar">
+                        <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
+                        <span>Mateus Carlos</span>
+                    </div>
+                </a>
             </div>
         </header>
 
@@ -54,14 +57,13 @@
 
             <div class="disciplinas-grid">
 
-            <a href="aluno.jsp"><div class="disciplina card1">
+            <div class="disciplina card1">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>
                 </div>
                 <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
             </div>
-            </a>
 
             <div class="disciplina card2">
                 <div class="disciplina-info">
