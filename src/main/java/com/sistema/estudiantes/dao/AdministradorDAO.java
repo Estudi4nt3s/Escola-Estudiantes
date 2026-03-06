@@ -1,5 +1,6 @@
 package com.sistema.estudiantes.dao;
 
+import com.sistema.estudiantes.conexao.Conexao;
 import com.sistema.estudiantes.model.Admin;
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,36 +8,31 @@ import java.util.List;
 
 public class AdministradorDAO {
 
-    private String url = "jdbc:mysql://localhost:3306/seu_banco";
-    private String user = "root";
-    private String password = "1234";
-
     public List<Admin> buscarLogin(String usuario) {
-
         List<Admin> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Admins WHERE Usuario = ?";
 
-        String sql = "SELECT * FROM admin WHERE usuario = ?";
+        // Usamos o método estático conectar() da sua classe Conexao
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (conn == null) return lista; // Evita NullPointerException se a conexão falhar
 
-            stmt.setString(1, usuario);
+            psmt.setString(1, usuario);
 
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Admin admin = new Admin();
-                admin.setId(rs.getInt("id"));
-                admin.setUsuario(rs.getString("usuario"));
-                admin.setSenha(rs.getString("senha"));
-
-                lista.add(admin);
+            try (ResultSet rs = psmt.executeQuery()) {
+                while (rs.next()) {
+                    Admin admin = new Admin();
+                    admin.setId(rs.getInt("Id"));
+                    admin.setUsuario(rs.getString("Usuario"));
+                    admin.setSenha(rs.getString("Senha"));
+                    lista.add(admin);
+                }
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao buscar login: " + e.getMessage());
         }
-
+        // O try-with-resources fecha automaticamente o psmt e o conn (chamando o close)
         return lista;
     }
 }

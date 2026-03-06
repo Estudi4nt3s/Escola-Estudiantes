@@ -19,10 +19,10 @@
 <div id="modalAdmin" class="modal-overlay">
     <div class="modal-content">
     <h3>Área Administrativa</h3>
-        <form action="${pageContext.request.contextPath}/LoginAdminServlet" method="post">
+        <form action="${pageContext.request.contextPath}/servletLoginAdmin" method="post">
             <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
 
-            <input type="email" name="usuario" id="usuario" placeholder="Usuário" required>
+            <input type="text" name="usuario" id="usuario" placeholder="Usuário" required>
             <input type="password" name="senha" id="senha" placeholder="Senha" required>
 
             <button type="submit" class="btn-primary">Entrar</button>
@@ -32,11 +32,7 @@
                style="margin-top: 15px; cursor: pointer; font-size: 12px; opacity: 0.5;">
                 Voltar ao login
             </p>
-            <a href="${pageContext.request.contextPath}/views/inicio_a.jsp">
-                    Entrar direto (modo dev
-            </a>
         </form>
-        <h2>Bem-vindo, <%= Admin.getUsuario() %></h2>
     </div>
 </div>
 
@@ -57,7 +53,7 @@
 
         <form action="servletLogin" method="post">
             <label for="usuario">Usuário</label>
-            <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário">
+            <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário/email">
 
             <label for="senha">Senha</label>
             <input type="password" name="senha" id="senha" required placeholder="••••••••">

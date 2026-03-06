@@ -31,14 +31,17 @@ public class ServletLoginAdmin extends HttpServlet {
             Admin admin = admins.get(0);
 
             if (admin.getSenha().equals(senha)) {
-
-                // cria sessão
                 HttpSession session = request.getSession();
+
+                // O objeto completo (bom para ter o ID à mão)
                 session.setAttribute("admin", admin);
 
-                response.sendRedirect("views/inicio_a.jsp");
+                // O que o seu JSP está pedindo:
+                session.setAttribute("tipoUsuario", "admin");
+                session.setAttribute("adminNome", admin.getUsuario());
 
-            } else {
+                response.sendRedirect("views/inicio_a.jsp");
+            }else {
                 response.sendRedirect("index.jsp?erroAdmin=senha");
             }
 
