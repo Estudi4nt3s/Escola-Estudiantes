@@ -35,7 +35,7 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
@@ -52,7 +52,7 @@
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12">
+                <img src="https://i.pravatar.cc/40?img=12" alt="">
                 <span><%= usuario.getNome() %></span>
             </div>
         </div>

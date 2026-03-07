@@ -1,4 +1,4 @@
-
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -13,6 +13,7 @@
 </head>
 <%
     String[] data = (String[]) request.getSession().getAttribute("data");
+    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
 %>
 
 <body>
@@ -27,7 +28,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp">
         <i class="material-icons">home</i>Início</a>
         <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>

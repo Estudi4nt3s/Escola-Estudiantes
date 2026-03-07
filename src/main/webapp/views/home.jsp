@@ -104,7 +104,7 @@
                         if(!data[2].equals("SÁB") && !data[2].equals("DOM")){
                             for(int i = 0;i < qtdmateria;i++){
                              %>
-                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> - <%=horario[i]%></li>
+                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> - <%=aulas.get(i).getHorarioInicio().getHour()%>:<%=aulas.get(i).getHorarioInicio().getMinute()%> às <%=aulas.get(i).getHorarioFim().getHour()%>:<%=aulas.get(i).getHorarioFim().getMinute()%></li>
                     <%
                             }
                         }
