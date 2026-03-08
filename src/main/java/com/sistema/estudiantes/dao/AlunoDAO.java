@@ -148,6 +148,7 @@ public class AlunoDAO {
                         Usuario u = new Usuario(rs.getInt("usuarioid"));
                         u.setNome(rs.getString("nome"));
                         u.setSobrenome(rs.getString("sobrenome"));
+                        System.out.println(u);
                         Aluno aluno = new Aluno(
                                 rs.getInt("matricula"),
                                 rs.getString("cpf"),
@@ -156,6 +157,7 @@ public class AlunoDAO {
                                 rs.getString("telefonepai"),
                                 rs.getInt("turmaid")
                         );
+                        System.out.println(aluno);
 
                         alunos.add(aluno);
                     }

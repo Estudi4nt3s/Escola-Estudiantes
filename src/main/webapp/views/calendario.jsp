@@ -22,10 +22,16 @@
         <a class="menu active" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
             <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">grading</i>Notas</a>
         <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
+
+    <div class="config">
+        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
+    </div>
 <div class="main">
 
   <div class="calendar-layout">
