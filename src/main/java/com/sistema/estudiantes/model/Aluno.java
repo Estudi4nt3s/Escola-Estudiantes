@@ -40,6 +40,7 @@ public class Aluno {
         this.dataNascimento = datanascimento;
         this.telefonePai = telefonepai;
         this.turmaId = turmaid;
+        this.usuario_id = u;
     }
 
     public int getMatricula() {

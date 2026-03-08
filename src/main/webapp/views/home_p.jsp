@@ -3,7 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -51,11 +51,12 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
         </nav>
 
         <div class="config">
             <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
-                <i class="material-icons">output</i>Logout
+                <i class="material-icons">output</i>Sair
             </a>
         </div>
     </aside>
@@ -116,7 +117,10 @@
                         for(int i = 0;i < qtdmateria;i++){
                             %>
                         <li>
-                            <strong><%=materia.getNome()%></strong> - <%=aulas.get(i).getHorarioInicio().getHour()%>:<%=aulas.get(i).getHorarioInicio().getMinute()%> às <%=aulas.get(i).getHorarioFim().getHour()%>:<%=aulas.get(i).getHorarioFim().getMinute()%>
+                            <strong><%=turma[i]%></strong> -
+                            <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
+                             às
+                            <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
                         </li>
                     <%
                         }

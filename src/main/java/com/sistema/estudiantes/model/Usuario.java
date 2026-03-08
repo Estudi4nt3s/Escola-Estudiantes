@@ -93,6 +93,6 @@ public class Usuario {
     }
 
     public String toString() {
-        return "Id: " + this.id + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nFoto: " + this.foto;
+        return "Id: " + this.id + "\nNome: " + this.nome + "\nSobrenome: " + this.sobrenome + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nFoto: " + this.foto;
     }
 }

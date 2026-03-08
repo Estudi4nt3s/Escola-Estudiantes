@@ -449,8 +449,8 @@ nav {
 .card1::before { background: #5aa7d6; }
 .card2::before { background: #e74c3c; }
 .card3::before { background: #f39c12; }
-.card4::before { background: #9b59b6; }
-.card5::before { background: #8e5c2c; }
+.card4::before { background: #e1af3a; }
+.card5::before { background: #9b59b6; }
 .card6::before { background: #2ecc71; }
 
 .disciplina-info h3 {

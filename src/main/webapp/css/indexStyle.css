@@ -362,27 +362,27 @@ nav {
 }
 
 .matematica::before {
-    background: #d11d22;
+    background: #5aa7d6;
 }
 
 .portugues::before {
-    background: #501581;
+    background: #e74c3c;
 }
 
 .historia::before {
-    background: #a95510;
+    background: #e1af3a;
 }
 
 .geografia::before {
-    background: #483115;
+    background: #f39c12;
 }
 
 .ingles::before {
-    background: #5f2eb9;
+    background: #9b59b6;
 }
 
 .ciencias::before {
-    background: #1a4815;
+    background: #2ecc71;
 }
 
 
