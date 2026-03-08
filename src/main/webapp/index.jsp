@@ -51,12 +51,12 @@
         <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Credenciais inválidas!</p>
         <% } %>
 
-        <form action="servletLogin" method="post">
+        <form action="${pageContext.request.contextPath}/views/loading.jsp" method="post">
             <label for="usuario">Usuário</label>
             <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário/email">
 
             <label for="senha">Senha</label>
-            <input type="password" name="senha" id="senha" required placeholder="••••••••">
+            <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
 
             <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
         </form>

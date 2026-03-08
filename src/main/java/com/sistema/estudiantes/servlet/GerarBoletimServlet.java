@@ -35,6 +35,7 @@ public class GerarBoletimServlet extends HttpServlet {
         @SuppressWarnings("unchecked")
         List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
 
+        LocalDate data = LocalDate.now();
         int iddisciplina;
         String situacao = "-";
 
@@ -60,7 +61,40 @@ public class GerarBoletimServlet extends HttpServlet {
 
             document.setMargins(20, 20, 20, 20);
 
-            // 🔥 AQUI VOCÊ COMEÇA A SUBSTITUIR DADOS
+            // ================= TOPO COM LOGO =================
+            float[] colTopo = {120, 500};
+            Table topo = new Table(colTopo);
+            topo.setWidth(UnitValue.createPercentValue(100));
+            topo.setBorder(Border.NO_BORDER);
+
+// LOGO
+            String caminhoLogo = getServletContext().getRealPath("/utils/logo.png");
+
+            ImageData logoData = ImageDataFactory.create(caminhoLogo);
+            Image logo = new Image(logoData);
+            logo.setWidth(100);
+            logo.setMarginTop(18);
+
+            Cell logoCell = new Cell();
+            logoCell.setBorder(Border.NO_BORDER);
+            logoCell.add(logo);
+            topo.addCell(logoCell);
+
+// TÍTULO
+            Paragraph titulo = new Paragraph("Escola Estudiantes")
+                    .setFontSize(18)
+                    .setBold()
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE);
+
+            Cell tituloCell = new Cell();
+            tituloCell.setBorder(Border.NO_BORDER);
+            tituloCell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+            tituloCell.add(titulo);
+
+            topo.addCell(tituloCell);
+
+            document.add(topo);
+            document.add(new Paragraph("\n"));
 
             String nomeAluno = user.getNome();
             String turma = serie.getSerie() + " " + serie.getLetra();
@@ -79,7 +113,7 @@ public class GerarBoletimServlet extends HttpServlet {
             cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado ? "Aprovado" : "Reprovado")));
 
             cabecalho.addCell(criarCelulaCabecalho("UNIDADE: Escola Estudiantes"));
-            cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + LocalDate.now()));
+            cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + String.format("%02d", data.getDayOfMonth()) + "/" + String.format("%02d", data.getMonthValue()) + "/" + data.getYear()));
 
             document.add(cabecalho);
             document.add(new Paragraph("\n"));
@@ -129,34 +163,34 @@ public class GerarBoletimServlet extends HttpServlet {
 
             document.add(tabela);
 
-            float[] colRodape = {300, 200};
+            float[] colRodape = {300};
             Table rodape = new Table(colRodape);
             rodape.setWidth(UnitValue.createPercentValue(100));
 
-// ===== ASSINATURA (ESQUERDA) =====
+            // ===== ASSINATURA (ESQUERDA) =====
+            // ===== ASSINATURA (ESQUERDA) =====
             Cell assinatura = new Cell();
             assinatura.setBorder(Border.NO_BORDER);
+            assinatura.setTextAlignment(TextAlignment.LEFT);
 
-            assinatura.add(new Paragraph("____________________________"));
-            assinatura.add(new Paragraph("Assinatura do Diretor").setFontSize(9));
-
-            rodape.addCell(assinatura);
-
-// ===== IMAGEM (DIREITA) =====
-            String caminhoImagem = getServletContext().getRealPath("/utils/logo.png");
+            String caminhoImagem = getServletContext().getRealPath("/utils/assinatura.png");
 
             ImageData imageData = ImageDataFactory.create(caminhoImagem);
             Image imagem = new Image(imageData);
 
             imagem.setWidth(120);
-            imagem.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+            imagem.setHorizontalAlignment(HorizontalAlignment.LEFT);
 
-            Cell imagemCell = new Cell();
-            imagemCell.setBorder(Border.NO_BORDER);
-            imagemCell.add(imagem);
+            assinatura.add(imagem);
 
-            rodape.addCell(imagemCell);
+            Paragraph rg = new Paragraph("RG: 400.289.226-76")
+                    .setFontSize(6)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setWidth(113); // mesma largura da imagem
 
+            assinatura.add(rg);
+
+            rodape.addCell(assinatura);
 // espaço antes do rodapé
             document.add(new Paragraph("\n\n"));
 

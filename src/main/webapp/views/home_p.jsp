@@ -49,13 +49,12 @@
 
         <nav>
             <a class="menu active"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="nota"><i class="material-icons">grading</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
         </nav>
 
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: darkred" href="${pageContext.request.contextPath}/index.jsp">
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
                 <i class="material-icons">output</i>Logout
             </a>
         </div>

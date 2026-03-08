@@ -2,6 +2,8 @@
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="com.sistema.estudiantes.model.Aula" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -14,6 +16,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/indexStyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 
 </head>
 <%
@@ -21,6 +24,7 @@
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");
+    List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
     int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
     Map<String,String> conteudo = new HashMap<>();
     conteudo.put("matematica", "Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.");
@@ -44,11 +48,19 @@
             <a class="menu active"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
                 <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">menu_book</i>Notas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+            <a class="menu" id="btnNotas"
+               href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>">
+                <i class="material-icons">grading</i>Notas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">
+                person</i>Perfil</a>
         </nav>
+        <div class="config">
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
+
 
     <main class="main">
 
@@ -61,7 +73,7 @@
             <div class="user">
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
-                    <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="https://i.pravatar.cc/40?img=12" alt="avatar"></a>
+                    <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
                     <span><%=usuario.getNome()%></span>
                 </div>
             </div>
@@ -98,15 +110,18 @@
                 <h2>Aulas de Hoje</h2>
                 <ul>
                     <%
-                        String[] horario = {"07:00 às 08:00","08:00 às 09:00","09:00 às 10:00",
-                                "10:30 às 11:30","11:30 às 12:30","13:30 às 14:30"};
-
-                        if(!data[2].equals("SÁB") && !data[2].equals("DOM")){
+                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !Boolean.parseBoolean((materia[0]))){
                             for(int i = 0;i < qtdmateria;i++){
                              %>
                     <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> - <%=aulas.get(i).getHorarioInicio().getHour()%>:<%=aulas.get(i).getHorarioInicio().getMinute()%> às <%=aulas.get(i).getHorarioFim().getHour()%>:<%=aulas.get(i).getHorarioFim().getMinute()%></li>
                     <%
                             }
+                        }
+                            else{
+
+                    %>
+                        <p>Você não possui aulas hoje.</p>
+                    <%
                         }
                     %>
                 </ul>
@@ -160,5 +175,29 @@
     </div>
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+    <div id="loadingOverlay">
+        <div class="loadingBox">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
+        </div>
+    </div>
+    <script>
+
+        const btnNotas = document.getElementById("btnNotas");
+        const loading = document.getElementById("loadingOverlay");
+
+        btnNotas.addEventListener("click", function(e){
+
+            e.preventDefault(); // impede abrir imediatamente
+
+            loading.style.display = "flex";
+
+            setTimeout(()=>{
+                window.location.href = this.href;
+            },500);
+
+        });
+
+    </script>
 </body>
 </html>

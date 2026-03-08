@@ -19,7 +19,8 @@
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -33,15 +34,18 @@
         <nav>
             <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu active"> <i class="material-icons">menu_book</i>Notas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+            <a class="menu active"> <i class="material-icons">grading</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
 
         </nav>
+        <div class="config">
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
 
     <main class="main">
-
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
@@ -59,6 +63,11 @@
         <div class="main-content">
             <div class="page-header">
                 <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
+
+                <a class="btn-boletim" href="${pageContext.request.contextPath}/gerarBoletim">
+                    <i class="material-icons">picture_as_pdf</i>
+                    Gerar Boletim
+                </a>
             </div>
 
             <div class="table-container">
@@ -147,9 +156,6 @@
         </div>
     </main>
 
-    <a href="${pageContext.request.contextPath}/gerarBoletim">
-        Gerar Boletim
-    </a>
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>
