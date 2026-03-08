@@ -6,6 +6,9 @@ import com.itextpdf.layout.*;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
 import com.itextpdf.layout.borders.*;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
 
 import com.sistema.estudiantes.model.*;
 
@@ -32,6 +35,7 @@ public class GerarBoletimServlet extends HttpServlet {
         @SuppressWarnings("unchecked")
         List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
 
+        LocalDate data = LocalDate.now();
         int iddisciplina;
         String situacao = "-";
 
@@ -57,7 +61,40 @@ public class GerarBoletimServlet extends HttpServlet {
 
             document.setMargins(20, 20, 20, 20);
 
-            // 🔥 AQUI VOCÊ COMEÇA A SUBSTITUIR DADOS
+            // ================= TOPO COM LOGO =================
+            float[] colTopo = {120, 500};
+            Table topo = new Table(colTopo);
+            topo.setWidth(UnitValue.createPercentValue(100));
+            topo.setBorder(Border.NO_BORDER);
+
+// LOGO
+            String caminhoLogo = getServletContext().getRealPath("/utils/logo.png");
+
+            ImageData logoData = ImageDataFactory.create(caminhoLogo);
+            Image logo = new Image(logoData);
+            logo.setWidth(100);
+            logo.setMarginTop(18);
+
+            Cell logoCell = new Cell();
+            logoCell.setBorder(Border.NO_BORDER);
+            logoCell.add(logo);
+            topo.addCell(logoCell);
+
+// TÍTULO
+            Paragraph titulo = new Paragraph("Escola Estudiantes")
+                    .setFontSize(18)
+                    .setBold()
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE);
+
+            Cell tituloCell = new Cell();
+            tituloCell.setBorder(Border.NO_BORDER);
+            tituloCell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+            tituloCell.add(titulo);
+
+            topo.addCell(tituloCell);
+
+            document.add(topo);
+            document.add(new Paragraph("\n"));
 
             String nomeAluno = user.getNome();
             String turma = serie.getSerie() + " " + serie.getLetra();
@@ -75,8 +112,8 @@ public class GerarBoletimServlet extends HttpServlet {
             cabecalho.addCell(criarCelulaCabecalho("TURMA: " + turma));
             cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado ? "Aprovado" : "Reprovado")));
 
-            cabecalho.addCell(criarCelulaCabecalho("UNIDADE: Escola Germinare"));
-            cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + LocalDate.now()));
+            cabecalho.addCell(criarCelulaCabecalho("UNIDADE: Escola Estudiantes"));
+            cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + String.format("%02d", data.getDayOfMonth()) + "/" + String.format("%02d", data.getMonthValue()) + "/" + data.getYear()));
 
             document.add(cabecalho);
             document.add(new Paragraph("\n"));
@@ -93,7 +130,7 @@ public class GerarBoletimServlet extends HttpServlet {
             tabela.addHeaderCell(criarHeader("Situação"));
             for (Disciplina disciplina : disciplinas) {
 
-                tabela.addCell(criarCelula(disciplina.getNome()));
+                tabela.addCell(criarCelula(disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())));
 
                 Nota notaEncontrada = null;
 
@@ -108,9 +145,9 @@ public class GerarBoletimServlet extends HttpServlet {
 
                     double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
 
-                    tabela.addCell(criarNota(String.valueOf(notaEncontrada.getN1())));
-                    tabela.addCell(criarNota(String.valueOf(notaEncontrada.getN2())));
-                    tabela.addCell(criarNota(String.valueOf(media)));
+                    tabela.addCell(criarNota(String.format("%.2f",notaEncontrada.getN1())));
+                    tabela.addCell(criarNota(String.format("%.2f",notaEncontrada.getN2())));
+                    tabela.addCell(criarNota(String.format("%.2f",media)));
 
                     situacao = media >= 7 ? "Aprovado" : "Reprovado";
                     tabela.addCell(criarCelula(situacao));
@@ -125,6 +162,39 @@ public class GerarBoletimServlet extends HttpServlet {
             }
 
             document.add(tabela);
+
+            float[] colRodape = {300};
+            Table rodape = new Table(colRodape);
+            rodape.setWidth(UnitValue.createPercentValue(100));
+
+            // ===== ASSINATURA (ESQUERDA) =====
+            // ===== ASSINATURA (ESQUERDA) =====
+            Cell assinatura = new Cell();
+            assinatura.setBorder(Border.NO_BORDER);
+            assinatura.setTextAlignment(TextAlignment.LEFT);
+
+            String caminhoImagem = getServletContext().getRealPath("/utils/assinatura.png");
+
+            ImageData imageData = ImageDataFactory.create(caminhoImagem);
+            Image imagem = new Image(imageData);
+
+            imagem.setWidth(120);
+            imagem.setHorizontalAlignment(HorizontalAlignment.LEFT);
+
+            assinatura.add(imagem);
+
+            Paragraph rg = new Paragraph("RG: 400.289.226-76")
+                    .setFontSize(6)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setWidth(113); // mesma largura da imagem
+
+            assinatura.add(rg);
+
+            rodape.addCell(assinatura);
+// espaço antes do rodapé
+            document.add(new Paragraph("\n\n"));
+
+            document.add(rodape);
 
             document.close();
 

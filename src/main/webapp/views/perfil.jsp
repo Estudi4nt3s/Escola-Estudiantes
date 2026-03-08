@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -35,10 +36,14 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/aluno.jsp"> <i class="material-icons">menu_book</i>Notas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
+    <div class="config">
+        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
+    </div>
 </aside>
 
 <main class="main">
@@ -52,7 +57,7 @@
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12">
+                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
                 <span><%= usuario.getNome() %></span>
             </div>
         </div>
@@ -62,12 +67,12 @@
 
         <div class="perfil-header-card">
             <div class="perfil-foto">
-                <img src="https://i.pravatar.cc/40?img=12" alt="Aluno">
+                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Aluno">
             </div>
 
             <div class="perfil-info-principal">
                 <h2><%= usuario.getNome() %></h2>
-                <p> <%=turma.getSerie()%></p>
+                <p> <%=turma.getSerie() + " " + turma.getLetra()%></p>
 
                 <div class="perfil-status ativo">
                     ● Aluno Ativo
@@ -113,5 +118,30 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<div id="loadingOverlay">
+    <div class="loadingBox">
+        <div class="spinner"></div>
+
+        <p>Carregando...</p>
+    </div>
+</div>
+<script>
+
+    const btnNotas = document.getElementById("btnNotas");
+    const loading = document.getElementById("loadingOverlay");
+
+    btnNotas.addEventListener("click", function(e){
+
+        e.preventDefault(); // impede abrir imediatamente
+
+        loading.style.display = "flex";
+
+        setTimeout(()=>{
+            window.location.href = this.href;
+        },500);
+
+    });
+
+</script>
 </body>
 </html>

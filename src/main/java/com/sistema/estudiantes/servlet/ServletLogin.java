@@ -84,7 +84,7 @@ public class ServletLogin extends HttpServlet {
                     ProfessorDAO profDAO = new ProfessorDAO();
                     ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
-                    List<Aluno> alunos = alunoDAO.listarComFiltro(usuarioLogado.getId());
+                    List<Aluno> alunos = alunoDAO.listarUsuario(usuarioLogado.getId());
 
                     if (!alunos.isEmpty()) {
                         Aluno aluno = alunos.getFirst();
@@ -116,6 +116,7 @@ public class ServletLogin extends HttpServlet {
                         }
 
                         request.getSession().setAttribute("aluno", aluno);
+                        request.getSession().setAttribute("aulas",aulas);
                         request.getSession().setAttribute("turma", !turmas.isEmpty() ? turmas.getFirst() : null);
                         request.getSession().setAttribute("materia", materia);
                         request.getSession().setAttribute("notas", notas);
