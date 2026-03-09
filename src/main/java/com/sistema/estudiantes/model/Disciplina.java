@@ -11,6 +11,10 @@ public class Disciplina {
         this.nome = nome;
     }
 
+    public Disciplina(String nome) {
+        this.nome = nome;
+    }
+
     public Disciplina(int id) {this.id = id;}
 
     public int getId() {

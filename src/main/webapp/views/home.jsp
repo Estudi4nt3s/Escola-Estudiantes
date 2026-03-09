@@ -26,13 +26,13 @@
     String[] materia = (String[]) request.getSession().getAttribute("materia");
     List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
     int qtdmateria = (int) request.getSession().getAttribute("qtdMateria");
-    Map<String,String> conteudo = new HashMap<>();
-    conteudo.put("matematica", "Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.");
-    conteudo.put("portugues","Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.");
-    conteudo.put("historia","Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.");
-    conteudo.put("geografia","Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.");
-    conteudo.put("ingles","Aprendizado de vocabulário, gramática básica, leitura, escrita e conversação na língua inglesa.");
-    conteudo.put("ciencias","Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.");
+    Map<String,String[]> conteudo = new HashMap<>();
+    conteudo.put("matemática", new String[]{"Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.","calculate"});
+    conteudo.put("português", new String[]{"Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.","book"});
+    conteudo.put("história", new String[]{"Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.","history_edu"});
+    conteudo.put("geografia", new String[]{"Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.","public"});
+    conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
+    conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
 
 
 %>
@@ -96,8 +96,8 @@
 
                     <div class="card <%=materia[i].toLowerCase()%>">
                         <h3><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></h3>
-                        <p><%=conteudo.get(materia[i].toLowerCase())%></p>
-                        <img src="${pageContext.request.contextPath}/utils/<%=materia[i].toLowerCase(java.util.Locale.ROOT)%>.png" alt="<%=materia[i]%>">
+                        <p><%=conteudo.get(materia[i].toLowerCase())[0]%></p>
+                        <i class="material-icons materias"><%=conteudo.get(materia[i].toLowerCase())[1]%></i>
                     </div>
                 <%
                             }
@@ -113,7 +113,10 @@
                         if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !Boolean.parseBoolean((materia[0]))){
                             for(int i = 0;i < qtdmateria;i++){
                              %>
-                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> - <%=aulas.get(i).getHorarioInicio().getHour()%>:<%=aulas.get(i).getHorarioInicio().getMinute()%> às <%=aulas.get(i).getHorarioFim().getHour()%>:<%=aulas.get(i).getHorarioFim().getMinute()%></li>
+                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> -
+                        <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
+                         às
+                         <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
                     <%
                             }
                         }

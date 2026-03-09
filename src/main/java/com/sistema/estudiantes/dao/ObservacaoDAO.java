@@ -14,8 +14,8 @@ public class ObservacaoDAO {
 
     public void inserir(Observacao observacao) {
         String sql = """
-            INSERT INTO Observacoes (Texto, DataCriacao, alunomatricula, ProfessorId, DisciplinaId)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO Observacoes (Texto, DataCriacao, alunomatricula, ProfessorId)
+            VALUES (?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
@@ -25,7 +25,6 @@ public class ObservacaoDAO {
             psmt.setObject(2, observacao.getDataCriacao());
             psmt.setInt(3, observacao.getIdProfessor().getId());
             psmt.setInt(4, observacao.getIdAluno().getMatricula());
-            psmt.setInt(5, observacao.getIdDisciplina().getId());
 
             psmt.executeUpdate();
 
@@ -45,15 +44,13 @@ public class ObservacaoDAO {
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
                 Aluno a = new Aluno(rs.getInt("alunomatricula"));
-                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
 
                 Observacao o = new Observacao(
                         rs.getInt("id"),
                         rs.getString("texto"),
                         rs.getObject("datacriacao", LocalDate.class),
                         a,
-                        p,
-                        d
+                        p
                 );
                 lista.add(o);
             }
@@ -62,6 +59,48 @@ public class ObservacaoDAO {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public List<Observacao> listarDisciplina(int valor){
+        List<Observacao> observacaos = new ArrayList<>();
+        String sql = """
+                 SELECT o.*, professorid, p.nome as prof, d.nome as disc FROM observacoes o 
+                     join professores p on o.professorid = p.id
+                     join disciplinas d on p.disciplinaid = d.id
+                          WHERE alunomatricula = ?
+                """;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, valor);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    p.setNome(rs.getString("prof"));
+
+                    Disciplina d = new Disciplina();
+                    d.setNome(rs.getString("disc"));
+                    p.setDisciplina(d);
+
+                    Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                    Observacao o = new Observacao(
+                            rs.getInt("id"),
+                            rs.getString("texto"),
+                            rs.getObject("datacriacao", LocalDate.class),
+                            a,
+                            p
+                    );
+                    System.out.println(o.getIdProfessor().getNome());
+                    observacaos.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return observacaos;
     }
 
     public List<Observacao> listarComFiltro(String condicao, int valor){
@@ -76,15 +115,13 @@ public class ObservacaoDAO {
                 while (rs.next()) {
                     Professor p = new Professor(rs.getInt("professorid"));
                     Aluno a = new Aluno(rs.getInt("alunomatricula"));
-                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
 
                     Observacao o = new Observacao(
                             rs.getInt("id"),
                             rs.getString("texto"),
                             rs.getObject("datacriacao", LocalDate.class),
                             a,
-                            p,
-                            d
+                            p
                     );
 
                     observacaos.add(o);

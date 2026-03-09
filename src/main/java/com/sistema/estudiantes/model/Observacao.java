@@ -8,25 +8,22 @@ public class Observacao {
     private LocalDate dataCriacao;
     private Aluno idAluno;
     private Professor idProfessor;
-    private Disciplina idDisciplina;
 
     public Observacao() {}
 
-    public Observacao(String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor, Disciplina idDisciplina) {
+    public Observacao(String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor) {
         this.texto = texto;
         this.dataCriacao = dataCriacao;
         this.idAluno = idAluno;
         this.idProfessor = idProfessor;
-        this.idDisciplina = idDisciplina;
     }
 
-    public Observacao(int id, String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor, Disciplina idDisciplina) {
+    public Observacao(int id, String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor) {
         this.id = id;
         this.texto = texto;
         this.dataCriacao = dataCriacao;
         this.idAluno = idAluno;
         this.idProfessor = idProfessor;
-        this.idDisciplina = idDisciplina;
     }
 
     public int getId() {
@@ -49,10 +46,6 @@ public class Observacao {
         return this.idAluno;
     }
 
-    public Disciplina getIdDisciplina() {
-        return this.idDisciplina;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -73,12 +66,8 @@ public class Observacao {
         this.idAluno = idAluno;
     }
 
-    public void setIdDisciplina(Disciplina idDisciplina) {
-        this.idDisciplina = idDisciplina;
-    }
-
     public String toString() {
-        return "Id: " + this.id + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno + "\nId Disciplina: " + this.idDisciplina;
+        return "Id: " + this.id + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno;
     }
 
 }
