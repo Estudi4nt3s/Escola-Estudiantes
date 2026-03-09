@@ -57,11 +57,9 @@ create table Observacoes ( Id               serial          not null
                          , DataCriacao      date            not null default current_date
                          , AlunoMatricula   int             not null
                          , ProfessorId      int             not null
-                         , DisciplinaId     int             not null
                          , constraint pk_Observacoes              primary key (Id)
                          , constraint fk_Observacoes_Alunos       foreign key (AlunoMatricula)      references Alunos(Matricula)
                          , constraint fk_Observacoes_Professores  foreign key (ProfessorId)         references Professores(Id)
-                         , constraint fk_Observacoes_Disciplinas  foreign key (DisciplinaId)        references Disciplinas(Id)
                          );
 
 create table Notas ( Id              serial  not null
