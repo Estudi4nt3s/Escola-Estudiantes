@@ -96,7 +96,7 @@ public class ServletLogin extends HttpServlet {
                         List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
                         List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
-                        List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
+                        List<Observacao> observacoes = observacaoDAO.listarDisciplina(aluno.getMatricula());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];
@@ -112,7 +112,8 @@ public class ServletLogin extends HttpServlet {
                                     String nomeDisc = d.getNome();
                                     String nfd = Normalizer.normalize(nomeDisc, Normalizer.Form.NFD);
                                     Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-                                    materia[i] = pattern.matcher(nfd).replaceAll("");
+                                    materia[i] = d.getNome();
+                                            //pattern.matcher(nfd).replaceAll("");
                                     qtdMateria++;
                                     break;
                                 }
