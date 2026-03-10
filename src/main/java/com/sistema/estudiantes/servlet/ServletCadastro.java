@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.*;
 @WebServlet(name = "servletCadastro", value = "/servletCadastro")
 public class ServletCadastro extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
         AlunoDAO alunoDAO = new AlunoDAO();
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         List<Aluno> alunos = alunoDAO.listar();
@@ -28,17 +29,29 @@ public class ServletCadastro extends HttpServlet {
         String cpf = request.getParameter("cpf").replace(".", "").replace("-", "");
         List<Aluno> alunos1 = alunoDAO.listarMatricula(matricula);
         List<Usuario> usuarios = usuarioDAO.listarComFiltro("email = ?", email);
+
+        if (!usuarios.isEmpty()){
+            request.getSession().setAttribute("mensagem", "Email já cadastrado");
+            request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
+            return;
+        }
+
+
         if (!alunos1.isEmpty()) {
+
             if (alunos1.getFirst().getCpf().equals(cpf)) {
+
                 Usuario usuario = new Usuario(request.getParameter("nome"),request.getParameter("sobrenome"),email, senha);
                 usuarioDAO.inserir(usuario);
                 alunos1.getFirst().setUsuarioId(usuarioDAO.listarComFiltro("email = ?", email).getFirst());
                 alunoDAO.atualizar(alunos1.getFirst());
                 request.getRequestDispatcher("index.jsp").forward(request, response);
+
             } else {
                 request.getSession().setAttribute("mensagem", "CPF não encontrado, verifique se inseriu corretamente e tente novamente");
                 request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
             }
+
         } else {
             request.getSession().setAttribute("mensagem", "Matricula não encontrado, verifique se inseriu corretamente e tente novamente");
             request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);

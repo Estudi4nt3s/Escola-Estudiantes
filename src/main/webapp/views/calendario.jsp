@@ -32,6 +32,7 @@
             <i class="material-icons">output</i>Sair
         </a>
     </div>
+</aside>
 <div class="main">
 
   <div class="calendar-layout">
