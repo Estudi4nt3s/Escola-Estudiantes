@@ -39,7 +39,7 @@
 
         </nav>
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>

@@ -42,8 +42,7 @@ public class ServletLogin extends HttpServlet {
                 String dia = String.format("%02d", hoje.getDayOfMonth());
                 String mes = String.format("%02d", hoje.getMonthValue());
                 Locale ptBr = new Locale("pt", "BR");
-                String semana = "QUI";
-                        //hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+                String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
                 String[] data = {dia, mes, semana};
 
                 request.getSession().setAttribute("usuario", usuarioLogado);

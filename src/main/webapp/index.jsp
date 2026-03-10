@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Estudantes</title>
-
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

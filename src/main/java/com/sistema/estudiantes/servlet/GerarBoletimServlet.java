@@ -1,5 +1,6 @@
 package com.sistema.estudiantes.servlet;
 
+import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.*;
@@ -110,7 +111,7 @@ public class GerarBoletimServlet extends HttpServlet {
             cabecalho.addCell(criarCelulaCabecalho("ANO LETIVO: " + anoLetivo));
 
             cabecalho.addCell(criarCelulaCabecalho("TURMA: " + turma));
-            cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado ? "Aprovado" : "Reprovado")));
+            cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado ? criarSituacao("Aprovado", ColorConstants.GREEN) : criarSituacao("Reprovado", ColorConstants.RED))));
 
             cabecalho.addCell(criarCelulaCabecalho("UNIDADE: Escola Estudiantes"));
             cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + String.format("%02d", data.getDayOfMonth()) + "/" + String.format("%02d", data.getMonthValue()) + "/" + data.getYear()));
@@ -228,6 +229,15 @@ public class GerarBoletimServlet extends HttpServlet {
     private Cell criarNota(String texto) {
         return new Cell()
                 .add(new Paragraph(texto).setFontSize(9))
+                .setTextAlignment(TextAlignment.CENTER)
+                .setBorder(new SolidBorder(1));
+    }
+
+    private Cell criarSituacao(String texto, Color cor) {
+        return new Cell()
+                .add(new Paragraph(texto)
+                        .setFontSize(9)
+                        .setFontColor(cor))
                 .setTextAlignment(TextAlignment.CENTER)
                 .setBorder(new SolidBorder(1));
     }
