@@ -57,7 +57,12 @@
 
     <div class="main-content">
         <div class="page-header">
-            <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
+            <% if (aluno != null && aluno.getUsuarioId() != null) { %>
+            <h2 class="page-title">Boletim Escolar: <%= aluno.getUsuarioId().getNome()%></h2>
+            <% } else { %>
+            <h2 class="page-title">Boletim Escolar: Usuário não encontrado</h2>
+            <% } %>
+            <h2 class="page-title">Boletim Escolar: <%= aluno.getUsuarioId().getNome()%></h2>
         </div>
 
         <div class="table-container">

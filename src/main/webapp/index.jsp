@@ -20,7 +20,7 @@
 <div id="modalAdmin" class="modal-overlay">
     <div class="modal-content">
     <h3>Área Administrativa</h3>
-        <form action="${pageContext.request.contextPath}/LoginAdminServlet" method="post">
+        <form action="${pageContext.request.contextPath}/servletLogin" method="post">
             <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
 
             <input type="email" name="usuario" id="usuario" placeholder="Usuário" required>
