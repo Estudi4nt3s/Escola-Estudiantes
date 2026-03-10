@@ -15,7 +15,6 @@
     List<com.sistema.estudiantes.model.Professor> todosProfessores = (List<com.sistema.estudiantes.model.Professor>) request.getAttribute("listaProfessoresAuto");
     List<TurmaAdm> todasTurmas = (List<TurmaAdm>) request.getAttribute("listaTurmasAuto");
 %>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
