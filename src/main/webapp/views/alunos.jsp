@@ -16,6 +16,7 @@
     String mes = String.format("%02d", hoje.getMonthValue());
     Locale ptBr = new Locale("pt", "BR");
     String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
+    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -28,6 +29,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/alunos.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -39,17 +41,17 @@
     </div>
 
     <nav>
-        <a class="menu"><i class="material-icons">home</i>Início</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
-            <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home_p.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu active" href="${pageContext.request.contextPath}/turma">
+        <a class="menu active" href="${pageContext.request.contextPath}/views/turmas.jsp">
             <i class="material-icons">groups</i>Turmas</a>
-    </nav>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
 
+    </nav>
     <div class="config">
-        <i class="material-icons">settings</i>Configurações
+        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
     </div>
 </aside>
 
@@ -63,8 +65,8 @@
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12" alt="">
-                <span>Mateus Carlos</span>
+                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
+                <span><%=usuario.getNome() + " " + usuario.getSobrenome()%></span>
             </div>
         </div>
     </header>
@@ -95,6 +97,7 @@
             %>
             <div class="alunos-card">
                 <div class="alunos-nome">
+                    <%System.out.println(aluno);%>
                     <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
                 </div>
 
@@ -102,11 +105,13 @@
                     <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>
 
                     <div class="popup">
-                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card">
+                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
+                           onclick="document.getElementById('loadingOverlay').style.display='flex'">
                             <i class="material-icons popup-icones">edit_note</i>
                             <span>Notas</span>
                         </a>
-                        <a href="${pageContext.request.contextPath}/observacao?id=<%= aluno.getMatricula() %>" class="popup-card">
+                        <a href="${pageContext.request.contextPath}/observacao?id=<%= aluno.getMatricula() %>" class="popup-card"
+                           onclick="document.getElementById('loadingOverlay').style.display='flex'">
                             <i class="material-icons popup-icones">assignment</i>
                             <span>Observações</span>
                         </a>
@@ -168,6 +173,12 @@
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 <script src="${pageContext.request.contextPath}/js/popup.js"></script>
-</body>
 
+<div id="loadingOverlay">
+    <div class="loadingBox">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+    </div>
+</div>
+</body>
 </html>

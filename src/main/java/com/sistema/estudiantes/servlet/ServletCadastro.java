@@ -21,23 +21,28 @@ public class ServletCadastro extends HttpServlet {
 
         System.out.println("email: " + email);
         System.out.println("senha: " + senha);
+        System.out.println("nome: " +  request.getParameter("nome"));
+        System.out.println("sobrenome: " +  request.getParameter("sobrenome"));
 
         int matricula = Integer.parseInt(request.getParameter("matricula"));
         String cpf = request.getParameter("cpf").replace(".", "").replace("-", "");
-        List<Aluno> alunos1 = alunoDAO.listarComFiltro(matricula);
+        List<Aluno> alunos1 = alunoDAO.listarMatricula(matricula);
         List<Usuario> usuarios = usuarioDAO.listarComFiltro("email = ?", email);
-        System.out.println(alunos1.isEmpty());
-        if(!alunos1.isEmpty()) {
-                if (alunos1.getFirst().getCpf().equals(cpf)) {
-                    //Alterar dps
-                    Usuario usuario = new Usuario(100, email, senha);
-                    usuarioDAO.inserir(usuario);
-                    alunos1.getFirst().setUsuarioId(usuarios.getFirst());
-                    alunoDAO.atualizar(alunos1.getFirst());
-                }
-                //CPF não compativel
+        if (!alunos1.isEmpty()) {
+            if (alunos1.getFirst().getCpf().equals(cpf)) {
+                Usuario usuario = new Usuario(request.getParameter("nome"),request.getParameter("sobrenome"),email, senha);
+                usuarioDAO.inserir(usuario);
+                alunos1.getFirst().setUsuarioId(usuarioDAO.listarComFiltro("email = ?", email).getFirst());
+                alunoDAO.atualizar(alunos1.getFirst());
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            } else {
+                request.getSession().setAttribute("mensagem", "CPF não encontrado, verifique se inseriu corretamente e tente novamente");
+                request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
+            }
+        } else {
+            request.getSession().setAttribute("mensagem", "Matricula não encontrado, verifique se inseriu corretamente e tente novamente");
+            request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }
 

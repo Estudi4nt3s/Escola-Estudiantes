@@ -30,10 +30,15 @@
 
         <nav>
             <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
             <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="turmas_p.jsp"><i class="material-icons">groups</i>Turmas</a>
+            <a class="menu" href="turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
+            <a class="menu active"><i class="material-icons">person</i>Perfil</a>
         </nav>
+        <div class="config">
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
 
     <main class="main">

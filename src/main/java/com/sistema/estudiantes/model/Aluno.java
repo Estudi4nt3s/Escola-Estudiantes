@@ -3,8 +3,10 @@ package com.sistema.estudiantes.model;
 import java.time.LocalDate;
 
 public class Aluno {
+
     private int matricula;
     private String cpf;
+    private String nome;
     private LocalDate dataNascimento;
     private Usuario usuario_id;
     private String telefonePai;
@@ -12,7 +14,8 @@ public class Aluno {
 
     public Aluno() {}
 
-    public Aluno(int matricula, String cpf, LocalDate dataNascimento, Usuario usuarioId, String telefonePai, int turmaId) {
+    public Aluno(int matricula, String cpf, LocalDate dataNascimento, Usuario usuarioId, String telefonePai, int turmaId,String nome) {
+        this.nome = nome;
         this.matricula = matricula;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
@@ -31,9 +34,23 @@ public class Aluno {
         this.matricula = matricula;
     }
 
+    public Aluno(int matricula, String cpf, LocalDate datanascimento, Usuario u, String telefonepai, int turmaid) {
+        this.matricula = matricula;
+        this.cpf = cpf;
+        this.dataNascimento = datanascimento;
+        this.telefonePai = telefonepai;
+        this.turmaId = turmaid;
+        this.usuario_id = u;
+    }
+
     public int getMatricula() {
         return this.matricula;
     }
+
+    public Usuario getUsuario_id() {
+        return usuario_id;}
+
+    public String getNome() {return nome;}
 
     public String getCpf() {
         return this.cpf;
@@ -73,6 +90,18 @@ public class Aluno {
 
     public void setTelefonePai(String telefonePai) {
         this.telefonePai = telefonePai;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setUsuario_id(Usuario usuario_id) {
+        this.usuario_id = usuario_id;
+    }
+
+    public void setTurmaId(int turmaId) {
+        this.turmaId = turmaId;
     }
 
     public String toString() {

@@ -23,8 +23,8 @@ public class ProfessorDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, professor.getNome());
-            ps.setInt(2, professor.getUsuarioId().getId());
-            ps.setInt(3, professor.getDisciplinaId().getId());
+            ps.setInt(2, professor.getUsuario().getId());
+            ps.setInt(3, professor.getDisciplina().getId());
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class ProfessorDAO {
                 PreparedStatement psmt = conn.prepareStatement(sql)
                 ) {
             psmt.setString(1, professor.getNome());
-            psmt.setInt(2, professor.getUsuarioId().getId());
+            psmt.setInt(2, professor.getUsuario().getId());
             psmt.setInt(3, professor.getId());
 
             return psmt.executeUpdate() > 0;

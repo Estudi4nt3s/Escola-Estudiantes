@@ -9,7 +9,7 @@
     String[] data = (String[]) request.getSession().getAttribute("data");
     List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
     List<Nota> notas = (List<Nota>) request.getAttribute("notas");
-    List<Observacao> observacaos = (List<Observacao>) request.getAttribute("observacoes");
+    List<Observacao> observacaos = (List<Observacao>) request.getSession().getAttribute("observacoes");
 
 %>
 <head>
@@ -19,7 +19,8 @@
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -33,15 +34,18 @@
         <nav>
             <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu active"> <i class="material-icons">menu_book</i>Notas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+            <a class="menu active"> <i class="material-icons">grading</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
 
         </nav>
+        <div class="config">
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
 
     <main class="main">
-
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
@@ -59,6 +63,11 @@
         <div class="main-content">
             <div class="page-header">
                 <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
+
+                <a class="btn-boletim" href="${pageContext.request.contextPath}/gerarBoletim">
+                    <i class="material-icons">picture_as_pdf</i>
+                    Gerar Boletim
+                </a>
             </div>
 
             <div class="table-container">
@@ -126,12 +135,19 @@
                     <h3>Observações do Professor</h3>
                 </div>
                 <div class="obs-content">
+
                     <%
                         for(int i = 0;i < observacaos.size();i++){
+                    Professor prof = observacaos.get(i).getIdProfessor();
+                    String disciplina = "Sem disciplina";
+
+                    if(prof.getDisciplina() != null){
+                        disciplina = prof.getDisciplina().getNome();
+                    }
                     %>
-                            <p><strong>Prof. <%=observacaos.get(i).getIdProfessor().getNome()%> (<%=observacaos.get(i).getIdDisciplina().getNome()%>:</strong> "<%=observacaos.get(i).getTexto()%>"</p>
+                            <p><strong>Prof. <%=prof.getNome()%> (<%=disciplina%>:</strong> "<%=observacaos.get(i).getTexto()%>")</p>
                     <%
-                            if((i + 1) == observacaos.size()){
+                            if((i + 1) != observacaos.size()){
                     %>
                                 <hr>
                     <%
@@ -147,9 +163,6 @@
         </div>
     </main>
 
-    <a href="${pageContext.request.contextPath}/gerarBoletim">
-        Gerar Boletim
-    </a>
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>

@@ -35,7 +35,9 @@ public class Usuario {
         this.id = id;
     }
 
-    public Usuario(String email, String senha) {
+    public Usuario(String nome, String sobrenome, String email, String senha) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
         this.email = email;
         this.senha = senha;
     }
@@ -91,6 +93,6 @@ public class Usuario {
     }
 
     public String toString() {
-        return "Id: " + this.id + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nFoto: " + this.foto;
+        return "Id: " + this.id + "\nNome: " + this.nome + "\nSobrenome: " + this.sobrenome + "\nEmail: " + this.email + "\nSenha: " + this.senha + "\nFoto: " + this.foto;
     }
 }
