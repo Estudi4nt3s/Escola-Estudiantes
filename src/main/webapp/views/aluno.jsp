@@ -152,7 +152,7 @@
                         disciplina = prof.getDisciplina().getNome();
                     }
                     %>
-                            <p><strong>Prof. <%=prof.getNome()%> (<%=disciplina%>:</strong> "<%=observacaos.get(i).getTexto()%>")</p>
+                            <p><strong>Prof. <%=prof.getUsuario().getNome()%> (<%=disciplina%>:</strong> "<%=observacaos.get(i).getTexto()%>")</p>
                     <%
                             if((i + 1) != observacaos.size()){
                     %>

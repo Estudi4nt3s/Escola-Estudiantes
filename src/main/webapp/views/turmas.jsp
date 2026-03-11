@@ -67,7 +67,7 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
-                <span><%=professor.getNome()%></span>
+                <span><%=professor.getUsuario().getNome()%></span>
             </div>
         </div>
     </header>

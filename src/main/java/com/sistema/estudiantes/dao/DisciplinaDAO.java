@@ -12,7 +12,7 @@ import java.util.List;
 public class DisciplinaDAO {
 
         public void inserir(String nome) {
-                String sql = "INSERT INTO Disciplina (Nome) VALUES (?)";
+                String sql = "INSERT INTO Disciplinas (Nome) VALUES (?)";
 
                 try (Connection conn = new Conexao().conectar();
                      PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -104,7 +104,7 @@ public class DisciplinaDAO {
     }
 
         public boolean atualizar(Disciplina d) {
-            String sql = "UPDATE Disciplina SET Nome = ? WHERE Id = ?";
+            String sql = "UPDATE Disciplinas SET Nome = ? WHERE Id = ?";
 
             try (Connection conn = new Conexao().conectar();
                  PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -121,7 +121,7 @@ public class DisciplinaDAO {
         }
 
         public boolean excluir(int id) {
-            String sql = "DELETE FROM Disciplina WHERE Id = ?";
+            String sql = "DELETE FROM Disciplinas WHERE Id = ?";
 
             try (Connection conn = new Conexao().conectar();
                  PreparedStatement psmt = conn.prepareStatement(sql)) {

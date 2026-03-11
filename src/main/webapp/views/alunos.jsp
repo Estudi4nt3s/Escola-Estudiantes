@@ -99,6 +99,7 @@
             %>
             <div class="alunos-card">
                 <div class="alunos-nome">
+                    <%System.out.println(aluno);%>
                     <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
                 </div>
 
@@ -111,7 +112,7 @@
                             <i class="material-icons popup-icones">edit_note</i>
                             <span>Notas</span>
                         </a>
-                        <a href="${pageContext.request.contextPath}/observacao?id=<%= aluno.getMatricula() %>" class="popup-card"
+                        <a href="${pageContext.request.contextPath}/observacao?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
                            onclick="document.getElementById('loadingOverlay').style.display='flex'">
                             <i class="material-icons popup-icones">assignment</i>
                             <span>Observações</span>

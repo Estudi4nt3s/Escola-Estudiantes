@@ -2,15 +2,17 @@ package com.sistema.estudiantes.model;
 
 public class Turma {
     private int id;
-    private int ano;
     private String nome;
+    private int ano;
+    private int quantidadeMax;
 
     public Turma() {}
 
-    public Turma(int id, int ano, String nome) {
+    public Turma(int id, String nome, int ano, int quantidadeMax) {
         this.id = id;
-        this.ano = ano;
         this.nome = nome;
+        this.ano = ano;
+        this.quantidadeMax = quantidadeMax;
     }
 
     public Turma(int id){
@@ -21,25 +23,36 @@ public class Turma {
         return this.id;
     }
 
+    public String getNome() {
+        return this.nome;
+    }
+
     public int getAno() {
         return this.ano;
     }
 
-    public String getNome(){ return this.nome;}
+    public int getQuantidadeMax() {
+        return this.quantidadeMax;
+    }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setAno(int ano) {
-        this.ano = ano;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public void setQuantidadeMax(int quantidadeMax) {
+        this.quantidadeMax = quantidadeMax;
+    }
+
+
     public String toString() {
-        return "Id: " + this.id + "\nAno: " + this.ano + "\nSérie:" + nome;
+        return "Id: " + this.id + "\nNome: " + this.nome + "\nAno: " + this.ano + "\nQuantidade Máxima: " + this.quantidadeMax;
     }
 }

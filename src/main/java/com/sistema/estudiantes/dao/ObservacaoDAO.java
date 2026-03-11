@@ -23,8 +23,8 @@ public class ObservacaoDAO {
 
             psmt.setString(1, observacao.getTexto());
             psmt.setObject(2, observacao.getDataCriacao());
-            psmt.setInt(3, observacao.getIdProfessor().getId());
-            psmt.setInt(4, observacao.getIdAluno().getMatricula());
+            psmt.setInt(3, observacao.getIdAluno().getMatricula());
+            psmt.setInt(4, observacao.getIdProfessor().getId());
 
             psmt.executeUpdate();
 
@@ -35,7 +35,18 @@ public class ObservacaoDAO {
 
     public List<Observacao> listar() {
         List<Observacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Observacoes";
+        String sql = """
+                SELECT o.*, 
+                       ua.nome AS aluno_nome,
+                       ua.sobrenome AS aluno_sobrenome,
+                       up.nome AS prof_nome,
+                       up.sobrenome AS prof_sobrenome
+                FROM observacoes o
+                JOIN alunos a ON o.alunomatricula = a.matricula
+                JOIN usuarios ua ON a.usuarioid = ua.id
+                JOIN professores p ON o.professorid = p.id
+                JOIN usuarios up ON p.usuarioid = up.id
+                """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -44,6 +55,18 @@ public class ObservacaoDAO {
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
                 Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                Usuario u = new Usuario();
+                u.setNome(rs.getString("aluno_nome"));
+                u.setSobrenome(rs.getString("aluno_sobrenome"));
+
+                a.setUsuarioId(u);
+
+                Usuario up = new Usuario();
+                up.setNome(rs.getString("prof_nome"));
+                up.setSobrenome(rs.getString("prof_sobrenome"));
+
+                p.setUsuario(up);
 
                 Observacao o = new Observacao(
                         rs.getInt("id"),
@@ -64,11 +87,11 @@ public class ObservacaoDAO {
     public List<Observacao> listarDisciplina(int valor){
         List<Observacao> observacaos = new ArrayList<>();
         String sql = """
-                 SELECT o.*, professorid, u.nome as prof, d.nome as disc FROM observacoes o
-                        join professores p on o.professorid = p.id
-                        join disciplinas d on p.disciplinaid = d.id
-                        join usuarios u on u.id = p.usuarioid
-                            WHERE alunomatricula = ?
+                 SELECT o.*, professorid, u.nome as prof, d.nome as disc FROM observacoes o 
+                     join professores p on o.professorid = p.id
+                     join usuarios u on p.usuarioid = u.id
+                     join disciplinas d on p.disciplinaid = d.id
+                          WHERE alunomatricula = ?
                 """;
 
         try(Connection conn = Conexao.conectar();
@@ -79,7 +102,9 @@ public class ObservacaoDAO {
                 while (rs.next()) {
 
                     Professor p = new Professor(rs.getInt("professorid"));
-                    p.setNome(rs.getString("prof"));
+                    Usuario u = new Usuario();
+                    u.setNome(rs.getString("prof"));
+                    p.setUsuario(u);
 
                     Disciplina d = new Disciplina();
                     d.setNome(rs.getString("disc"));
@@ -94,7 +119,7 @@ public class ObservacaoDAO {
                             a,
                             p
                     );
-                    System.out.println(o.getIdProfessor().getNome());
+                    System.out.println(o.getIdProfessor().getUsuario().getNome());
                     observacaos.add(o);
                 }
             }
@@ -106,7 +131,14 @@ public class ObservacaoDAO {
 
     public List<Observacao> listarComFiltro(String condicao, int valor){
         List<Observacao> observacaos = new ArrayList<>();
-        String sql = " SELECT * FROM observacoes WHERE " + condicao;
+        String sql = "SELECT o.*, ua.nome as nome_aluno, ua.sobrenome as sobrenome_aluno, " +
+                "up.nome as nome_prof, up.sobrenome as sobrenome_prof " +
+                "FROM observacoes o " +
+                "JOIN alunos a ON o.alunomatricula = a.matricula " +
+                "JOIN usuarios ua ON a.usuarioid = ua.id " +
+                "JOIN professores p ON o.professorid = p.id " +
+                "JOIN usuarios up ON p.usuarioid = up.id " +
+                "WHERE " + condicao;
 
         try(Connection conn = Conexao.conectar();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -116,6 +148,18 @@ public class ObservacaoDAO {
                 while (rs.next()) {
                     Professor p = new Professor(rs.getInt("professorid"));
                     Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                    Usuario u = new Usuario();
+                    u.setNome(rs.getString("nome_aluno"));
+                    u.setSobrenome(rs.getString("sobrenome_aluno"));
+
+                    a.setUsuarioId(u);
+
+                    Usuario up = new Usuario();
+                    up.setNome(rs.getString("nome_prof"));
+                    up.setSobrenome(rs.getString("sobrenome_prof"));
+
+                    p.setUsuario(up);
 
                     Observacao o = new Observacao(
                             rs.getInt("id"),

@@ -18,6 +18,12 @@ public class Observacao {
         this.idProfessor = idProfessor;
     }
 
+    public Observacao(int id, String texto, LocalDate dataCriacao) {
+        this.id = id;
+        this.texto = texto;
+        this.dataCriacao = dataCriacao;
+    }
+
     public Observacao(int id, String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor) {
         this.id = id;
         this.texto = texto;
