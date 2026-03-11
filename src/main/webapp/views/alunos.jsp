@@ -78,7 +78,7 @@
                 if(turma != null){
             %>
             <div class="alunos-titulo">
-                <%= turma.getSerie() + " " + turma.getLetra() %>
+                <%= turma.getNome() %>
                 <i class="material-icons">expand_more</i>
             </div>
             <% } %>
@@ -110,7 +110,7 @@
                             <i class="material-icons popup-icones">edit_note</i>
                             <span>Notas</span>
                         </a>
-                        <a href="${pageContext.request.contextPath}/observacao?id=<%= aluno.getMatricula() %>" class="popup-card"
+                        <a href="${pageContext.request.contextPath}/observacao?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
                            onclick="document.getElementById('loadingOverlay').style.display='flex'">
                             <i class="material-icons popup-icones">assignment</i>
                             <span>Observações</span>

@@ -44,7 +44,7 @@ public class NotaDAO {
             while (rs.next()) {
 
                 Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
-                Aluno a = new Aluno(rs.getInt("alunoid"));
+                Aluno a = new Aluno(rs.getInt("alunomatricula"));
 
                 Nota n = new Nota(
                         rs.getInt("Id"),
@@ -74,7 +74,7 @@ public class NotaDAO {
                 while (rs.next()) {
 
                     Disciplina disciplina = new Disciplina(rs.getInt("disciplinaid"));
-                    Aluno aluno = new Aluno(rs.getInt("alunoid"));
+                    Aluno aluno = new Aluno(rs.getInt("alunomatricula"));
 
                     Nota nota = new Nota(
                             rs.getInt("id"),
