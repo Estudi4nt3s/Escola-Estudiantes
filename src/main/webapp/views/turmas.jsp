@@ -67,7 +67,7 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
-                <span><%=professor.getUsuario().getNome()%></span>
+                <span><%=professor.getNome()%></span>
             </div>
         </div>
     </header>
@@ -91,7 +91,7 @@
             %>
             <div class="turmas-card">
                 <h3><%= turma.getNome() %></h3>
-                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>"
+                <a href="${pageContext.request.contextPath}/aluno?sub_acao=buscar_todos&id=<%= turma.getId() %>"
                    onclick="document.getElementById('loadingOverlay').style.display='flex'">
                     <i class="material-icons">arrow_forward</i>
                 </a>

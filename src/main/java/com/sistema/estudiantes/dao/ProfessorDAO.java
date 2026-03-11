@@ -60,7 +60,7 @@ public class ProfessorDAO {
 
     public List<Professor> listarComFiltro(int id) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT id, usuarioid, disciplinaid FROM professores WHERE id = ?";
+        String sql = "SELECT id, nome, usuarioid, disciplinaid FROM professores WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {

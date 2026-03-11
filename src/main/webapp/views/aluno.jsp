@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudiantes - Boletim de <%=usuario.getNome()%></title>
+    <title>Estudiantes - Boletim de <%=aluno.getNome()%></title>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -55,14 +55,14 @@
             <div class="user">
                 <div class="avatar">
                     <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
-                    <span><%=usuario.getNome()%></span>
+                    <span><%=aluno.getNome()%></span>
                 </div>
             </div>
         </header>
 
         <div class="main-content">
             <div class="page-header">
-                <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
+                <h2 class="page-title">Boletim Escolar: <%=aluno.getNome()%></h2>
 
                 <a class="btn-boletim" href="${pageContext.request.contextPath}/gerarBoletim">
                     <i class="material-icons">picture_as_pdf</i>
@@ -145,7 +145,7 @@
                         disciplina = prof.getDisciplina().getNome();
                     }
                     %>
-                            <p><strong>Prof. <%=prof.getUsuario().getNome()%> (<%=disciplina%>:</strong> "<%=observacaos.get(i).getTexto()%>")</p>
+                            <p><strong>Prof. <%=prof.getNome()%> (<%=disciplina%>:</strong> "<%=observacaos.get(i).getTexto()%>")</p>
                     <%
                             if((i + 1) != observacaos.size()){
                     %>

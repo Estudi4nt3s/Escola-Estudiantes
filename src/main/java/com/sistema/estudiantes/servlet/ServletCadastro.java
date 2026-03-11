@@ -41,7 +41,7 @@ public class ServletCadastro extends HttpServlet {
 
             if (alunos1.getFirst().getCpf().equals(cpf)) {
 
-                Usuario usuario = new Usuario(request.getParameter("nome"),request.getParameter("sobrenome"),email, senha);
+                Usuario usuario = new Usuario(email, senha);
                 usuarioDAO.inserir(usuario);
                 alunos1.getFirst().setUsuarioId(usuarioDAO.listarComFiltro("email = ?", email).getFirst());
                 alunoDAO.atualizar(alunos1.getFirst());
