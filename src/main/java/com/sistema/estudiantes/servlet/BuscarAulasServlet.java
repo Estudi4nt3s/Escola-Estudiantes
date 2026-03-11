@@ -1,6 +1,8 @@
 package com.sistema.estudiantes.servlet;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -20,8 +22,22 @@ public class BuscarAulasServlet extends HttpServlet {
 
         String data = request.getParameter("data");
 
+        LocalDate dataSelecionada = LocalDate.parse(data);
+        DayOfWeek dia = dataSelecionada.getDayOfWeek();
+
+        String diaSemana = switch (dia) {
+            case MONDAY -> "SEG";
+            case TUESDAY -> "TER";
+            case WEDNESDAY -> "QUA";
+            case THURSDAY -> "QUI";
+            case FRIDAY -> "SEX";
+            case SATURDAY -> "SÁB";
+            case SUNDAY -> "DOM";
+        };
+
+
         AulaDAO aulaDAO = new AulaDAO();
-        List<Aula> aulas = aulaDAO.listarComFiltro("data = ?",data);
+        List<Aula> aulas = aulaDAO.listarComFiltro("diasemana = ?", diaSemana);
 
         request.setAttribute("aulas", aulas);
 
