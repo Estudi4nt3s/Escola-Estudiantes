@@ -56,7 +56,7 @@
                         <a href="${pageContext.request.contextPath}/views/perfil.jsp">
                             <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
                         </a>
-                            <span><%=usuario.getNome()%></span>
+                            <span><%=aluno.getNome()%></span>
                     </div>
 
             </div>

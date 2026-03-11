@@ -72,7 +72,7 @@
             <div class="user">
                 <div class="avatar">
                     <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
-                    <span><%=professor.getUsuario().getNome()%></span>
+                    <span><%=professor.getNome()%></span>
                 </div>
             </div>
         </header>
@@ -83,7 +83,7 @@
 
                 <div class="welcome">
                     <%-- Saudação personalizada com o primeiro nome --%>
-                    <h2>Olá, <%=professor.getUsuario().getNome()%>!</h2>
+                    <h2>Olá, <%=professor.getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 

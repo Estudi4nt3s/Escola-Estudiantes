@@ -74,7 +74,7 @@
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
                     <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
-                    <span><%=usuario.getNome()%></span>
+                    <span><%=aluno.getNome()%></span>
                 </div>
             </div>
         </header>
@@ -84,7 +84,7 @@
             <div class="left">
 
                 <div class="welcome">
-                    <h2>Olá, <%=usuario.getNome()%>!</h2>
+                    <h2>Olá, <%=aluno.getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 

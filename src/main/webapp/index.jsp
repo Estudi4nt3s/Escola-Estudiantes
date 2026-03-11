@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Estudantes</title>
-
+    <title>Estudiantes - Login</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
 
 <div class="container">
     <div class="left">
-        <h1>Seja bem-vindo<br>ao Estudantes</h1>
+        <h1>Seja bem-vindo<br>ao Estudiantes</h1>
         <hr>
         <p>A educação é a arma mais poderosa que você pode usar para mudar o mundo.</p>
         <a href="${pageContext.request.contextPath}/views/cadastro.jsp" class="btn-primary">Não tem conta? Cadastrar-se</a>
