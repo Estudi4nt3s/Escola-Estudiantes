@@ -17,13 +17,14 @@ import java.util.List;
 public class ProfessorDAO {
 
     public void inserir(Professor professor) {
-        String sql = "INSERT INTO Professores (UsuarioId, disciplinaid) VALUES (?, ?)";
+        String sql = "INSERT INTO Professores (nome, UsuarioId, disciplinaid) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, professor.getUsuario().getId());
-            ps.setInt(2, professor.getDisciplina().getId());
+            ps.setString(1, professor.getNome());
+            ps.setInt(2, professor.getUsuario().getId());
+            ps.setInt(3, professor.getDisciplina().getId());
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -45,6 +46,7 @@ public class ProfessorDAO {
                 Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
                 Professor professor = new Professor(
                         rs.getInt("id"),
+                        rs.getString("nome"),
                         u,
                         d
                 );
@@ -70,6 +72,7 @@ public class ProfessorDAO {
                     Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
                     Professor prof = new Professor(
                             rs.getInt("id"),
+                            rs.getString("nome"),
                             u,
                             d
                     );
@@ -94,6 +97,7 @@ public class ProfessorDAO {
             if (rs.next()) {
                 return new Professor(
                         rs.getInt("id"),
+                        rs.getString("nome"),
                         new Usuario(rs.getInt("usuarioid")),
                         new Disciplina(rs.getInt("disciplinaid"))
                 );
