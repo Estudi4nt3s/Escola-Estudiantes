@@ -32,7 +32,7 @@
     for(int i = 0; i < Math.min(aulas.size(), 6); i++){
         for (Turma value : turmas) {
             if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getSerie() + value.getLetra();
+                turma[i] = value.getNome();
                 qtdmateria++;
                 break;
             }
@@ -72,7 +72,7 @@
             <div class="user">
                 <div class="avatar">
                     <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
-                    <span><%=professor.getNome()%></span>
+                    <span><%=professor.getUsuario().getNome()%></span>
                 </div>
             </div>
         </header>
@@ -83,7 +83,7 @@
 
                 <div class="welcome">
                     <%-- Saudação personalizada com o primeiro nome --%>
-                    <h2>Olá, <%=professor.getNome()%>!</h2>
+                    <h2>Olá, <%=professor.getUsuario().getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 

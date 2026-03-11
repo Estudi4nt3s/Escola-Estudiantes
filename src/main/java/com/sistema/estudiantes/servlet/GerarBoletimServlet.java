@@ -97,7 +97,7 @@ public class GerarBoletimServlet extends HttpServlet {
             document.add(new Paragraph("\n"));
 
             String nomeAluno = user.getNome();
-            String turma = serie.getSerie() + " " + serie.getLetra();
+            String turma = serie.getNome();
             String anoLetivo = String.valueOf(serie.getAno());
 
             // ================= CABEÇALHO =================

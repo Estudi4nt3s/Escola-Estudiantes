@@ -10,7 +10,7 @@ public class ProfessorAdmDAO {
 
     public List<Professor> listarComTudo() {
         List<Professor> lista = new ArrayList<>();
-        String sql = "SELECT p.Id, p.Nome, p.UsuarioId, p.DisciplinaId, u.Email, u.Nome as UNome, d.Nome as DNome " +
+        String sql = "SELECT p.Id, u.Nome, p.UsuarioId, p.DisciplinaId, u.Email, u.Nome as UNome, d.Nome as DNome " +
                 "FROM Professores p " +
                 "JOIN Usuarios u ON p.UsuarioId = u.Id " +
                 "JOIN Disciplinas d ON p.DisciplinaId = d.Id";
@@ -20,7 +20,7 @@ public class ProfessorAdmDAO {
                 Usuario u = new Usuario(rs.getInt("UsuarioId"));
                 u.setEmail(rs.getString("Email"));
                 Disciplina d = new Disciplina(rs.getInt("DisciplinaId"), rs.getString("DNome"));
-                lista.add(new Professor(rs.getInt("Id"), rs.getString("Nome"), u, d));
+                lista.add(new Professor(rs.getInt("Id"), u, d));
             }
         } catch (SQLException e) { e.printStackTrace(); }
         return lista;
@@ -28,7 +28,7 @@ public class ProfessorAdmDAO {
 
     public boolean cadastrarCompleto(String nome, String sobrenome, String email, String senha, int discId) {
         String sqlU = "INSERT INTO Usuarios (Nome, Sobrenome, Email, Senha) VALUES (?, ?, ?, ?)";
-        String sqlP = "INSERT INTO Professores (Nome, UsuarioId, DisciplinaId) VALUES (?, ?, ?)";
+        String sqlP = "INSERT INTO Professores (UsuarioId, DisciplinaId) VALUES (?, ?)";
         try (Connection conn = Conexao.conectar()) {
             conn.setAutoCommit(false);
             int uid = -1;
@@ -58,7 +58,7 @@ public class ProfessorAdmDAO {
         } catch (SQLException e) { e.printStackTrace(); }
     }
     public Professor buscarPorId(int id) {
-        String sql = "SELECT p.Id, p.Nome, p.UsuarioId, p.DisciplinaId, u.Email, u.Sobrenome, d.Nome as DNome " +
+        String sql = "SELECT p.Id, u.Nome, p.UsuarioId, p.DisciplinaId, u.Email, u.Sobrenome, d.Nome as DNome " +
                 "FROM Professores p " +
                 "JOIN Usuarios u ON p.UsuarioId = u.Id " +
                 "JOIN Disciplinas d ON p.DisciplinaId = d.Id WHERE p.Id = ?";
@@ -69,7 +69,7 @@ public class ProfessorAdmDAO {
                     Usuario u = new Usuario(rs.getInt("UsuarioId"));
                     u.setEmail(rs.getString("Email"));
                     Disciplina d = new Disciplina(rs.getInt("DisciplinaId"), rs.getString("DNome"));
-                    return new Professor(rs.getInt("Id"), rs.getString("Nome"), u, d);
+                    return new Professor(rs.getInt("Id"), u, d);
                 }
             }
         } catch (SQLException e) { e.printStackTrace(); }
