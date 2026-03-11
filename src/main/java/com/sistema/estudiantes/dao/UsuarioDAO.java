@@ -15,16 +15,14 @@ import java.util.List;
 public class UsuarioDAO {
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO Usuarios (nome, sobrenome, email, senha, photo) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios (email, senha, photo) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, usuario.getNome());
-            psmt.setString(2, usuario.getSobrenome());
-            psmt.setString(3, usuario.getEmail());
-            psmt.setString(4, usuario.getSenha());
-            psmt.setString(5, usuario.getFoto());
+            psmt.setString(1, usuario.getEmail());
+            psmt.setString(2, usuario.getSenha());
+            psmt.setString(3, usuario.getFoto());
             psmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -43,8 +41,6 @@ public class UsuarioDAO {
             while (rs.next()) {
                 Usuario u = new Usuario(
                         rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("sobrenome"),
                         rs.getString("email"),
                         rs.getString("senha"),
                         rs.getString("photo")
@@ -71,8 +67,6 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
-                            rs.getString("nome"),
-                            rs.getString("sobrenome"),
                             rs.getString("email"),
                             rs.getString("senha"),
                             rs.getString("Photo")
@@ -101,8 +95,6 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
-                            rs.getString("nome"),
-                            rs.getString("sobrenome"),
                             rs.getString("email"),
                             rs.getString("senha"),
                             rs.getString("Photo")
@@ -118,17 +110,15 @@ public class UsuarioDAO {
     }
 
     public boolean atualizar(Usuario u) {
-        String sql = "UPDATE Usuarios SET nome = ?, sobrenome = ?, email = ?, senha = ?, photo = ? WHERE Id = ?";
+        String sql = "UPDATE Usuarios SET email = ?, senha = ?, photo = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, u.getNome());
-            psmt.setString(2, u.getSobrenome());
-            psmt.setString(3, u.getEmail());
-            psmt.setString(4, u.getSenha());
-            psmt.setString(5, u.getFoto());
-            psmt.setInt(6, u.getId());
+            psmt.setString(1, u.getEmail());
+            psmt.setString(2, u.getSenha());
+            psmt.setString(3, u.getFoto());
+            psmt.setInt(4, u.getId());
 
             return psmt.executeUpdate() > 0;
 
