@@ -30,8 +30,16 @@ public class ServletCadastro extends HttpServlet {
         List<Aluno> alunos1 = alunoDAO.listarMatricula(matricula);
         List<Usuario> usuarios = usuarioDAO.listarComFiltro("email = ?", email);
 
-        if (!usuarios.isEmpty()){
-            request.getSession().setAttribute("mensagem", "Email já cadastrado");
+        if (!usuarios.isEmpty()) {
+            request.getSession().setAttribute("mensagem", "Email já cadastrado, tente inserir um novo email.");
+            request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
+            return;
+        }
+
+        System.out.println(alunos1.getFirst().getUsuarioId().getId());
+
+        if (alunos1.getFirst().getUsuarioId().getId() != null){
+            request.getSession().setAttribute("mensagem", "Aluno já cadastrado");
             request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
             return;
         }

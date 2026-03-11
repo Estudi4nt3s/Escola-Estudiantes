@@ -1,6 +1,5 @@
 package com.sistema.estudiantes.servlet;
 
-import com.sistema.estudiantes.dao.AlunoDAO;
 import com.sistema.estudiantes.dao.DisciplinaDAO;
 import com.sistema.estudiantes.dao.NotaDAO;
 import com.sistema.estudiantes.dao.ObservacaoDAO;
@@ -81,7 +80,7 @@ public class ServletNota extends HttpServlet {
 
         int alunoId = Integer.parseInt(request.getParameter("id"));
 
-        List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunoid = ?", alunoId);
+        List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
         List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
 

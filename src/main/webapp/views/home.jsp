@@ -5,6 +5,18 @@
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+    if (session.getAttribute("usuario") == null) {
+
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
+        response.sendRedirect("../index.jsp");
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 

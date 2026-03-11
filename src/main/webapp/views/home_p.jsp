@@ -28,11 +28,10 @@
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-    System.out.println(aulas.size());
-    for(int i = 0; i < Math.min(aulas.size(), 6); i++){
+    for(int i = 0; i < aulas.size(); i++){
         for (Turma value : turmas) {
             if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getSerie() + value.getLetra();
+                turma[i] = value.getNome();
                 qtdmateria++;
                 break;
             }

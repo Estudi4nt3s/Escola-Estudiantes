@@ -44,8 +44,7 @@ public class TurmaDAO {
                 Turma t = new Turma(
                         rs.getInt("Id"),
                         rs.getInt("Ano"),
-                        rs.getString("Serie"),
-                        rs.getString("Letra").charAt(0)
+                        rs.getString("nome")
                 );
                 lista.add(t);
             }
@@ -68,8 +67,7 @@ public class TurmaDAO {
                     Turma turma = new Turma(
                             rs.getInt("id"),
                             rs.getInt("ano"),
-                            rs.getString("serie"),
-                            rs.getString("letra").charAt(0)
+                            rs.getString("nome")
                     );
                     turmas.add(turma);
                 }
@@ -83,15 +81,14 @@ public class TurmaDAO {
     }
 
     public boolean atualizar(Turma t) {
-        String sql = "UPDATE Turmas SET Ano = ?, Serie = ?, Letra = ? WHERE Id = ?";
+        String sql = "UPDATE Turmas SET Ano = ?, nome = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
             psmt.setInt(1, t.getAno());
-            psmt.setString(2, t.getSerie());
-            psmt.setString(3, String.valueOf(t.getLetra()));
-            psmt.setInt(4, t.getId());
+            psmt.setString(2, t.getNome());
+            psmt.setInt(3, t.getId());
 
             return psmt.executeUpdate() > 0;
 

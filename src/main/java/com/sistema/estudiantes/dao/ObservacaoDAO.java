@@ -64,10 +64,11 @@ public class ObservacaoDAO {
     public List<Observacao> listarDisciplina(int valor){
         List<Observacao> observacaos = new ArrayList<>();
         String sql = """
-                 SELECT o.*, professorid, p.nome as prof, d.nome as disc FROM observacoes o 
-                     join professores p on o.professorid = p.id
-                     join disciplinas d on p.disciplinaid = d.id
-                          WHERE alunomatricula = ?
+                 SELECT o.*, professorid, u.nome as prof, d.nome as disc FROM observacoes o
+                        join professores p on o.professorid = p.id
+                        join disciplinas d on p.disciplinaid = d.id
+                        join usuarios u on u.id = p.usuarioid
+                            WHERE alunomatricula = ?
                 """;
 
         try(Connection conn = Conexao.conectar();

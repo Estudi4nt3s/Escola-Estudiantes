@@ -60,7 +60,11 @@ public class ProfessorDAO {
 
     public List<Professor> listarComFiltro(int id) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT id, nome, usuarioid, disciplinaid FROM professores WHERE id = ?";
+        String sql = """
+                SELECT p.id, u.nome || u.sobrenome as nome, usuarioid, disciplinaid FROM professores p
+                        join usuarios u on p.usuarioid = u.id
+                        WHERE p.id = ?;
+                """;
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -72,7 +76,6 @@ public class ProfessorDAO {
                     Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
                     Professor prof = new Professor(
                             rs.getInt("id"),
-                            rs.getString("nome"),
                             u,
                             d
                     );
@@ -97,7 +100,6 @@ public class ProfessorDAO {
             if (rs.next()) {
                 return new Professor(
                         rs.getInt("id"),
-                        rs.getString("nome"),
                         new Usuario(rs.getInt("usuarioid")),
                         new Disciplina(rs.getInt("disciplinaid"))
                 );

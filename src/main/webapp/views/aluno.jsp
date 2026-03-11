@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.*" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%
@@ -96,18 +96,25 @@
 
                                 if (notaEncontrada != null) {
 
-                                    double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                                    Double n1 = notaEncontrada.getN1();
+                                    Double n2 = notaEncontrada.getN2();
 
-                                    situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                                    Double media = null;
+
+                                    if (n1 != null && n2 != null) {
+                                        media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                                    }
+
+                                    situacao = (n1 == null || n2 == null)?"Em andamento":media >= 7 ? "Aprovado" : "Reprovado";
 
                         %>
                             <tr>
                                 <td><strong><%=disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())%></strong></td>
-                                <td><%=String.format("%.2f",notaEncontrada.getN1())%></td>
-                                <td><%=String.format("%.2f",notaEncontrada.getN2())%></td>
-                                <td><%=String.format("%.2f",media)%></td>
+                                <td><%=(n1 == null ? "-" : String.format("%.2f", n1))%></td>
+                                <td><%=(n2 == null ? "-" : String.format("%.2f", n2))%></td>
+                                <td><%=(n1 == null || n2 == null) ? "-" : String.format("%.2f", media)%></td>
                                 <td>
-                                    <span class="status <%=media >= 7?"approved":"attention"%>"><%=situacao%></span>
+                                    <span class="status <%=(n1 == null || n2 == null)?"":media >= 7?"approved":"attention"%>"><%=situacao%></span>
                                 </td>
                             </tr>
                         <%

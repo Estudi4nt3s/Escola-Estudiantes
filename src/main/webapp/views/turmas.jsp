@@ -90,7 +90,7 @@
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getSerie() + " " + turma.getLetra() %></h3>
+                <h3><%= turma.getNome() %></h3>
                 <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>"
                    onclick="document.getElementById('loadingOverlay').style.display='flex'">
                     <i class="material-icons">arrow_forward</i>

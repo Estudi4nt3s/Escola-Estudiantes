@@ -94,7 +94,8 @@ public class ServletLogin extends HttpServlet {
                         List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", aluno.getTurmaId());
                         List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
-                        List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
+                        List<Nota> notas = notaDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
+                        System.out.println(notas.getLast().getN2());
                         List<Observacao> observacoes = observacaoDAO.listarDisciplina(aluno.getMatricula());
 
                         int qtdMateria = 0;

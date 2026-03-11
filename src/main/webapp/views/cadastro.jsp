@@ -60,7 +60,10 @@
             <input type="email" name="email" id="email" placeholder="Digite seu email" required>
 
             <label for="senha">Senha</label>
-            <input type="password" name="senha" id="senha" placeholder="Digite sua senha" required>
+            <div class="input-wrapper">
+                <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
+                <i class="material-icons" style="color: #ffd27a" onclick="alternarVisibilidade(event)">visibility</i>
+            </div>
 
             <button type="submit" id="btnNotas">Cadastrar</button>
 
@@ -73,5 +76,20 @@
         <p>Carregando...</p>
     </div>
 </div>
+
+<script>
+    function alternarVisibilidade(event) {
+        const icone = event.target;
+        const input = icone.closest('.input-wrapper').querySelector('input');
+
+        if (input.type === "password") {
+            input.type = "text";
+            icone.textContent = "visibility_off";
+        } else {
+            input.type = "password";
+            icone.textContent = "visibility";
+        }
+    }
+</script>
 </body>
 </html>

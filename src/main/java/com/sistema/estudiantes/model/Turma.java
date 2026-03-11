@@ -3,16 +3,14 @@ package com.sistema.estudiantes.model;
 public class Turma {
     private int id;
     private int ano;
-    private String serie;
-    private char letra;
+    private String nome;
 
     public Turma() {}
 
-    public Turma(int id, int ano, String serie, char letra) {
+    public Turma(int id, int ano, String nome) {
         this.id = id;
         this.ano = ano;
-        this.serie = serie;
-        this.letra = letra;
+        this.nome = nome;
     }
 
     public Turma(int id){
@@ -27,11 +25,7 @@ public class Turma {
         return this.ano;
     }
 
-    public String getSerie(){ return this.serie;}
-
-    public char getLetra() {
-        return this.letra;
-    }
+    public String getNome(){ return this.nome;}
 
     public void setId(int id) {
         this.id = id;
@@ -41,11 +35,11 @@ public class Turma {
         this.ano = ano;
     }
 
-    public void setLetra(char letra) {
-        this.letra = letra;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String toString() {
-        return "Id: " + this.id + "\nAno: " + this.ano + "\nSérie:" + serie + "\nLetra: " + this.letra;
+        return "Id: " + this.id + "\nAno: " + this.ano + "\nSérie:" + nome;
     }
 }

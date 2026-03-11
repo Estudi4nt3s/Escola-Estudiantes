@@ -33,19 +33,24 @@ public class GerarBoletimServlet extends HttpServlet {
         Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
         @SuppressWarnings("unchecked")
         List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
+        System.out.println(notas.getLast().getN2());
         @SuppressWarnings("unchecked")
         List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
 
-        LocalDate data = LocalDate.now();
-        int iddisciplina;
-        String situacao = "-";
+        String situacao;
 
-        boolean aprovado = true;
+        LocalDate data = LocalDate.now();
+        String aprovado = "Aprovado";
 
         for (Nota nota : notas) {
-            double media = (nota.getN1() + nota.getN2()) / 2;
-            if (media < 7) {
-                aprovado = false;
+            Double media = (nota.getN1() == null || nota.getN2() == null)?null:(nota.getN1() + nota.getN2())/ 2;
+            if (media == null) {
+                aprovado = "Em andamento";
+                break;
+            }
+
+            if (media < 7){
+                aprovado = "Reprovado";
                 break;
             }
         }
@@ -98,7 +103,7 @@ public class GerarBoletimServlet extends HttpServlet {
             document.add(new Paragraph("\n"));
 
             String nomeAluno = user.getNome();
-            String turma = serie.getSerie() + " " + serie.getLetra();
+            String turma = serie.getNome();
             String anoLetivo = String.valueOf(serie.getAno());
 
             // ================= CABEÇALHO =================
@@ -111,7 +116,7 @@ public class GerarBoletimServlet extends HttpServlet {
             cabecalho.addCell(criarCelulaCabecalho("ANO LETIVO: " + anoLetivo));
 
             cabecalho.addCell(criarCelulaCabecalho("TURMA: " + turma));
-            cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado ? criarSituacao("Aprovado", ColorConstants.GREEN) : criarSituacao("Reprovado", ColorConstants.RED))));
+            cabecalho.addCell(criarCelulaCabecalho("SITUAÇÃO FINAL: " + (aprovado.equals("Aprovado") ? criarSituacao("Aprovado", ColorConstants.GREEN) : aprovado.equals("Reprovado")?criarSituacao("Reprovado", ColorConstants.RED):"Em andamento")));
 
             cabecalho.addCell(criarCelulaCabecalho("UNIDADE: Escola Estudiantes"));
             cabecalho.addCell(criarCelulaCabecalho("EMISSÃO: " + String.format("%02d", data.getDayOfMonth()) + "/" + String.format("%02d", data.getMonthValue()) + "/" + data.getYear()));
@@ -143,22 +148,28 @@ public class GerarBoletimServlet extends HttpServlet {
                 }
 
                 if (notaEncontrada != null) {
+                    Double n1 = notaEncontrada.getN1();
+                    Double n2 = notaEncontrada.getN2();
 
-                    double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                    Double media = null;
 
-                    tabela.addCell(criarNota(String.format("%.2f",notaEncontrada.getN1())));
-                    tabela.addCell(criarNota(String.format("%.2f",notaEncontrada.getN2())));
-                    tabela.addCell(criarNota(String.format("%.2f",media)));
+                    if (n1 != null && n2 != null) {
+                        media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                    }
 
-                    situacao = media >= 7 ? "Aprovado" : "Reprovado";
-                    tabela.addCell(criarCelula(situacao));
+                    tabela.addCell(criarNota(n1 == null ? "-" : String.format("%.2f", n1)));
+                    tabela.addCell(criarNota(n2 == null ? "-" : String.format("%.2f", n2)));
+                    tabela.addCell(criarNota((n1 == null || n2 == null) ? "-" : String.format("%.2f", media)));
+
+                    situacao = (n1 == null || n2 == null)?"-" : media >= 7 ? "Aprovado" : "Reprovado";
+                    tabela.addCell(criarCelula(situacao).setTextAlignment(TextAlignment.CENTER));
 
                 } else {
 
                     tabela.addCell(criarNota("-"));
                     tabela.addCell(criarNota("-"));
                     tabela.addCell(criarNota("-"));
-                    tabela.addCell(criarCelula("-"));
+                    tabela.addCell(criarCelula("-").setTextAlignment(TextAlignment.CENTER));
                 }
             }
 
