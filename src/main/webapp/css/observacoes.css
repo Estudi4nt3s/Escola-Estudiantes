@@ -771,3 +771,11 @@ a {
 .excluir-btn-modal:hover{
     background:#a5161a;
 }
+
+.confirmar{
+    background: #d11d22;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 40px;
+    border: none;
+}
