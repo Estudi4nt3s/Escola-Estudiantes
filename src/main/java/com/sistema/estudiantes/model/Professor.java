@@ -20,6 +20,12 @@ public class Professor {
         this.disciplina = disciplina;
     }
 
+    public Professor(int id, Usuario usuario, Disciplina disciplina) {
+        this.id = id;
+        this.usuario = usuario;
+        this.disciplina = disciplina;
+    }
+
     // Getters e Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

@@ -1,6 +1,5 @@
 package com.sistema.estudiantes.servlet;
 
-import com.sistema.estudiantes.dao.AlunoDAO;
 import com.sistema.estudiantes.dao.DisciplinaDAO;
 import com.sistema.estudiantes.dao.NotaDAO;
 import com.sistema.estudiantes.dao.ObservacaoDAO;

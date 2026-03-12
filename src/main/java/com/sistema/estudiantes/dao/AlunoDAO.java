@@ -84,6 +84,10 @@ public class AlunoDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Usuario u = new Usuario(rs.getInt("usuarioid"));
+
+                    if(rs.wasNull()) {
+                        u.setId(null);
+                    }
                     Aluno aluno = new Aluno(
                             rs.getInt("matricula"),
                             rs.getString("nome"),

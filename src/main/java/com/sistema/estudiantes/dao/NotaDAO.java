@@ -72,6 +72,11 @@ public class NotaDAO {
 
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
+                    double n1Value = rs.getDouble("N1");
+                    Double n1 = rs.wasNull() ? null : n1Value;
+
+                    double n2Value = rs.getDouble("N2");
+                    Double n2 = rs.wasNull() ? null : n2Value;
 
                     Disciplina disciplina = new Disciplina(rs.getInt("disciplinaid"));
                     Aluno aluno = new Aluno(rs.getInt("alunomatricula"));
@@ -80,10 +85,11 @@ public class NotaDAO {
                             rs.getInt("id"),
                             disciplina,
                             aluno,
-                            rs.getDouble("N1"),
-                            rs.getDouble("N2")
+                            n1,
+                            n2
                     );
                     listaNota.add(nota);
+                    System.out.println("Nota: " + nota.getN2());
                 }
             }
         } catch (SQLException e) {
