@@ -65,7 +65,7 @@
         </div>
 
         <div class="user">
-            <i class="material-icons" id="openNotification" onclick="toggleNotifications()">notifications</i>
+<%--            <i class="material-icons" id="openNotification" onclick="toggleNotifications()">notifications</i>--%>
             <div class="avatar">
                 <img id="top-avatar-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
                 <span><%= aluno.getNome() %></span>

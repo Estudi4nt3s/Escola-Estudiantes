@@ -134,7 +134,7 @@
         <div class="notification-modal">
             <div class="notification-modal-header">
                 <h2>Notificações</h2>
-                <button id="closeNotificationModal">✕</button>
+<%--                <button id="closeNotificationModal">✕</button>--%>
             </div>
 
             <ul class="notification-modal-list">
