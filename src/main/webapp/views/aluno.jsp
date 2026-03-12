@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.*" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%
@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudiantes - Boletim de <%=usuario.getNome()%></title>
+    <title>Estudiantes - Boletim de <%=aluno.getNome()%></title>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -39,7 +39,7 @@
 
         </nav>
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -55,14 +55,14 @@
             <div class="user">
                 <div class="avatar">
                     <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
-                    <span><%=usuario.getNome()%></span>
+                    <span><%=aluno.getNome()%></span>
                 </div>
             </div>
         </header>
 
         <div class="main-content">
             <div class="page-header">
-                <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
+                <h2 class="page-title">Boletim Escolar: <%=aluno.getNome()%></h2>
 
                 <a class="btn-boletim" href="${pageContext.request.contextPath}/gerarBoletim">
                     <i class="material-icons">picture_as_pdf</i>
@@ -96,18 +96,25 @@
 
                                 if (notaEncontrada != null) {
 
-                                    double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                                    Double n1 = notaEncontrada.getN1();
+                                    Double n2 = notaEncontrada.getN2();
 
-                                    situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                                    Double media = null;
+
+                                    if (n1 != null && n2 != null) {
+                                        media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                                    }
+
+                                    situacao = (n1 == null || n2 == null)?"Em andamento":media >= 7 ? "Aprovado" : "Reprovado";
 
                         %>
                             <tr>
                                 <td><strong><%=disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())%></strong></td>
-                                <td><%=String.format("%.2f",notaEncontrada.getN1())%></td>
-                                <td><%=String.format("%.2f",notaEncontrada.getN2())%></td>
-                                <td><%=String.format("%.2f",media)%></td>
+                                <td><%=(n1 == null ? "-" : String.format("%.2f", n1))%></td>
+                                <td><%=(n2 == null ? "-" : String.format("%.2f", n2))%></td>
+                                <td><%=(n1 == null || n2 == null) ? "-" : String.format("%.2f", media)%></td>
                                 <td>
-                                    <span class="status <%=media >= 7?"approved":"attention"%>"><%=situacao%></span>
+                                    <span class="status <%=(n1 == null || n2 == null)?"":media >= 7?"approved":"attention"%>"><%=situacao%></span>
                                 </td>
                             </tr>
                         <%

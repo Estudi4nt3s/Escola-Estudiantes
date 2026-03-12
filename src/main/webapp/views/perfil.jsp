@@ -40,7 +40,7 @@
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
     <div class="config">
-        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+        <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
             <i class="material-icons">output</i>Sair
         </a>
     </div>
@@ -58,7 +58,7 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
-                <span><%= usuario.getNome() %></span>
+                <span><%= aluno.getNome() %></span>
             </div>
         </div>
     </header>
@@ -71,8 +71,8 @@
             </div>
 
             <div class="perfil-info-principal">
-                <h2><%= usuario.getNome() %></h2>
-                <p> <%=turma.getSerie() + " " + turma.getLetra()%></p>
+                <h2><%= aluno.getNome() %></h2>
+                <p> <%=turma.getNome() %></p>
 
                 <div class="perfil-status ativo">
                     ● Aluno Ativo
@@ -87,7 +87,7 @@
                 <div class="linha"><span>RA:</span> <%= aluno.getMatricula() %></div>
                 <div class="linha"><span>Email:</span> <%=usuario.getEmail()%></div>
                 <div class="linha"><span>Telefone:</span> <%= aluno.getTelefonePai() %></div>
-                <div class="linha"><span>Turma:</span> <%=turma.getSerie() + " " + turma.getLetra()%></div>
+                <div class="linha"><span>Turma:</span> <%=turma.getNome() %></div>
 
             </div>
         </div>

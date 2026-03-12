@@ -5,6 +5,18 @@
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+    if (session.getAttribute("usuario") == null) {
+
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
+        response.sendRedirect("../index.jsp");
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -20,7 +32,6 @@
 
 </head>
 <%
-    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");
@@ -55,7 +66,7 @@
                 person</i>Perfil</a>
         </nav>
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <a class="menu" style="color: #590101" href="sair">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -74,7 +85,7 @@
                 <i class="material-icons" id="openNotification">notifications</i>
                 <div class="avatar">
                     <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
-                    <span><%=usuario.getNome()%></span>
+                    <span><%=aluno.getNome()%></span>
                 </div>
             </div>
         </header>
@@ -84,7 +95,7 @@
             <div class="left">
 
                 <div class="welcome">
-                    <h2>Olá, <%=usuario.getNome()%>!</h2>
+                    <h2>Olá, <%=aluno.getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 

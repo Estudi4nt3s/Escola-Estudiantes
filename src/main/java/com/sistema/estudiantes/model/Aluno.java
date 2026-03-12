@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public class Aluno {
 
     private int matricula;
-    private String cpf;
     private String nome;
+    private String cpf;
     private LocalDate dataNascimento;
     private Usuario usuario_id;
     private String telefonePai;
@@ -14,12 +14,11 @@ public class Aluno {
 
     public Aluno() {}
 
-    public Aluno(int matricula, String cpf, LocalDate dataNascimento, Usuario usuarioId, String telefonePai, int turmaId,String nome) {
-        this.nome = nome;
+    public Aluno(int matricula, String nome, String cpf, LocalDate dataNascimento, Usuario usuarioId, String telefonePai, int turmaId) {
         this.matricula = matricula;
+        this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
-        this.cpf = cpf;
         this.usuario_id = usuarioId;
         this.telefonePai = telefonePai;
         this.turmaId = turmaId;
@@ -34,21 +33,9 @@ public class Aluno {
         this.matricula = matricula;
     }
 
-    public Aluno(int matricula, String cpf, LocalDate datanascimento, Usuario u, String telefonepai, int turmaid) {
-        this.matricula = matricula;
-        this.cpf = cpf;
-        this.dataNascimento = datanascimento;
-        this.telefonePai = telefonepai;
-        this.turmaId = turmaid;
-        this.usuario_id = u;
-    }
-
     public int getMatricula() {
         return this.matricula;
     }
-
-    public Usuario getUsuario_id() {
-        return usuario_id;}
 
     public String getNome() {return nome;}
 
@@ -76,6 +63,10 @@ public class Aluno {
         this.matricula = matricula;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
@@ -92,19 +83,11 @@ public class Aluno {
         this.telefonePai = telefonePai;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setUsuario_id(Usuario usuario_id) {
-        this.usuario_id = usuario_id;
-    }
-
     public void setTurmaId(int turmaId) {
         this.turmaId = turmaId;
     }
 
     public String toString() {
-        return "Matrícula: "+ this.matricula + "\nCpf: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai + "\nId Turma: " + this.turmaId;
+        return "Matrícula: "+ this.matricula + "\nNome: " + this.nome + "\nCpf: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nId Usuário: " + this.usuario_id + "\nTelefone Pai: " + this.telefonePai + "\nId Turma: " + this.turmaId;
     }
 }

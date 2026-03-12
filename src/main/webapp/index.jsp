@@ -6,8 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Estudantes</title>
-
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Inria+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -38,7 +39,7 @@
 
 <div class="container">
     <div class="left">
-        <h1>Seja bem-vindo<br>ao Estudantes</h1>
+        <h1>Seja bem-vindo<br>ao Estudiantes</h1>
         <hr>
         <p>A educação é a arma mais poderosa que você pode usar para mudar o mundo.</p>
         <a href="${pageContext.request.contextPath}/views/cadastro.jsp" class="btn-primary">Não tem conta? Cadastrar-se</a>
@@ -47,7 +48,7 @@
     <div class="login-box">
         <h2>Login</h2>
 
-        <% if (request.getParameter("erro") != null) { %>
+        <% if (request.getSession().getAttribute("erro") != null) { %>
         <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Credenciais inválidas!</p>
         <% } %>
 
@@ -56,8 +57,10 @@
             <input type="text" name="usuario" id="usuario" required placeholder="Digite seu usuário/email">
 
             <label for="senha">Senha</label>
-            <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
-
+            <div class="input-wrapper">
+                <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
+                <i class="material-icons" style="color: #ffd27a" onclick="alternarVisibilidade(event)">visibility</i>
+            </div>
             <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
         </form>
     </div>
@@ -77,6 +80,19 @@
     window.onclick = function(event) {
         if (event.target == modal) {
             fecharAdmin();
+        }
+    }
+
+    function alternarVisibilidade(event) {
+        const icone = event.target;
+        const input = icone.closest('.input-wrapper').querySelector('input');
+
+        if (input.type === "password") {
+            input.type = "text";
+            icone.textContent = "visibility_off";
+        } else {
+            input.type = "password";
+            icone.textContent = "visibility";
         }
     }
 </script>

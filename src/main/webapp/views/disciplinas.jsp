@@ -1,5 +1,7 @@
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -16,7 +18,13 @@
 <%
     String[] data = (String[]) request.getSession().getAttribute("data");
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
-    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+    Map<String,String> conteudo = new HashMap<>();
+    conteudo.put("matemática","calculate");
+    conteudo.put("português","book");
+    conteudo.put("história","history_edu");
+    conteudo.put("geografia","public");
+    conteudo.put("informática","computer");
+    conteudo.put("ciências","science");
 %>
 
 <body>
@@ -35,7 +43,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -56,7 +64,7 @@
                         <a href="${pageContext.request.contextPath}/views/perfil.jsp">
                             <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
                         </a>
-                            <span><%=usuario.getNome()%></span>
+                            <span><%=aluno.getNome()%></span>
                     </div>
 
             </div>
@@ -68,52 +76,52 @@
 
             <div class="disciplinas-grid">
 
-            <div class="disciplina card1">
+            <div class="disciplina matemática">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("matemática")%></i>
             </div>
 
-            <div class="disciplina card2">
+            <div class="disciplina português">
                 <div class="disciplina-info">
                     <h3>Português</h3>
                     <p>Prof. Cláudia</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/portugues.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("português")%></i>
             </div>
 
-            <div class="disciplina card3">
+            <div class="disciplina geografia">
                 <div class="disciplina-info">
                     <h3>Geografia</h3>
                     <p>Prof. Flávio</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/geografia.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("geografia")%></i>
             </div>
 
-            <div class="disciplina card4">
+            <div class="disciplina história">
                 <div class="disciplina-info">
                     <h3>História</h3>
                     <p>Prof. Rosangela</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/historia.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("história")%></i>
             </div>
 
-            <div class="disciplina card5">
+            <div class="disciplina informática">
                 <div class="disciplina-info">
-                    <h3>Inglês</h3>
-                    <p>Prof. Erika</p>
+                    <h3>Informática</h3>
+                    <p>Prof. Diego</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/ingles.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("informática")%></i>
             </div>
 
-            <div class="disciplina card6">
+            <div class="disciplina ciências">
                 <div class="disciplina-info">
                     <h3>Ciências</h3>
                     <p>Prof. Robson</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/ciencias.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("ciências")%></i>
             </div>
 
             </div>

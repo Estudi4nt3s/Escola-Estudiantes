@@ -20,12 +20,10 @@ public class Conexao {
             String password = dotenv.get("DB_SENHA");
 
             // Log para conferir se os dados estão chegando (Cuidado em produção!)
-            System.out.println("Tentando conectar em: " + caminho);
 
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection(caminho, usuario, password);
 
-            System.out.println("Conexão estabelecida com sucesso!");
         } catch (Exception e) {
             System.err.println("ERRO NA CONEXÃO: " + e.getMessage());
             e.printStackTrace();

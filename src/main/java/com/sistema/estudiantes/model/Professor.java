@@ -20,10 +20,16 @@ public class Professor {
         this.disciplina = disciplina;
     }
 
+    public Professor(int id, Usuario usuario, Disciplina disciplina) {
+        this.id = id;
+        this.usuario = usuario;
+        this.disciplina = disciplina;
+    }
+
     // Getters e Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public String getNome() { return nome; }
+    public String getNome() { return this.nome; }
     public void setNome(String nome) { this.nome = nome; }
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }

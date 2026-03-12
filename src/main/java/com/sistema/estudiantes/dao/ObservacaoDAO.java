@@ -23,8 +23,8 @@ public class ObservacaoDAO {
 
             psmt.setString(1, observacao.getTexto());
             psmt.setObject(2, observacao.getDataCriacao());
-            psmt.setInt(3, observacao.getIdProfessor().getId());
-            psmt.setInt(4, observacao.getIdAluno().getMatricula());
+            psmt.setInt(3, observacao.getIdAluno().getMatricula());
+            psmt.setInt(4, observacao.getIdProfessor().getId());
 
             psmt.executeUpdate();
 
@@ -35,7 +35,13 @@ public class ObservacaoDAO {
 
     public List<Observacao> listar() {
         List<Observacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Observacoes";
+        // Removemos os JOINs com a tabela de Usuarios
+        String sql = """
+            SELECT o.*, a.nome AS aluno_nome, p.nome AS prof_nome
+            FROM observacoes o
+            JOIN alunos a ON o.alunomatricula = a.matricula
+            JOIN professores p ON o.professorid = p.id
+            """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -43,7 +49,11 @@ public class ObservacaoDAO {
 
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
-                Aluno a = new Aluno(rs.getInt("alunomatricula"));
+                p.setNome(rs.getString("prof_nome")); // Nome direto do Professor
+
+                Aluno a = new Aluno();
+                a.setMatricula(rs.getInt("alunomatricula"));
+                a.setNome(rs.getString("aluno_nome")); // Nome direto do Aluno
 
                 Observacao o = new Observacao(
                         rs.getInt("id"),
@@ -54,7 +64,6 @@ public class ObservacaoDAO {
                 );
                 lista.add(o);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,9 +73,10 @@ public class ObservacaoDAO {
     public List<Observacao> listarDisciplina(int valor){
         List<Observacao> observacaos = new ArrayList<>();
         String sql = """
-                 SELECT o.*, professorid, p.nome as prof, d.nome as disc FROM observacoes o 
+                 SELECT o.*, p.nome as prof, a.nome as aluno, d.nome as disc FROM observacoes o 
                      join professores p on o.professorid = p.id
                      join disciplinas d on p.disciplinaid = d.id
+                     join alunos a on o.alunomatricula = a.matricula
                           WHERE alunomatricula = ?
                 """;
 
@@ -85,6 +95,7 @@ public class ObservacaoDAO {
                     p.setDisciplina(d);
 
                     Aluno a = new Aluno(rs.getInt("alunomatricula"));
+                    a.setNome(rs.getString("aluno"));
 
                     Observacao o = new Observacao(
                             rs.getInt("id"),
@@ -105,7 +116,12 @@ public class ObservacaoDAO {
 
     public List<Observacao> listarComFiltro(String condicao, int valor){
         List<Observacao> observacaos = new ArrayList<>();
-        String sql = " SELECT * FROM observacoes WHERE " + condicao;
+        String sql = "SELECT o.*, a.nome as aluno, " +
+                "p.nome as prof " +
+                "FROM observacoes o " +
+                "JOIN alunos a ON o.alunomatricula = a.matricula " +
+                "JOIN professores p ON o.professorid = p.id " +
+                "WHERE " + condicao;
 
         try(Connection conn = Conexao.conectar();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -116,6 +132,9 @@ public class ObservacaoDAO {
                     Professor p = new Professor(rs.getInt("professorid"));
                     Aluno a = new Aluno(rs.getInt("alunomatricula"));
 
+                    a.setNome(rs.getString("aluno"));
+                    p.setNome(rs.getString("prof"));
+
                     Observacao o = new Observacao(
                             rs.getInt("id"),
                             rs.getString("texto"),
@@ -123,7 +142,6 @@ public class ObservacaoDAO {
                             a,
                             p
                     );
-
                     observacaos.add(o);
                 }
             }

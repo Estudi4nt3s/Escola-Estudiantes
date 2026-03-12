@@ -15,15 +15,15 @@ import java.util.List;
 
 public class TurmaDAO {
 
-    public void inserir(int ano, String serie, char letra) {
-        String sql = "INSERT INTO Turmas (Ano, Serie, Letra) VALUES (?, ?, ?)";
+    public void inserir(String nome, int ano, int quantidadeMax) {
+        String sql = "INSERT INTO Turmas (nome, ano, quantidademax) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, ano);
-            psmt.setString(2, serie);
-            psmt.setString(3, String.valueOf(letra));
+            psmt.setString(1, nome);
+            psmt.setInt(2, ano);
+            psmt.setInt(3, quantidadeMax);
 
             psmt.executeUpdate();
 
@@ -42,10 +42,10 @@ public class TurmaDAO {
 
             while (rs.next()) {
                 Turma t = new Turma(
-                        rs.getInt("Id"),
-                        rs.getInt("Ano"),
-                        rs.getString("Serie"),
-                        rs.getString("Letra").charAt(0)
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getInt("ano"),
+                        rs.getInt("quantidademax")
                 );
                 lista.add(t);
             }
@@ -67,9 +67,9 @@ public class TurmaDAO {
                 while (rs.next()) {
                     Turma turma = new Turma(
                             rs.getInt("id"),
+                            rs.getString("nome"),
                             rs.getInt("ano"),
-                            rs.getString("serie"),
-                            rs.getString("letra").charAt(0)
+                            rs.getInt("quantidademax")
                     );
                     turmas.add(turma);
                 }
@@ -83,14 +83,14 @@ public class TurmaDAO {
     }
 
     public boolean atualizar(Turma t) {
-        String sql = "UPDATE Turmas SET Ano = ?, Serie = ?, Letra = ? WHERE Id = ?";
+        String sql = "UPDATE Turmas SET nome = ?, ano = ?, quantidademax = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, t.getAno());
-            psmt.setString(2, t.getSerie());
-            psmt.setString(3, String.valueOf(t.getLetra()));
+            psmt.setString(1, t.getNome());
+            psmt.setInt(2, t.getAno());
+            psmt.setInt(3, t.getQuantidadeMax());
             psmt.setInt(4, t.getId());
 
             return psmt.executeUpdate() > 0;
