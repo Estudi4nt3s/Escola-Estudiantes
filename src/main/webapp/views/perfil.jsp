@@ -166,7 +166,7 @@
         <p>Deseja encerrar sua sessão no sistema?</p>
         <div class="logout-buttons">
             <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
-            <a href="${pageContext.request.contextPath}/logout" class="btn-confirm">Sim, Sair</a>
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
         </div>
     </div>
 </div>

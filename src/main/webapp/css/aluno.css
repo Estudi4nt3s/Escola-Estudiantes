@@ -533,3 +533,48 @@ nav {
 .btn-boletim:hover {
     background: var(--red-dark);
 }
+
+
+/* MODAL LOGOUT (NOVO) */
+.logout-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease;
+    z-index: 3000;
+}
+
+.logout-modal-overlay.show { opacity: 1; pointer-events: auto; }
+
+.logout-modal-content {
+    background: white;
+    width: 350px;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    transform: translateY(20px);
+    transition: 0.3s ease;
+}
+
+.logout-modal-overlay.show .logout-modal-content { transform: translateY(0); }
+
+.logout-icon i { font-size: 50px; color: var(--red); margin-bottom: 15px; }
+
+.logout-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
+
+.btn-cancel {
+    background: #eee; border: none; padding: 12px 25px; border-radius: 10px;
+    cursor: pointer; font-weight: 600; color: #555;
+}
+
+.btn-confirm {
+    background: var(--red); color: white; text-decoration: none;
+    padding: 12px 25px; border-radius: 10px; font-weight: 600;
+}
