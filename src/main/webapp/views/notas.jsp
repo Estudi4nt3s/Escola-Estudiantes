@@ -15,10 +15,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <% if (aluno != null) { %>
+    <%if (aluno != null) {%>
     <title>Estudiantes - Boletim de <%=aluno.getNome()%></title>
-    <% } else { %>
-    <title>Estudiantes - Boletim></title>
+    <%} else { %>
+    <title>Estudiantes - Boletim</title>
     <% } %>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
@@ -97,10 +97,20 @@
                         }
 
                         if (notaEncontrada != null) {
+                            Double n1 = notaEncontrada.getN1();
+                            Double n2 = notaEncontrada.getN2();
 
-                            double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                            Double media = null;
 
-                            situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                            if(n1 != null && n2 != null){
+                                media = (n1 + n2) / 2;
+                            }
+
+                            if (media == null) {
+                                situacao = "-";
+                            } else {
+                                situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                            }
 
                 %>
                 <tr>
@@ -122,9 +132,9 @@
                                min="0"
                                max="10"
                                value="<%=notaEncontrada.getN2()%>"></td>
-                    <td><%=String.format("%.2f",media)%></td>
+                    <td><%= media != null ? String.format("%.2f",media) : "-" %></td>
                     <td>
-                        <span class="status <%=media >= 7?"approved":"attention"%>"><%=situacao%></span>
+                        <span class="status <%= media != null && media >= 7 ? "approved" : "attention" %>"></span>
                     </td>
                 </tr>
                 <%

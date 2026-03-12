@@ -4,7 +4,6 @@
 
 
 <%
-    // Recuperando objetos da sessão conforme o modelo Aluno
     Professor professor = (Professor) request.getSession().getAttribute("professor");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     String[] data = (String[]) request.getSession().getAttribute("data");
@@ -25,7 +24,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/foto_edit.css">
-    <%-- Se você tiver um carregar.css para o professor também: --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil_p.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
@@ -62,7 +61,6 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            <%-- Mantendo a lógica de formatação de data do servidor que você já usa --%>
             <%= data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1] %>
         </div>
 
@@ -85,8 +83,7 @@
 
             <div class="perfil-info-principal">
                 <h2><%= professor.getNome() %></h2>
-                <%-- Assumindo que a classe Professor tem o método getDisciplina() --%>
-                <p>Professor de <%= professor.getUsuarioId()%></p>
+                <p>Professor de <%= professor.getDisciplina().getNome()%></p>
 
 
                 <div class="perfil-status ativo">
@@ -105,14 +102,12 @@
             <div class="perfil-card-info">
                 <h3>Informações Institucionais</h3>
                 <div class="linha"><span>Matrícula:</span> <%= professor.getId() %></div>
-                <div class="linha"><span>E-mail:</span> <%= usuario.getEmail() %></div>
+                <div class="linha"><span>Usário/E-mail:</span> <%= usuario.getEmail() %></div>
             </div>
         </div>
     </div>
 </main>
 
-
-<%-- Modais e Scripts mantidos conforme seu HTML original --%>
 <div id="photoModal" class="photo-modal-overlay" onclick="closePhotoModal(event)">
     <div class="photo-modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closePhotoModal(event)">&times;</span>

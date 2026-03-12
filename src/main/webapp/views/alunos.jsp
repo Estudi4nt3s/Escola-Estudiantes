@@ -66,9 +66,8 @@
         </div>
 
         <div class="user">
-            <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
+                <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
                 <span><%=professor.getNome()%></span>
             </div>
         </div>
@@ -101,7 +100,6 @@
             %>
             <div class="alunos-card">
                 <div class="alunos-nome">
-                    <%System.out.println(aluno);%>
                     <%= aluno.getNome()%>
                 </div>
 
