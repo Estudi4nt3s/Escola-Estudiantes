@@ -4,11 +4,15 @@
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.time.format.TextStyle" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
         busca = request.getParameter("busca");
     }
+    @SuppressWarnings("unchecked")
+    List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
     LocalDate hoje = LocalDate.now();
     String dia = String.format("%02d",hoje.getDayOfMonth());
     String mes = String.format("%02d",hoje.getMonthValue());
@@ -21,10 +25,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Início</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -36,17 +42,16 @@
     </div>
 
     <nav>
-        <a class="menu active"><i class="material-icons">home</i>Início</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
-            <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu" href="${pageContext.request.contextPath}/turma">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+        <a class="menu active">
+            <i class="material-icons">groups</i>Turmas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
-
     <div class="config">
-        <i class="material-icons">settings</i>Configurações
+        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
     </div>
 </aside>
 
@@ -61,8 +66,8 @@
         <div class="user">
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12" alt="">
-                <span>Mateus Carlos</span>
+                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
+                <span><%=professor.getUsuario().getNome()%></span>
             </div>
         </div>
     </header>
@@ -81,13 +86,13 @@
 
         <div class="turmas">
             <%
-                List<Turma> turmas = (List<Turma>) request.getAttribute("turmas");
                 if (turmas != null && !turmas.isEmpty()) {
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getSerie() + " " + turma.getLetra() %></h3>
-                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>">
+                <h3><%= turma.getNome() %></h3>
+                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>"
+                   onclick="document.getElementById('loadingOverlay').style.display='flex'">
                     <i class="material-icons">arrow_forward</i>
                 </a>
             </div>
@@ -147,6 +152,11 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<div id="loadingOverlay">
+    <div class="loadingBox">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+    </div>
+</div>
 </body>
-
 </html>

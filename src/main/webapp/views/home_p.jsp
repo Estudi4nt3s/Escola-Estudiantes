@@ -3,14 +3,15 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Início</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home_p.css">
@@ -27,10 +28,11 @@
 
     int qtdmateria = 0;
     String[] turma = new String[6];
+    System.out.println(aulas.size());
     for(int i = 0; i < Math.min(aulas.size(), 6); i++){
         for (Turma value : turmas) {
             if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getSerie();
+                turma[i] = value.getNome();
                 qtdmateria++;
                 break;
             }
@@ -47,14 +49,14 @@
 
         <nav>
             <a class="menu active"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas_p.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
         </nav>
 
         <div class="config">
-            <a class="menu" style="margin-left: -25px;" href="perfil_p.jsp">
-                <i class="material-icons">person</i>Perfil
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
             </a>
         </div>
     </aside>
@@ -70,7 +72,7 @@
             <div class="user">
                 <div class="avatar">
                     <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
-                    <span><%=professor.getNome()%></span>
+                    <span><%=professor.getUsuario().getNome()%></span>
                 </div>
             </div>
         </header>
@@ -81,15 +83,16 @@
 
                 <div class="welcome">
                     <%-- Saudação personalizada com o primeiro nome --%>
-                    <h2>Olá, <%=professor.getNome()%>!</h2>
+                    <h2>Olá, <%=professor.getUsuario().getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 
                 <div class="flex">
                     <%-- Loop para gerar os cards de conteúdo das aulas --%>
                     <%
-                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) || qtdmateria != 0){
-                            for(int i = 0;i < Math.min(aulas.size(),6);i++){
+                        System.out.println(materia);
+                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
+                            for(int i = 0;i < aulas.size();i++){
                     %>
                         <div class="card card<%=materia.getNome().toLowerCase()%>">
                             <h3><%=turma[i]%></h3>
@@ -99,11 +102,6 @@
                         </div>
                     <%
                             }
-                        }
-                        else{
-                    %>
-                        <p>Você não possui aulas agendadas para hoje.</p>
-                    <%
                         }
                     %>
                 </div>
@@ -115,18 +113,25 @@
                 <ul>
                     <%-- Loop para a lista lateral de horários --%>
                     <%
-                        String[] horario = {"07:00 às 08:00","08:00 às 09:00","09:00 às 10:00",
-                                "10:30 às 11:30","11:30 às 12:30","13:30 às 14:30"};
-                    if((!data[2].equals("SÁB") && !data[2].equals("DOM")) || qtdmateria != 0){
+                    if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
                         for(int i = 0;i < qtdmateria;i++){
                             %>
                         <li>
-                            <strong><%=materia.getNome()%></strong> - <%=horario[i]%>
+                            <strong><%=turma[i]%></strong> -
+                            <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
+                             às
+                            <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
                         </li>
                     <%
                         }
                     }
+                        else{
+
                     %>
+                        <p>Você não possui aulas hoje.</p>
+                        <%
+                            }
+                        %>
                 </ul>
             </div>
 

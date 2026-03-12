@@ -15,14 +15,16 @@ import java.util.List;
 public class UsuarioDAO {
 
     public void inserir(Usuario usuario) {
-        String sql = "INSERT INTO Usuario (id, email, senha) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Usuarios (nome, sobrenome, email, senha, photo) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, usuario.getId());
-            psmt.setString(2, usuario.getEmail());
-            psmt.setString(3, usuario.getSenha());
+            psmt.setString(1, usuario.getNome());
+            psmt.setString(2, usuario.getSobrenome());
+            psmt.setString(3, usuario.getEmail());
+            psmt.setString(4, usuario.getSenha());
+            psmt.setString(5, usuario.getFoto());
             psmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -32,7 +34,7 @@ public class UsuarioDAO {
 
     public List<Usuario> listar() {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Usuario";
+        String sql = "SELECT * FROM Usuarios";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -41,9 +43,10 @@ public class UsuarioDAO {
             while (rs.next()) {
                 Usuario u = new Usuario(
                         rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sobrenome"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getBoolean("isadm"),
                         rs.getString("photo")
                 );
                 lista.add(u);
@@ -57,7 +60,7 @@ public class UsuarioDAO {
 
     public List<Usuario> listarComFiltro(String condicao, String filtro) {
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT * FROM usuario WHERE " + condicao;
+        String sql = "SELECT * FROM usuarios WHERE " + condicao;
 
         try (Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -68,9 +71,10 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("sobrenome"),
                             rs.getString("email"),
                             rs.getString("senha"),
-                            rs.getBoolean("IsAdm"),
                             rs.getString("Photo")
                     );
                     usuarios.add(user);
@@ -85,7 +89,7 @@ public class UsuarioDAO {
 
     public List<Usuario> listarFiltros(String condicao, boolean filtro1, String filtro2) {
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT * FROM usuario WHERE " + condicao;
+        String sql = "SELECT * FROM usuarios WHERE " + condicao;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -97,9 +101,10 @@ public class UsuarioDAO {
                 while (rs.next()) {
                     Usuario user = new Usuario(
                             rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("sobrenome"),
                             rs.getString("email"),
                             rs.getString("senha"),
-                            rs.getBoolean("IsAdm"),
                             rs.getString("Photo")
                     );
                     usuarios.add(user);
@@ -113,16 +118,17 @@ public class UsuarioDAO {
     }
 
     public boolean atualizar(Usuario u) {
-        String sql = "UPDATE Usuario SET Email = ?, Senha = ?, IsAdm = ?, Photo = ? WHERE Id = ?";
+        String sql = "UPDATE Usuarios SET nome = ?, sobrenome = ?, email = ?, senha = ?, photo = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setString(1, u.getEmail());
-            psmt.setString(2, u.getSenha());
-            psmt.setBoolean(3, u.getIsAdm());
-            psmt.setString(4, u.getFoto());
-            psmt.setInt(5, u.getId());
+            psmt.setString(1, u.getNome());
+            psmt.setString(2, u.getSobrenome());
+            psmt.setString(3, u.getEmail());
+            psmt.setString(4, u.getSenha());
+            psmt.setString(5, u.getFoto());
+            psmt.setInt(6, u.getId());
 
             return psmt.executeUpdate() > 0;
 
@@ -133,7 +139,7 @@ public class UsuarioDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Usuario WHERE Id = ?";
+        String sql = "DELETE FROM Usuarios WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

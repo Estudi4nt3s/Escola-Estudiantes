@@ -1,0 +1,222 @@
+:root {
+    --red: #d11d22;
+    --red-dark: #a5161a;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    --soft-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --radius: 16px;
+}
+
+/* RESET E BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background: var(--bg);
+    color: #333;
+    overflow: hidden; /* Trava a rolagem do corpo */
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, var(--red), var(--red-dark));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 30px 25px;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+    border-left: 3px solid transparent;
+}
+
+.menu.active {
+    background: rgba(255, 255, 255, 0.12);
+    border-left: 3px solid white;
+}
+
+.menu:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.config {
+    margin-top: auto;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    opacity: 0.8;
+}
+
+/* MAIN CONTENT */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Garante que a rolagem seja interna ao card */
+}
+
+/* TOPBAR */
+.topbar {
+    height: 85px;
+    background: white;
+    box-shadow: var(--soft-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+}
+
+.avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    object-fit: cover;
+}
+
+/* CABEÇALHO DA PÁGINA */
+.page-header {
+    margin: 25px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.page-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* O CARD COM ROLAGEM ESTILO EXCEL */
+.card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 0; /* Zerado para o sticky encostar no topo */
+    box-shadow: var(--shadow);
+    margin: 0 40px 30px 40px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Corta o conteúdo nas bordas arredondadas */
+    border: 1px solid #eee;
+}
+
+.table-container {
+    width: 100%;
+    overflow-y: auto; /* Rolagem vertical aqui */
+    overflow-x: auto; /* Rolagem horizontal se necessário */
+    max-height: calc(100vh - 250px); /* Altura dinâmica */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* FIXAR CABEÇALHO */
+thead th {
+    position: sticky;
+    top: 0;
+    background: #fafafa; /* Fundo sólido para não ver o texto passando atrás */
+    z-index: 10;
+    color: #888;
+    font-weight: 600;
+    padding: 18px 25px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    text-align: left;
+    border-bottom: 2px solid #f0f0f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+td {
+    padding: 16px 25px;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background: #fcfcfc;
+}
+
+/* BOTÕES */
+.btn-primary {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.icon-btn { border: none; background: none; cursor: pointer; color: #666; transition: 0.3s; }
+.icon-btn.edit:hover { color: #007bff; }
+.icon-btn.delete:hover { color: var(--red); }
+
+/* FORMULÁRIOS E MODAL */
+.overlay {
+    position: fixed; top:0; left:0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+
+.modal {
+    background: white; width: 450px; padding: 30px; border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.form-group { margin-bottom: 20px; }
+.form-group label { font-weight: 600; display: block; margin-bottom: 8px; }
+
+input, select {
+    padding: 12px; border: 1.5px solid #e0e0e0; border-radius: 10px;
+    width: 100%; outline: none; transition: 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(209, 29, 34, 0.1);
+}
+
+.modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px; }
+
+.btn-cancelar {
+    background: #e0e0e0; color: #555; padding: 10px 20px;
+    border-radius: 8px; text-decoration: none; font-weight: 600;
+}

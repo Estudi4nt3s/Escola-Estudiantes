@@ -1,31 +1,24 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.time.format.TextStyle" %>
-<%@ page import="com.sistema.estudiantes.model.Aluno" %>
-<%@ page import="com.sistema.estudiantes.model.Turma" %>
-<%
-    String busca = "";
-    if (request.getParameter("busca") != null) {
-        busca = request.getParameter("busca");
-    }
-    LocalDate hoje = LocalDate.now();
-    String dia = String.format("%02d",hoje.getDayOfMonth());
-    String mes = String.format("%02d",hoje.getMonthValue());
-    Locale ptBr = new Locale("pt", "BR");
-    String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
-%>
+<%@ page import="com.sistema.estudiantes.model.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
+<%
+    Aluno aluno = (Aluno) request.getSession().getAttribute("alunoSelecionado");
+    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+    String[] data = (String[]) request.getSession().getAttribute("data");
+    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
+    List<Nota> notas = (List<Nota>) request.getAttribute("notas");
 
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Início</title>
+    <title>Estudiantes - Boletim de <%=usuario.getNome()%></title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
 </head>
 
 <body>
@@ -37,17 +30,15 @@
     </div>
 
     <nav>
-        <a class="menu active"><i class="material-icons">home</i>Início</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
-            <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home_p.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu" href="${pageContext.request.contextPath}/turma">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
-
     <div class="config">
-        <i class="material-icons">settings</i>Configurações
+        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
     </div>
 </aside>
 
@@ -56,111 +47,152 @@
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            <%=semana.toUpperCase().charAt(0) + semana.toLowerCase().substring(1) + ", " + dia + "/" + mes%>
+            <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
         </div>
 
         <div class="user">
-            <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="https://i.pravatar.cc/40?img=12" alt="">
-                <span>Mateus Carlos</span>
+                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
+                <span><%=usuario.getNome()%></span>
             </div>
         </div>
     </header>
 
     <div class="main-content">
-        <div class="alunos-topo">
-            <%
-                Turma turma = (Turma) request.getAttribute("turmaSelecionada");
-                if(turma != null){
-            %>
-
-            <div class="alunos-titulo">
-                <%= turma.getSerie() + " " + turma.getLetra() %>
-                <i class="material-icons">expand_more</i>
-            </div>
-
-            <%
-                }
-            %>
-
-            <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
-                <i class="material-icons">search</i>
-                <input type="text" name="busca" placeholder="Pesquise o aluno" value="<%= busca %>">
-            </form>
+        <div class="page-header">
+            <% if (aluno != null && aluno.getUsuarioId() != null) { %>
+            <h2 class="page-title">Boletim Escolar: <%= aluno.getUsuarioId().getNome()%></h2>
+            <% } else { %>
+            <h2 class="page-title">Boletim Escolar: Usuário não encontrado</h2>
+            <% } %>
+            <h2 class="page-title">Boletim Escolar: <%= aluno.getUsuarioId().getNome()%></h2>
         </div>
 
-        <div class="alunos">
-            <%
-                List<Aluno> alunos = (List<Aluno>) request.getAttribute("alunos");
-                if (alunos != null && !alunos.isEmpty()) {
-                    for (Aluno aluno : alunos) {
-            %>
-            <div class="alunos-card">
-                <div class="alunos-nome">
-                    <%= aluno.getNome() %>
-                </div>
+        <div class="table-container">
+            <table class="grades-table">
+                <thead>
+                <tr>
+                    <th>Disciplina</th>
+                    <th>N1</th>
+                    <th>N2</th>
+                    <th>Média</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                    String situacao;
+                    for (Disciplina disciplina : disciplinas) {
+                        Nota notaEncontrada = null;
 
-                <a href="${pageContext.request.contextPath}/nota?id=<%= aluno.getMatricula() %>">
-                    <i class="material-icons opcoes">more_vert</i>
-                </a>
-            </div>
-            <%
+                        for (Nota nota : notas) {
+                            if (nota.getIdDisciplina().getId() == disciplina.getId()) {
+                                notaEncontrada = nota;
+                                break;
+                            }
+                        }
+
+                        if (notaEncontrada != null) {
+
+                            double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+
+                            situacao = media >= 7 ? "Aprovado" : "Reprovado";
+
+                %>
+                <tr>
+                    <td><strong><%=disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())%></strong></td>
+                    <td>
+                        <input class="nota-edit"
+                               type="number"
+                               step="0.01"
+                               data-id="<%=notaEncontrada.getId()%>"
+                               data-campo="n1"
+                               min="0"
+                               max="10"
+                               value="<%=notaEncontrada.getN1()%>"></td>
+                    <td><input class="nota-edit"
+                               type="number"
+                               step="0.01"
+                               data-id="<%=notaEncontrada.getId()%>"
+                               data-campo="n2"
+                               min="0"
+                               max="10"
+                               value="<%=notaEncontrada.getN2()%>"></td>
+                    <td><%=String.format("%.2f",media)%></td>
+                    <td>
+                        <span class="status <%=media >= 7?"approved":"attention"%>"><%=situacao%></span>
+                    </td>
+                </tr>
+                <%
                 }
-            } else {
-            %>
-            <p>Nenhum aluno encontrado.</p>
-            <%
-                }
-            %>
+                else{
+                %>
+                <tr>
+                    <td><strong><%=disciplina.getNome()%></strong></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <%
+                        }
+                    }
+                %>
+                </tbody>
+            </table>
         </div>
     </div>
 </main>
-<!-- Overlay -->
-<div class="notification-overlay" id="notificationOverlay">
 
-    <div class="notification-modal">
-
-        <div class="notification-modal-header">
-            <h2>Notificações</h2>
-            <button id="closeNotificationModal">✕</button>
-        </div>
-
-        <ul class="notification-modal-list">
-            <li class="denied">
-
-                <div class="notification-content">
-                    <strong>Avaliação de Matemática</strong>
-                    <span>Status: Negado</span>
-                </div>
-
-                <button class="confirm-btn">Confirmar</button>
-            </li>
-
-            <li class="denied">
-                <div class="notification-content">
-                    <strong>Avaliação 2ª Guerra</strong>
-                    <span>Status: Negado</span>
-                </div>
-
-                <button class="confirm-btn">Confirmar</button>
-            </li>
-
-
-            <li class="denied">
-                <div class="notification-content">
-                    <strong>Trabalho de Geografia</strong>
-                    <span>Status: Negado</span>
-                </div>
-
-                <button class="confirm-btn">Confirmar</button>
-            </li>
-        </ul>
-
-    </div>
-</div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
-</body>
+<script>
+    document.querySelectorAll(".nota-edit").forEach(input => {
 
+        input.addEventListener("input", function(){
+
+            const row = this.closest("tr")
+
+            const n1 = parseFloat(row.children[1].querySelector("input").value) || 0
+            const n2 = parseFloat(row.children[2].querySelector("input").value) || 0
+
+            const media = (n1 + n2) / 2
+
+            row.children[3].innerText = media.toFixed(2)
+
+            const status = row.children[4].querySelector(".status")
+
+            if(media >= 7){
+                status.innerText = "Aprovado"
+                status.className = "status approved"
+            }else{
+                status.innerText = "Reprovado"
+                status.className = "status attention"
+            }
+
+        })
+
+        input.addEventListener("change", function(){
+
+            const id = this.dataset.id
+            const campo = this.dataset.campo
+            const valor = this.value
+
+            fetch("${pageContext.request.contextPath}/nota", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body:
+                    "sub_acao=atualizar" +
+                    "&id=" + id +
+                    "&campo=" + campo +
+                    "&valor=" + valor
+            })
+
+        })
+
+    })
+</script>
+</body>
 </html>

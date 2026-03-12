@@ -418,7 +418,7 @@ nav {
     text-align: left;
 }
 
-.grades-table theories, .grades-table th {
+.grades-table thead, .grades-table th {
     background-color: #BF1F1C;
     color: #ffffff;
     font-weight: 700;
@@ -506,21 +506,21 @@ nav {
 }
 
 /* Inputs de Notas */
-.grade-input {
-    width: 60px;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 1rem;
-    color: #333;
-    transition: 0.2s;
+.nota-edit {
+    width:60px;
+    padding:8px;
+    border:none;
+    outline:none;
+    box-shadow:none;
+    background:transparent;
+    text-align:center;
+    font-size:1rem;
 }
 
-.grade-input:focus {
-    border-color: var(--red);
-    outline: none;
-    box-shadow: 0 0 5px rgba(209, 29, 34, 0.2);
+.nota-edit:focus {
+    border:none;
+    outline:none;
+    box-shadow:none;
 }
 
 .final-grade {

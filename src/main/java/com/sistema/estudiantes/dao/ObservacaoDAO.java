@@ -2,10 +2,7 @@ package com.sistema.estudiantes.dao;
 
 
 import com.sistema.estudiantes.conexao.Conexao;
-import com.sistema.estudiantes.model.Aluno;
-import com.sistema.estudiantes.model.Disciplina;
-import com.sistema.estudiantes.model.Observacao;
-import com.sistema.estudiantes.model.Professor;
+import com.sistema.estudiantes.model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -17,8 +14,8 @@ public class ObservacaoDAO {
 
     public void inserir(Observacao observacao) {
         String sql = """
-            INSERT INTO Observacao (Texto, DataCriacao, ProfessorId, IdAluno, DisciplinaId)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO Observacoes (Texto, DataCriacao, alunomatricula, ProfessorId)
+            VALUES (?, ?, ?, ?)
         """;
 
         try (Connection conn = new Conexao().conectar();
@@ -26,9 +23,8 @@ public class ObservacaoDAO {
 
             psmt.setString(1, observacao.getTexto());
             psmt.setObject(2, observacao.getDataCriacao());
-            psmt.setInt(3, observacao.getIdProfessor().getId());
-            psmt.setInt(4, observacao.getIdAluno().getMatricula());
-            psmt.setInt(5, observacao.getIdDisciplina().getId());
+            psmt.setInt(3, observacao.getIdAluno().getMatricula());
+            psmt.setInt(4, observacao.getIdProfessor().getId());
 
             psmt.executeUpdate();
 
@@ -39,7 +35,18 @@ public class ObservacaoDAO {
 
     public List<Observacao> listar() {
         List<Observacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Observacao";
+        String sql = """
+                SELECT o.*, 
+                       ua.nome AS aluno_nome,
+                       ua.sobrenome AS aluno_sobrenome,
+                       up.nome AS prof_nome,
+                       up.sobrenome AS prof_sobrenome
+                FROM observacoes o
+                JOIN alunos a ON o.alunomatricula = a.matricula
+                JOIN usuarios ua ON a.usuarioid = ua.id
+                JOIN professores p ON o.professorid = p.id
+                JOIN usuarios up ON p.usuarioid = up.id
+                """;
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -47,15 +54,26 @@ public class ObservacaoDAO {
 
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
-                Aluno a = new Aluno(rs.getInt("idaluno"));
-                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                Usuario u = new Usuario();
+                u.setNome(rs.getString("aluno_nome"));
+                u.setSobrenome(rs.getString("aluno_sobrenome"));
+
+                a.setUsuarioId(u);
+
+                Usuario up = new Usuario();
+                up.setNome(rs.getString("prof_nome"));
+                up.setSobrenome(rs.getString("prof_sobrenome"));
+
+                p.setUsuario(up);
+
                 Observacao o = new Observacao(
                         rs.getInt("id"),
                         rs.getString("texto"),
                         rs.getObject("datacriacao", LocalDate.class),
-                        p,
                         a,
-                        d
+                        p
                 );
                 lista.add(o);
             }
@@ -66,8 +84,102 @@ public class ObservacaoDAO {
         return lista;
     }
 
+    public List<Observacao> listarDisciplina(int valor){
+        List<Observacao> observacaos = new ArrayList<>();
+        String sql = """
+                 SELECT o.*, professorid, u.nome as prof, d.nome as disc FROM observacoes o 
+                     join professores p on o.professorid = p.id
+                     join usuarios u on p.usuarioid = u.id
+                     join disciplinas d on p.disciplinaid = d.id
+                          WHERE alunomatricula = ?
+                """;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, valor);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    Usuario u = new Usuario();
+                    u.setNome(rs.getString("prof"));
+                    p.setUsuario(u);
+
+                    Disciplina d = new Disciplina();
+                    d.setNome(rs.getString("disc"));
+                    p.setDisciplina(d);
+
+                    Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                    Observacao o = new Observacao(
+                            rs.getInt("id"),
+                            rs.getString("texto"),
+                            rs.getObject("datacriacao", LocalDate.class),
+                            a,
+                            p
+                    );
+                    System.out.println(o.getIdProfessor().getUsuario().getNome());
+                    observacaos.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return observacaos;
+    }
+
+    public List<Observacao> listarComFiltro(String condicao, int valor){
+        List<Observacao> observacaos = new ArrayList<>();
+        String sql = "SELECT o.*, ua.nome as nome_aluno, ua.sobrenome as sobrenome_aluno, " +
+                "up.nome as nome_prof, up.sobrenome as sobrenome_prof " +
+                "FROM observacoes o " +
+                "JOIN alunos a ON o.alunomatricula = a.matricula " +
+                "JOIN usuarios ua ON a.usuarioid = ua.id " +
+                "JOIN professores p ON o.professorid = p.id " +
+                "JOIN usuarios up ON p.usuarioid = up.id " +
+                "WHERE " + condicao;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, valor);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                    Usuario u = new Usuario();
+                    u.setNome(rs.getString("nome_aluno"));
+                    u.setSobrenome(rs.getString("sobrenome_aluno"));
+
+                    a.setUsuarioId(u);
+
+                    Usuario up = new Usuario();
+                    up.setNome(rs.getString("nome_prof"));
+                    up.setSobrenome(rs.getString("sobrenome_prof"));
+
+                    p.setUsuario(up);
+
+                    Observacao o = new Observacao(
+                            rs.getInt("id"),
+                            rs.getString("texto"),
+                            rs.getObject("datacriacao", LocalDate.class),
+                            a,
+                            p
+                    );
+
+                    observacaos.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return observacaos;
+    }
+
     public boolean atualizar(Observacao o) {
-        String sql = "UPDATE Observacao SET Texto = ?, DataCriacao = ? WHERE Id = ?";
+        String sql = "UPDATE Observacoes SET Texto = ?, DataCriacao = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -85,7 +197,7 @@ public class ObservacaoDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Observacao WHERE Id = ?";
+        String sql = "DELETE FROM Observacoes WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

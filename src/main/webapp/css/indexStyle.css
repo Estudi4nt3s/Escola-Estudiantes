@@ -314,7 +314,7 @@ nav {
     flex: 1;
     min-width: 250px;
     border-radius: 24px;
-    height: 375px;
+    height: 300px;
     padding: 20px;
     box-shadow: var(--shadow);
     position: relative;
@@ -353,36 +353,36 @@ nav {
 .card::before {
     content: "";
     position: absolute;
-    left: 0px;
+    left: 0;
     top: 15px;
     bottom: 25px;
-    height: 345px;
+    height: 265px;
     width: 6px;
     border-radius: 0 10px 10px 0;
 }
 
-.matematica::before {
-    background: #d11d22;
+.matemática::before {
+    background: #5aa7d6;
 }
 
-.portugues::before {
-    background: #501581;
+.português::before {
+    background: #e74c3c;
 }
 
-.historia::before {
-    background: #a95510;
+.história::before {
+    background: #e1af3a;
 }
 
 .geografia::before {
-    background: #483115;
+    background: #f39c12;
 }
 
-.ingles::before {
-    background: #5f2eb9;
+.informática::before {
+    background: #9b59b6;
 }
 
-.ciencias::before {
-    background: #1a4815;
+.ciências::before {
+    background: #2ecc71;
 }
 
 
@@ -395,8 +395,8 @@ nav {
 }
 
 .card img {
-    width: 140px;
-    height: auto;
+    width: 120px;
+    height: 120px;
     display: block;
     margin: 100px auto 0 100px;
 }
@@ -501,4 +501,10 @@ nav {
     to {
         opacity: 1;
     }
+}
+
+.materias{
+    font-size: 90px;
+    margin-top: auto;
+    align-self: end;
 }

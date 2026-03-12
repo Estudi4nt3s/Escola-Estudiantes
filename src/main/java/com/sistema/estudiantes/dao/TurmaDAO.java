@@ -15,15 +15,15 @@ import java.util.List;
 
 public class TurmaDAO {
 
-    public void inserir(int ano, String serie, char letra) {
-        String sql = "INSERT INTO Turma (Ano, Serie, Letra) VALUES (?, ?, ?)";
+    public void inserir(String nome, int ano, int quantidadeMax) {
+        String sql = "INSERT INTO Turmas (nome, ano, quantidademax) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, ano);
-            psmt.setString(2, serie);
-            psmt.setString(3, String.valueOf(letra));
+            psmt.setString(1, nome);
+            psmt.setInt(2, ano);
+            psmt.setInt(3, quantidadeMax);
 
             psmt.executeUpdate();
 
@@ -34,7 +34,7 @@ public class TurmaDAO {
 
     public List<Turma> listar() {
         List<Turma> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Turma";
+        String sql = "SELECT * FROM Turmas";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -42,10 +42,10 @@ public class TurmaDAO {
 
             while (rs.next()) {
                 Turma t = new Turma(
-                        rs.getInt("Id"),
-                        rs.getInt("Ano"),
-                        rs.getString("Serie"),
-                        rs.getString("Letra").charAt(0)
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getInt("ano"),
+                        rs.getInt("quantidademax")
                 );
                 lista.add(t);
             }
@@ -56,20 +56,20 @@ public class TurmaDAO {
         return lista;
     }
 
-    public List<Turma> listarComFiltro(String condicao, Object valor) {
+    public List<Turma> listarComFiltro(String condicao, int valor) {
         List<Turma> turmas = new ArrayList<>();
-        String sql = "SELECT * FROM Turma WHERE " + condicao;
+        String sql = "SELECT * FROM turmas WHERE " + condicao;
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-             stmt.setObject(1, valor);
+             stmt.setInt(1, valor);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Turma turma = new Turma(
                             rs.getInt("id"),
+                            rs.getString("nome"),
                             rs.getInt("ano"),
-                            rs.getString("serie"),
-                            rs.getString("letra").charAt(0)
+                            rs.getInt("quantidademax")
                     );
                     turmas.add(turma);
                 }
@@ -83,14 +83,14 @@ public class TurmaDAO {
     }
 
     public boolean atualizar(Turma t) {
-        String sql = "UPDATE Turma SET Ano = ?, Serie = ?, Letra = ? WHERE Id = ?";
+        String sql = "UPDATE Turmas SET nome = ?, ano = ?, quantidademax = ? WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
 
-            psmt.setInt(1, t.getAno());
-            psmt.setString(2, t.getSerie());
-            psmt.setString(3, String.valueOf(t.getLetra()));
+            psmt.setString(1, t.getNome());
+            psmt.setInt(2, t.getAno());
+            psmt.setInt(3, t.getQuantidadeMax());
             psmt.setInt(4, t.getId());
 
             return psmt.executeUpdate() > 0;
@@ -102,7 +102,7 @@ public class TurmaDAO {
     }
 
     public boolean excluir(int id) {
-        String sql = "DELETE FROM Turma WHERE Id = ?";
+        String sql = "DELETE FROM Turmas WHERE Id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {

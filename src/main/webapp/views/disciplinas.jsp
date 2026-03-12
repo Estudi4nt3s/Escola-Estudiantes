@@ -1,17 +1,22 @@
-
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Estudiantes - Minhas Disciplinas</title>
+    <title>Estudiantes - Minhas Disciplinas</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 <%
     String[] data = (String[]) request.getSession().getAttribute("data");
+    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 %>
 
 <body>
@@ -26,9 +31,14 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp">
         <i class="material-icons">home</i>Início</a>
         <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">menu_book</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
+        <div class="config">
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
 
     <main class="main">
@@ -41,10 +51,14 @@
 
             <div class="user">
                 <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
-                <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
-                    <span>Mateus Carlos</span>
-                </div>
+
+                    <div class="avatar">
+                        <a href="${pageContext.request.contextPath}/views/perfil.jsp">
+                            <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
+                        </a>
+                            <span><%=usuario.getNome()%></span>
+                    </div>
+
             </div>
         </header>
 
@@ -54,14 +68,13 @@
 
             <div class="disciplinas-grid">
 
-            <a href="aluno.jsp"><div class="disciplina card1">
+            <div class="disciplina card1">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>
                 </div>
                 <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
             </div>
-            </a>
 
             <div class="disciplina card2">
                 <div class="disciplina-info">
@@ -145,6 +158,30 @@
     </div>
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+    <div id="loadingOverlay">
+        <div class="loadingBox">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
+        </div>
+    </div>
+    <script>
+
+        const btnNotas = document.getElementById("btnNotas");
+        const loading = document.getElementById("loadingOverlay");
+
+        btnNotas.addEventListener("click", function(e){
+
+            e.preventDefault(); // impede abrir imediatamente
+
+            loading.style.display = "flex";
+
+            setTimeout(()=>{
+                window.location.href = this.href;
+            },500);
+
+        });
+
+    </script>
 </body>
 
 </html>
