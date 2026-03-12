@@ -66,12 +66,14 @@ nav {
 
 .config {
     margin-top: auto;
-    padding: 25px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
+    width: 100%;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    align-items: center;
+}
+
+.config .menu {
+    width: 100%;
+    height: 90px;
 }
 
 .main {
@@ -836,11 +838,6 @@ nav {
 .menu.active { background: var(--red-dark); }
 .menu:hover { background: rgba(0, 0, 0, 0.1); }
 
-.config {
-    margin-top: auto;
-    padding: 25px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
 
 /* MAIN & TOPBAR */
 .main {

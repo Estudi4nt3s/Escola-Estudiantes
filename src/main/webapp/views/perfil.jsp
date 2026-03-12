@@ -1,16 +1,15 @@
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
-
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 
 <%
     // Recuperando objetos da sessão
     Aluno aluno = (Aluno) session.getAttribute("aluno");
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     Turma turma = (Turma) session.getAttribute("turma");
-    String[] dataSessao = (String[]) session.getAttribute("data");
+    String[] data = (String[]) session.getAttribute("data");
 
 
     // Redireciona caso a sessão tenha expirado
@@ -24,22 +23,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudiantes - Perfil de <%= aluno.getNome() %></title>
 
-
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
-
 <body>
-
 
 <aside class="sidebar">
     <div class="logo">
@@ -47,36 +43,26 @@
         <span>Colégio Estudiantes</span>
     </div>
 
-
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>">
-            <i class="material-icons">assessment</i>Notas
-        </a>
+        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">grading</i>Notas</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
-
-
     <div class="config">
-        <a class="menu" style="color: #ffffff; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 0 15px; width: 88%;" onclick="openLogoutModal()">
+        <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
             <i class="material-icons" style="color: #fff">output</i>Sair
         </a>
     </div>
 </aside>
 
-
 <main class="main">
-
 
     <header class="topbar">
         <div class="date">
             <i class="material-icons">calendar_today</i>
-            <% if(dataSessao != null) { %>
-            <%= dataSessao[2].toUpperCase().charAt(0) + dataSessao[2].toLowerCase().substring(1) %>, <%= dataSessao[0] %>/<%= dataSessao[1] %>
-            <% } %>
+            <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
         </div>
-
 
         <div class="user">
             <i class="material-icons" id="openNotification" onclick="toggleNotifications()">notifications</i>
@@ -87,21 +73,19 @@
         </div>
     </header>
 
-
     <div class="perfil-page">
         <div class="perfil-header-card">
             <div class="perfil-foto" onclick="openPhotoModal()" style="cursor: pointer;">
                 <img id="main-profile-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Aluno">
             </div>
 
-
             <div class="perfil-info-principal">
                 <h2><%= aluno.getNome() %></h2>
-                <p><%= turma.getAno() %> <%= turma.getLetra() %> - Ensino Técnico</p>
+                <p><%= turma.getNome() %> - Ensino Técnico</p>
 
 
                 <div class="perfil-status ativo">
-                    ● Aluno Ativo | RA: #<span id="prof-id-badge"><%= aluno.getMatricula() %></span>
+                    ● Aluno Ativo
                 </div>
             </div>
 
@@ -110,7 +94,6 @@
                 <i class="material-icons" style="font-size: 18px; vertical-align: middle;">edit</i> Editar Perfil
             </button>
         </div>
-
 
         <div class="perfil-detalhes">
             <div class="perfil-card-info">
@@ -124,13 +107,12 @@
             <div class="perfil-card-info">
                 <h3>Turma e Ensino</h3>
                 <div class="linha"><span>Série:</span> <span><%= turma.getAno() %></span></div>
-                <div class="linha"><span>Turma:</span> <span><%= turma.getLetra() %></span></div>
+                <div class="linha"><span>Turma:</span> <span><%= turma.getNome() %></span></div>
                 <div class="linha"><span>Instituição:</span> <span>Instituto J&F</span></div>
             </div>
         </div>
     </div>
 </main>
-
 
 <div class="notification-overlay" id="notificationOverlay">
     <div class="notification-modal">
@@ -150,8 +132,16 @@
     </div>
 </div>
 
+<script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<div id="loadingOverlay">
+    <div class="loadingBox">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+    </div>
+</div>
 
-<div id="photoModal" class="photo-modal-overlay" onclick="closePhotoModal(event)">
+
+    <div id="photoModal" class="photo-modal-overlay" onclick="closePhotoModal(event)">
     <div class="photo-modal-content" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closePhotoModal(event)">&times;</span>
         <div class="photo-wrapper">
@@ -165,8 +155,7 @@
         </div>
         <p style="color: white; margin-top: 15px; font-weight: 500;">Clique no ícone para alterar sua foto de aluno</p>
     </div>
-</div>
-
+    </div>
 
 <div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
     <div class="logout-modal-content" onclick="event.stopPropagation()">
@@ -182,33 +171,44 @@
     </div>
 </div>
 
-
 <script>
     // Funções de Modal e UI
     function toggleNotifications() {
         document.getElementById('notificationOverlay').classList.toggle('show');
     }
-
-
     function openPhotoModal() {
         document.getElementById('photoModal').classList.add('show');
     }
 
+    document.addEventListener("DOMContentLoaded", function(){
 
-    function closePhotoModal(event) {
-        document.getElementById('photoModal').classList.remove('show');
-    }
+        const btnNotas = document.getElementById("btnNotas");
+        const loading = document.getElementById("loadingOverlay");
+
+        if(btnNotas){
+            btnNotas.addEventListener("click", function(e){
+                e.preventDefault();
+                loading.style.display = "flex";
+
+                setTimeout(()=>{
+                    window.location.href = this.href;
+                },500);
+            });
+        }
+
+    });
 
 
     function openLogoutModal() {
         document.getElementById('logoutModal').classList.add('show');
     }
 
-
     function closeLogoutModal() {
         document.getElementById('logoutModal').classList.remove('show');
     }
-
+    function closePhotoModal(event) {
+        document.getElementById('photoModal').classList.remove('show');
+    }
 
     function previewImage(event) {
         const reader = new FileReader();
