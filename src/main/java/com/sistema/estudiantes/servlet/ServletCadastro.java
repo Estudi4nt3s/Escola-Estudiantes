@@ -15,15 +15,12 @@ public class ServletCadastro extends HttpServlet {
 
         AlunoDAO alunoDAO = new AlunoDAO();
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        List<Aluno> alunos = alunoDAO.listar();
 
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
 
         System.out.println("email: " + email);
         System.out.println("senha: " + senha);
-        System.out.println("nome: " +  request.getParameter("nome"));
-        System.out.println("sobrenome: " +  request.getParameter("sobrenome"));
 
         int matricula = Integer.parseInt(request.getParameter("matricula"));
         String cpf = request.getParameter("cpf").replace(".", "").replace("-", "");
@@ -36,9 +33,7 @@ public class ServletCadastro extends HttpServlet {
             return;
         }
 
-        System.out.println(alunos1.getFirst().getUsuarioId().getId());
-
-        if (alunos1.getFirst().getUsuarioId().getId() != null){
+        if (!alunos1.isEmpty() &&(alunos1.getFirst().getUsuarioId().getId()) != null){
             request.getSession().setAttribute("mensagem", "Aluno já cadastrado");
             request.getRequestDispatcher("views/cadastro.jsp").forward(request, response);
             return;

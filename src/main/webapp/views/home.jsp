@@ -32,7 +32,6 @@
 
 </head>
 <%
-    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     String[] data = (String[]) request.getSession().getAttribute("data");
     String[] materia = (String[]) request.getSession().getAttribute("materia");

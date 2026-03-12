@@ -1,14 +1,14 @@
 package com.sistema.estudiantes.model;
 
 public class Usuario {
-    private int id;
+    private Integer id;
     private String email;
     private String senha;
     private String foto;
 
     public Usuario() {}
 
-    public Usuario(int id, String email, String senha, String foto) {
+    public Usuario(Integer id, String email, String senha, String foto) {
         this.id = id;
         this.email = email;
         this.senha = senha;
@@ -21,13 +21,13 @@ public class Usuario {
         this.foto = foto;
     }
 
-    public Usuario(int id, String email, String senha) {
+    public Usuario(Integer id, String email, String senha) {
         this.id = id;
         this.email = email;
         this.senha = senha;
     }
 
-    public Usuario(int id) {
+    public Usuario(Integer id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
@@ -53,7 +53,7 @@ public class Usuario {
         return this.foto;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -66,9 +66,6 @@ public class ServletLogin extends HttpServlet {
                         Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplina().getId()));
                         List<Aula> aulas = aulaDAO.listarComFiltro("professorid = ? AND diasemana = ? order by horarioinicio", prof.getId(), semana);
                         List<Turma> turmas = turmaDAO.listar();
-                        String nfd = Normalizer.normalize(disc.getNome(), Normalizer.Form.NFD);
-                        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-                        disc.setNome(pattern.matcher(nfd).replaceAll(""));
 
                         request.getSession().setAttribute("professor", prof);
                         request.getSession().setAttribute("disciplina", disc);

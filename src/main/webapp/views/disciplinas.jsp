@@ -18,7 +18,6 @@
 <%
     String[] data = (String[]) request.getSession().getAttribute("data");
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
-    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     Map<String,String> conteudo = new HashMap<>();
     conteudo.put("matemática","calculate");
     conteudo.put("português","book");

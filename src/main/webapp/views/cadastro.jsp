@@ -44,12 +44,6 @@
         <form action="${pageContext.request.contextPath}/servletCadastro" method="post"
               onsubmit="document.getElementById('loadingOverlay').style.display='flex'">
 
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome" placeholder="Digite seu nome" required>
-
-            <label for="sobrenome">Sobrenome</label>
-            <input type="text" name="sobrenome" id="sobrenome" placeholder="Digite seu sobrenome" required>
-
             <label for="matricula">Matrícula</label>
             <input type="number" name="matricula" id="matricula" placeholder="Digite sua matrícula" required>
 
