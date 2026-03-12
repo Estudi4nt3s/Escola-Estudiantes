@@ -270,12 +270,12 @@ nav {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     padding: 40px;
     background: var(--bg);
     width: 100%;
     max-width: 1100px;
     margin-left: 40px;
+    align-items: center;
 }
 
 .turmas-topo {
@@ -401,6 +401,7 @@ nav {
     color: #333;
     border-left: 5px solid var(--red);
     padding-left: 15px;
+    margin-bottom: 40px;
 }
 
 .table-container {
@@ -598,6 +599,8 @@ nav {
     gap:8px;
     margin-bottom:20px;
     transition:0.2s;
+    margin-left: auto;
+    align-self: flex-end;
 }
 
 .submit:hover{
@@ -608,6 +611,171 @@ a {
     text-decoration: none;
 }
 
-a .crud {
+.editar {
     color: #000000;
+    gap: 10px;
+}
+
+.excluir {
+    color: red;
+}
+
+.grades-table th:nth-child(1),
+.grades-table td:nth-child(1){
+    text-align: left;
+}
+
+.grades-table th:nth-child(2),
+.grades-table td:nth-child(2){
+    text-align: center;
+}
+
+.grades-table th:nth-child(3),
+.grades-table td:nth-child(3){
+    text-align: center;
+}
+
+.grades-table th:nth-child(1){
+    width:60%;
+}
+
+.grades-table th:nth-child(2){
+    width:20%;
+}
+
+.grades-table th:nth-child(3){
+    width:20%;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3{
+    margin: 0;
+}
+
+.modal-header .fechar{
+    cursor: pointer;
+}
+
+.modal-box{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    width:350px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.modal-box textarea{
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    border: 2px solid black;
+    border-radius: 12px;
+    font-size: 16px;
+    resize: none;
+}
+
+.modal-box form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fechar{
+    font-size:22px;
+    cursor:pointer;
+    align-self:flex-end;
+}
+
+.editar-btn,
+.excluir-btn{
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.texto-excluir{
+    text-align:center;
+    font-size:15px;
+    color:#444;
+    margin-top:5px;
+}
+
+.acoes-excluir{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:10px;
+}
+
+.cancelar{
+    background:#e5e5e5;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.2s;
+}
+
+.cancelar:hover{
+    background:#d6d6d6;
+}
+
+.cancelar,
+.excluir-btn-modal{
+    width:120px;
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:500;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+}
+
+.excluir-btn-modal{
+    background:#d11d22;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.2s;
+}
+
+.excluir-btn-modal:hover{
+    background:#a5161a;
+}
+
+.confirmar{
+    background: #d11d22;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 40px;
+    border: none;
 }

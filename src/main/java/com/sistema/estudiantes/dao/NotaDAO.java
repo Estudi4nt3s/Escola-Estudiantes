@@ -65,9 +65,9 @@ public class NotaDAO {
 
     public List<Nota> listarComFiltro(String condicao, int valor){
         List<Nota> listaNota = new ArrayList<>();
-        String sql = "SELECT * FROM notas WHERE "+condicao;
+        String sql = "SELECT * FROM notas WHERE " + condicao;
         try(Connection conn = Conexao.conectar();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, valor);
 
             try(ResultSet rs = stmt.executeQuery()){

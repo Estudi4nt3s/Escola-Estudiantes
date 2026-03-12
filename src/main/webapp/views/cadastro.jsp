@@ -21,7 +21,7 @@
 </a>
 <div class="container">
     <div class="left">
-        <h1>Seja bem-vindo<br>ao Estudantes</h1>
+        <h1>Seja bem-vindo<br>ao Estudiantes</h1>
         <hr>
         <p>
             A educação é a arma mais poderosa que você pode usar para mudar o mundo.

@@ -102,7 +102,7 @@ public class GerarBoletimServlet extends HttpServlet {
             document.add(topo);
             document.add(new Paragraph("\n"));
 
-            String nomeAluno = user.getNome();
+            String nomeAluno = aluno.getNome();
             String turma = serie.getNome();
             String anoLetivo = String.valueOf(serie.getAno());
 

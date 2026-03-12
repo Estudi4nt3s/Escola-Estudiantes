@@ -6,6 +6,7 @@
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
@@ -18,6 +19,7 @@
     String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -67,7 +69,7 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
-                <span><%=usuario.getNome() + " " + usuario.getSobrenome()%></span>
+                <span><%=professor.getNome()%></span>
             </div>
         </div>
     </header>
@@ -100,7 +102,7 @@
             <div class="alunos-card">
                 <div class="alunos-nome">
                     <%System.out.println(aluno);%>
-                    <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
+                    <%= aluno.getNome()%>
                 </div>
 
                 <div class="acoes-container">
