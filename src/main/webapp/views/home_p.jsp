@@ -3,6 +3,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -28,8 +30,7 @@
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-    System.out.println(aulas.size());
-    for(int i = 0; i < Math.min(aulas.size(), 6); i++){
+    for(int i = 0; i < aulas.size(); i++){
         for (Turma value : turmas) {
             if (value.getId() == aulas.get(i).getTurmaId().getId()) {
                 turma[i] = value.getNome();
@@ -38,6 +39,14 @@
             }
         }
     }
+
+    Map<String,String[]> conteudo = new HashMap<>();
+    conteudo.put("matemática", new String[]{"Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.","calculate"});
+    conteudo.put("português", new String[]{"Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.","book"});
+    conteudo.put("história", new String[]{"Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.","history_edu"});
+    conteudo.put("geografia", new String[]{"Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.","public"});
+    conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
+    conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
 %>
 <body>
 
@@ -72,7 +81,7 @@
             <div class="user">
                 <div class="avatar">
                     <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
-                    <span><%=professor.getUsuario().getNome()%></span>
+                    <span><%=professor.getNome()%></span>
                 </div>
             </div>
         </header>
@@ -83,7 +92,7 @@
 
                 <div class="welcome">
                     <%-- Saudação personalizada com o primeiro nome --%>
-                    <h2>Olá, <%=professor.getUsuario().getNome()%>!</h2>
+                    <h2>Olá, <%=professor.getNome()%>!</h2>
                     <p>Pronto para as aulas de hoje?</p>
                 </div>
 
@@ -94,11 +103,10 @@
                         if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
                             for(int i = 0;i < aulas.size();i++){
                     %>
-                        <div class="card card<%=materia.getNome().toLowerCase()%>">
+                        <div class="card card <%=materia.getNome().toLowerCase()%>">
                             <h3><%=turma[i]%></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                                nesciunt.</p>
-                            <img src="${pageContext.request.contextPath}/utils/<%=materia.getNome().toLowerCase()%>.png" alt="<%=materia.getNome()%>">
+                            <p><%=conteudo.get(materia.getNome().toLowerCase())[0]%></p>
+                            <i class="material-icons materias"><%=conteudo.get(materia.getNome().toLowerCase())[1]%></i>
                         </div>
                     <%
                             }

@@ -55,6 +55,7 @@ public class AlunoDAO {
                 Usuario u = new Usuario(rs.getInt("usuarioid"));
                 Aluno aluno = new Aluno(
                         rs.getInt("matricula"),
+                        rs.getString("nome"),
                         rs.getString("cpf"),
                         rs.getObject("datanascimento", LocalDate.class),
                         u,
@@ -83,8 +84,13 @@ public class AlunoDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Usuario u = new Usuario(rs.getInt("usuarioid"));
+
+                    if(rs.wasNull()) {
+                        u.setId(null);
+                    }
                     Aluno aluno = new Aluno(
                             rs.getInt("matricula"),
+                            rs.getString("nome"),
                             rs.getString("cpf"),
                             rs.getObject("datanascimento", LocalDate.class),
                             u,
@@ -114,6 +120,7 @@ public class AlunoDAO {
                     Usuario u = new Usuario(rs.getInt("usuarioid"));
                     Aluno aluno = new Aluno(
                             rs.getInt("matricula"),
+                            rs.getString("nome"),
                             rs.getString("cpf"),
                             rs.getObject("datanascimento", LocalDate.class),
                             u,
@@ -133,10 +140,9 @@ public class AlunoDAO {
     public List<Aluno> listarPorTurma(int turmaId) {
         List<Aluno> alunos = new ArrayList<>();
         String sql = """
-                    SELECT a.*, u.nome, u.sobrenome
-                    FROM alunos a
-                    INNER JOIN usuarios u ON a.usuarioid = u.id
-                    WHERE a.turmaid = ?;
+                    SELECT *
+                    FROM alunos
+                    WHERE turmaid = ?;
         """;
                 try (Connection conn = Conexao.conectar();
                      PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -146,11 +152,10 @@ public class AlunoDAO {
                     ResultSet rs = stmt.executeQuery();
                     while (rs.next()) {
                         Usuario u = new Usuario(rs.getInt("usuarioid"));
-                        u.setNome(rs.getString("nome"));
-                        u.setSobrenome(rs.getString("sobrenome"));
                         System.out.println(u);
                         Aluno aluno = new Aluno(
                                 rs.getInt("matricula"),
+                                rs.getString("nome"),
                                 rs.getString("cpf"),
                                 rs.getObject("datanascimento", LocalDate.class),
                                 u,

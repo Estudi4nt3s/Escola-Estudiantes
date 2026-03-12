@@ -65,13 +65,18 @@ public class NotaDAO {
 
     public List<Nota> listarComFiltro(String condicao, int valor){
         List<Nota> listaNota = new ArrayList<>();
-        String sql = "SELECT * FROM notas WHERE "+condicao;
+        String sql = "SELECT * FROM notas WHERE " + condicao;
         try(Connection conn = Conexao.conectar();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, valor);
 
             try(ResultSet rs = stmt.executeQuery()){
                 while (rs.next()) {
+                    double n1Value = rs.getDouble("N1");
+                    Double n1 = rs.wasNull() ? null : n1Value;
+
+                    double n2Value = rs.getDouble("N2");
+                    Double n2 = rs.wasNull() ? null : n2Value;
 
                     Disciplina disciplina = new Disciplina(rs.getInt("disciplinaid"));
                     Aluno aluno = new Aluno(rs.getInt("alunomatricula"));
@@ -80,10 +85,11 @@ public class NotaDAO {
                             rs.getInt("id"),
                             disciplina,
                             aluno,
-                            rs.getDouble("N1"),
-                            rs.getDouble("N2")
+                            n1,
+                            n2
                     );
                     listaNota.add(nota);
+                    System.out.println("Nota: " + nota.getN2());
                 }
             }
         } catch (SQLException e) {

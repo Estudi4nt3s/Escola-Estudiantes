@@ -6,6 +6,7 @@
 <%
     Aluno aluno = (Aluno) request.getSession().getAttribute("alunoSelecionado");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
     String[] data = (String[]) request.getSession().getAttribute("data");
     List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
     List<Nota> notas = (List<Nota>) request.getAttribute("notas");
@@ -14,7 +15,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudiantes - Boletim de <%=usuario.getNome()%></title>
+    <% if (aluno != null) { %>
+    <title>Estudiantes - Boletim de <%=aluno.getNome()%></title>
+    <% } else { %>
+    <title>Estudiantes - Boletim></title>
+    <% } %>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -53,7 +58,7 @@
         <div class="user">
             <div class="avatar">
                 <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
-                <span><%=usuario.getNome()%></span>
+                <span><%=professor.getNome()%></span>
             </div>
         </div>
     </header>
@@ -61,11 +66,10 @@
     <div class="main-content">
         <div class="page-header">
             <% if (aluno != null && aluno.getUsuarioId() != null) { %>
-            <h2 class="page-title">Boletim Escolar: <%= aluno.getUsuarioId().getNome()%></h2>
+            <h2 class="page-title">Boletim Escolar: <%= aluno.getNome()%></h2>
             <% } else { %>
             <h2 class="page-title">Boletim Escolar: Usuário não encontrado</h2>
             <% } %>
-            <h2 class="page-title">Boletim Escolar: <%= aluno.getUsuarioId().getNome()%></h2>
         </div>
 
         <div class="table-container">

@@ -65,7 +65,7 @@ public class ServletObservacao extends HttpServlet {
         }
 
         request.setAttribute("observacoes", observacoes);
-        request.setAttribute("alunos", alunos);
+        request.setAttribute("alunoSelecionado", alunos);
         request.setAttribute("professores", professores);
 
         encaminhar(request, response, "/views/observacoes.jsp");
@@ -79,7 +79,7 @@ public class ServletObservacao extends HttpServlet {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
         int professorId = usuario.getId();
 
-        List<Observacao> observacoesAluno = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
+        List<Observacao> observacoesAluno = observacaoDAO.listarComFiltro("o.alunomatricula = ?", alunoId);
 
         List<Observacao> filtradas = new ArrayList<>();
 
@@ -91,8 +91,15 @@ public class ServletObservacao extends HttpServlet {
             }
         }
 
+        List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
+        Aluno aluno = null;
+
+        if(alunos != null && !alunos.isEmpty()){
+            aluno = alunos.get(0);
+        }
+
         request.setAttribute("observacoes", filtradas);
-        request.setAttribute("alunoId", alunoId);
+        request.getSession().setAttribute("alunoSelecionado", aluno);
 
         encaminhar(request, response, "/views/observacoes.jsp");
 
@@ -124,13 +131,14 @@ public class ServletObservacao extends HttpServlet {
 
         int id = Integer.parseInt(request.getParameter("id"));
         String texto = request.getParameter("texto");
-        LocalDate dataCriacao = LocalDate.parse(request.getParameter("datacriacao"));
+
+        LocalDate dataCriacao = LocalDate.now();
 
         Observacao observacao = new Observacao(id, texto, dataCriacao);
 
         observacaoDAO.atualizar(observacao);
 
-        List<Observacao> lista = observacaoDAO.listarComFiltro("id = ?", id);
+        List<Observacao> lista = observacaoDAO.listarComFiltro("o.id = ?", id);
         Observacao obs = lista.get(0);
 
         int alunoId = obs.getIdAluno().getMatricula();

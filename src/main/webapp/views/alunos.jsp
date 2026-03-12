@@ -6,6 +6,7 @@
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%
     String busca = "";
     if (request.getParameter("busca") != null) {
@@ -17,6 +18,8 @@
     Locale ptBr = new Locale("pt", "BR");
     String semana = hoje.getDayOfWeek().getDisplayName(TextStyle.SHORT, ptBr).toUpperCase().substring(0, 3);
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+    List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -66,22 +69,23 @@
             <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
                 <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
-                <span><%=usuario.getNome() + " " + usuario.getSobrenome()%></span>
+                <span><%=professor.getNome()%></span>
             </div>
         </div>
     </header>
 
     <div class="main-content">
         <div class="alunos-topo">
+            <form action="aluno" method="get">
+                <select class="alunos-titulo" name="id" onchange="this.form.submit()">
             <%
-                Turma turma = (Turma) request.getAttribute("turmaSelecionada");
-                if(turma != null){
+                Turma turmaSelecionada = (Turma) request.getAttribute("turmaSelecionada");
+                for(Turma turma:turmas){
             %>
-            <div class="alunos-titulo">
-                <%= turma.getNome() %>
-                <i class="material-icons">expand_more</i>
-            </div>
-            <% } %>
+                    <option value="<%=turma.getId()%>" <%=turma.getId() == turmaSelecionada.getId()?"selected":""%>><%= turma.getNome() %></option>
+                    <% } %>
+                </select>
+            </form>
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
@@ -98,7 +102,7 @@
             <div class="alunos-card">
                 <div class="alunos-nome">
                     <%System.out.println(aluno);%>
-                    <%= aluno.getUsuarioId().getNome() + " " + aluno.getUsuarioId().getSobrenome() %>
+                    <%= aluno.getNome()%>
                 </div>
 
                 <div class="acoes-container">
