@@ -14,7 +14,7 @@ Nenhuma aula para este dia.
 
 <div class="aula-item">
 
-  <strong><%= aula.getId() %></strong><br>
+  <strong><%= aula.getProfessorId().getDisciplina().getNome() %></strong><br>
   Professor: <%= aula.getProfessorId().getNome() %><br>
   Horário: <%= aula.getHorarioInicio() + "-" + aula.getHorarioFim() %>
 </div>
