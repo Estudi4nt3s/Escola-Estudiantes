@@ -1,5 +1,12 @@
 <%@ page import="com.sistema.estudiantes.model.Admin" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    session = request.getSession(false);
+    if(session != null) {
+        session.invalidate();
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -82,6 +89,12 @@
             fecharAdmin();
         }
     }
+
+
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
 
     function alternarVisibilidade(event) {
         const icone = event.target;
