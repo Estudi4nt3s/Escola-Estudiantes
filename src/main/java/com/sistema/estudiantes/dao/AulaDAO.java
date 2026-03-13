@@ -4,10 +4,10 @@ import com.sistema.estudiantes.conexao.Conexao;
 import com.sistema.estudiantes.model.*;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AulaDAO {
     public void inserir(Aula aula) {
@@ -65,10 +65,15 @@ public class AulaDAO {
         return lista;
     }
 
-    public List<Aula> listarComFiltro(String condicao, String valor) {
+    public List<Aula> listarComFiltro(String condicao, int id, String valor) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM aulas WHERE " + condicao;
+        String sql = """
+    SELECT a.*, p.nome AS professornome, d.nome AS disciplinanome
+    FROM aulas a
+    LEFT JOIN professores p ON a.professorid = p.id
+    LEFT JOIN disciplinas d ON p.disciplinaid = d.id
+    WHERE\s""" + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -80,6 +85,12 @@ public class AulaDAO {
 
                 while (rs.next()) {
                     Professor p = new Professor(rs.getInt("professorid"));
+                    p.setNome(rs.getString("professornome"));
+
+                    Disciplina d = new Disciplina(rs.getInt("id"));
+                    d.setNome(rs.getString("disciplinanome"));
+                    p.setDisciplina(d);
+
                     Turma t = new Turma(rs.getInt("turmaid"));
                     Aula aula = new Aula(
                             rs.getInt("id"),
@@ -88,8 +99,6 @@ public class AulaDAO {
                             p,
                             t,
                             rs.getString("diasemana")
-
-
                     );
                     aulas.add(aula);
                 }
@@ -102,32 +111,39 @@ public class AulaDAO {
         return aulas;
     }
 
-    public List<Aula> listarComFiltro(String condicao, int valor, String data) {
+    public List<Aula> listarComFiltro(Optional<String> condicao, String valor1, int valor2) {
 
         List<Aula> aulas = new ArrayList<>();
-        String sql = "SELECT * FROM aulas WHERE " + condicao;
+        String sql = """
+        SELECT a.*, p.nome AS professornome, d.nome AS disciplinanome
+        FROM aulas a
+        LEFT JOIN professores p ON a.professorid = p.id
+        LEFT JOIN disciplinas d ON p.disciplinaid = d.id
+        WHERE \s""" + condicao;
 
         try (
                 Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setInt(1, valor);
-            stmt.setString(2, data);
+            stmt.setString(1, valor1);
+            stmt.setInt(2, valor2);
 
             try (ResultSet rs = stmt.executeQuery()) {
-
                 while (rs.next()) {
                     Professor p = new Professor(rs.getInt("professorid"));
+                    p.setNome(rs.getString("professornome"));
+
+                    Disciplina d = new Disciplina(rs.getInt("id"));
+                    d.setNome(rs.getString("disciplinanome"));
+                    p.setDisciplina(d);
+
                     Turma t = new Turma(rs.getInt("turmaid"));
                     Aula aula = new Aula(
                             rs.getInt("id"),
                             rs.getObject("horarioinicio", LocalTime.class),
                             rs.getObject("horariofim", LocalTime.class),
-                            p,
-                            t,
+                            p, t,
                             rs.getString("diasemana")
-
-
                     );
                     aulas.add(aula);
                 }
