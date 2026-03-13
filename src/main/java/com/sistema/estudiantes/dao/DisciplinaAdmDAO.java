@@ -8,18 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisciplinaAdmDAO {
-    // Retorna a lista simples de disciplinas para o SELECT do formulário
+
     public List<Disciplina> listar() {
         List<Disciplina> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Disciplinas ORDER BY Nome ASC";
-
+        String sql = "SELECT id, nome FROM disciplinas ORDER BY nome ASC";
         try (Connection conn = Conexao.conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
              ResultSet rs = psmt.executeQuery()) {
             while (rs.next()) {
                 Disciplina d = new Disciplina();
-                d.setId(rs.getInt("Id"));
-                d.setNome(rs.getString("Nome"));
+                d.setId(rs.getInt("id"));
+                d.setNome(rs.getString("nome"));
                 lista.add(d);
             }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -28,142 +27,83 @@ public class DisciplinaAdmDAO {
 
     public List<DisciplinasAdm> listarTodasComRelacionamentos() {
         List<DisciplinasAdm> lista = new ArrayList<>();
-        String sql = "SELECT * FROM DisciplinaAdm ORDER BY Id DESC";
+        // MUDANÇA AQUI: Buscamos o nome direto da tabela professores (p.nome)
+        String sql = "SELECT d.id, d.nome, " +
+                "COALESCE(p.nome, 'Sem Professor') as prof_nome " +
+                "FROM disciplinas d " +
+                "LEFT JOIN professores p ON p.disciplinaid = d.id " +
+                "ORDER BY d.id DESC";
+
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 DisciplinasAdm d = new DisciplinasAdm();
-                d.setId(rs.getInt("Id"));
-                d.setNome(rs.getString("Nome"));
-                d.setCargaHoraria(rs.getInt("CargaHoraria"));
-                d.setProfessorNome(rs.getString("ProfessorNome"));
-                d.setTurmaNome(rs.getString("TurmaNome"));
+                d.setId(rs.getInt("id"));
+                d.setNome(rs.getString("nome"));
+                d.setProfessorNome(rs.getString("prof_nome"));
+
+                d.setCargaHoraria(0);
+                d.setTurmaNome("N/A");
                 lista.add(d);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
     public void salvar(DisciplinasAdm d, String acao) {
-        try (Connection conn = Conexao.conectar()) {
-            garantirDisciplinaReal(d.getNome(), conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         String sql = "novo".equals(acao)
-                ? "INSERT INTO DisciplinaAdm (Nome, CargaHoraria, ProfessorNome, TurmaNome) VALUES (?, ?, ?, ?)"
-                : "UPDATE DisciplinaAdm SET Nome=?, CargaHoraria=?, ProfessorNome=?, TurmaNome=? WHERE Id=?";
+                ? "INSERT INTO disciplinas (nome) VALUES (?)"
+                : "UPDATE disciplinas SET nome=? WHERE id=?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, d.getNome());
-            stmt.setInt(2, d.getCargaHoraria());
-            stmt.setString(3, d.getProfessorNome());
-            stmt.setString(4, d.getTurmaNome());
-            if ("editar".equals(acao)) stmt.setInt(5, d.getId());
+            if ("editar".equals(acao)) stmt.setInt(2, d.getId());
             stmt.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    public boolean professorExisteNoBancoReal(String nomeProfessor) {
-        String sql = "SELECT COUNT(*) FROM Professores WHERE Nome ILIKE ?";
+    // Simplificado para a nova lógica: Criamos apenas o Professor com o nome direto
+    public void criarProfessorBasico(String nomeCompleto, int disciplinaId) {
+        String sql = "INSERT INTO professores (nome, disciplinaid) VALUES (?, ?)";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, nomeProfessor);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-        return false;
-    }
-
-    public void criarProfessorCompleto(String nome, String sobrenome, String email) {
-        Connection conn = null;
-        try {
-            conn = Conexao.conectar();
-            conn.setAutoCommit(false);
-
-            String sqlUser = "INSERT INTO Usuarios (Nome, Sobrenome, Email, Senha) VALUES (?, ?, ?, ?)";
-            int usuarioId = -1;
-
-            try (PreparedStatement stmtUser = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS)) {
-                stmtUser.setString(1, nome);
-                stmtUser.setString(2, sobrenome);
-                stmtUser.setString(3, email);
-                stmtUser.setString(4, "senha123"); // Senha padrão
-                stmtUser.executeUpdate();
-
-                ResultSet rs = stmtUser.getGeneratedKeys();
-                if (rs.next()) usuarioId = rs.getInt(1);
-            }
-
-            if (usuarioId != -1) {
-                int disciplinaId = garantirDisciplinaReal(nome, conn);
-
-                String sqlProf = "INSERT INTO Professores (Nome, UsuarioId, DisciplinaId) VALUES (?, ?, ?)";
-                try (PreparedStatement stmtProf = conn.prepareStatement(sqlProf)) {
-                    stmtProf.setString(1, nome + " " + sobrenome);
-                    stmtProf.setInt(2, usuarioId);
-                    stmtProf.setInt(3, disciplinaId);
-                    stmtProf.executeUpdate();
-                }
-            }
-
-            conn.commit(); // Salva tudo
-        } catch (Exception e) {
-            try { if (conn != null) conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
-            e.printStackTrace();
-        } finally {
-            try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-        }
-    }
-
-    private int garantirDisciplinaReal(String nomeDisc, Connection conn) throws SQLException {
-        String sqlBusca = "SELECT Id FROM Disciplinas WHERE Nome ILIKE ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sqlBusca)) {
-            stmt.setString(1, nomeDisc);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return rs.getInt(1);
-        }
-
-        String sqlInsert = "INSERT INTO Disciplinas (Nome) VALUES (?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, nomeDisc);
+            stmt.setString(1, nomeCompleto);
+            stmt.setInt(2, disciplinaId);
             stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return 1; // Fallback para ID 1 caso tudo falhe
     }
 
     public DisciplinasAdm buscarPorId(int id) {
-        String sql = "SELECT * FROM DisciplinaAdm WHERE Id = ?";
+        String sql = "SELECT id, nome FROM disciplinas WHERE id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                DisciplinasAdm d = new DisciplinasAdm();
-                d.setId(rs.getInt("Id"));
-                d.setNome(rs.getString("Nome"));
-                d.setCargaHoraria(rs.getInt("CargaHoraria"));
-                d.setProfessorNome(rs.getString("ProfessorNome"));
-                d.setTurmaNome(rs.getString("TurmaNome"));
-                return d;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    DisciplinasAdm d = new DisciplinasAdm();
+                    d.setId(rs.getInt("id"));
+                    d.setNome(rs.getString("nome"));
+                    return d;
+                }
             }
         } catch (Exception e) { e.printStackTrace(); }
         return null;
     }
 
     public void excluir(int id) {
-        String sql = "DELETE FROM DisciplinaAdm WHERE Id = ?";
+        // Primeiro removemos a referência nas notas/observações se houver (opcional dependendo do seu banco)
+        String sql = "DELETE FROM disciplinas WHERE id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
-
 }

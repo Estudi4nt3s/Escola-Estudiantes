@@ -50,18 +50,18 @@ public class TurmaAdmServlet extends HttpServlet {
         try {
             if ("excluir".equals(acao)) {
                 dao.excluir(Integer.parseInt(request.getParameter("id")));
-            } else if ("novo".equals(acao) || "editar".equals(acao)) {
-                TurmaAdm t = new TurmaAdm();
-                if ("editar".equals(acao)) t.setId(Integer.parseInt(request.getParameter("id")));
+            }else if ("novo".equals(acao) || "editar".equals(acao)) {
+            TurmaAdm t = new TurmaAdm();
+            if ("editar".equals(acao)) t.setId(Integer.parseInt(request.getParameter("id")));
 
-                t.setNome(request.getParameter("nome"));
-                t.setAno(Integer.parseInt(request.getParameter("ano")));
+            t.setNome(request.getParameter("nome"));
+            t.setAno(Integer.parseInt(request.getParameter("ano")));
 
-                String qtdStr = request.getParameter("quantidadeAlunos");
-                t.setQuantidadeAlunos(qtdStr != null ? Integer.parseInt(qtdStr) : 0);
+            // REMOVIDO: Não pegamos mais a quantidade do request.
+            // O banco calcula isso sozinho na listagem.
 
-                dao.salvar(t, acao);
-            }
+            dao.salvar(t, acao);
+        }
             // Se chegou aqui, deu certo
             request.getSession().setAttribute("mensagemSucesso", "Operação realizada com sucesso!");
 

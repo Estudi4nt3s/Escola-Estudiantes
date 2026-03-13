@@ -10,34 +10,35 @@ public class TurmaAdmDAO {
 
     public List<TurmaAdm> listarTodas() {
         List<TurmaAdm> lista = new ArrayList<>();
-        // Removidas as aspas duplas para o Postgres ignorar o Case Sensitive
-        String sql = "SELECT * FROM TurmaAdm ORDER BY Id DESC";
+        // Note que usamos 'Turmas t' para a tabela principal
+        String sql = "SELECT t.*, COALESCE(v.qntdAlunos, 0) as total " +
+                "FROM Turmas t " +
+                "LEFT JOIN vwQntdAlunosTurma v ON t.Nome = v.Nome " +
+                "ORDER BY t.Id DESC";
 
         try (Connection conn = Conexao.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 TurmaAdm t = new TurmaAdm();
                 t.setId(rs.getInt("Id"));
                 t.setNome(rs.getString("Nome"));
                 t.setAno(rs.getInt("Ano"));
-                t.setQuantidadeAlunos(rs.getInt("QuantidadeAlunos"));
+                t.setQuantidadeAlunos(rs.getInt("total"));
                 lista.add(t);
             }
-        } catch (Exception e) {
-            System.err.println("Erro no DAO listarTodas: " + e.getMessage());
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
         return lista;
     }
 
     public void salvar(TurmaAdm turma, String acao) {
         String sql;
+        // Removido 'QuantidadeAlunos' do INSERT e UPDATE, pois a View cuida disso
         if ("novo".equals(acao)) {
-            sql = "INSERT INTO TurmaAdm (Nome, Ano, QuantidadeAlunos) VALUES (?, ?, ?)";
+            sql = "INSERT INTO Turmas (Nome, Ano) VALUES (?, ?)";
         } else {
-            sql = "UPDATE TurmaAdm SET Nome = ?, Ano = ?, QuantidadeAlunos = ? WHERE Id = ?";
+            sql = "UPDATE Turmas SET Nome = ?, Ano = ? WHERE Id = ?";
         }
 
         try (Connection conn = Conexao.conectar();
@@ -45,11 +46,9 @@ public class TurmaAdmDAO {
 
             stmt.setString(1, turma.getNome());
             stmt.setInt(2, turma.getAno());
-            // Trata o nulo da QuantidadeAlunos
-            stmt.setInt(3, turma.getQuantidadeAlunos());
 
             if ("editar".equals(acao)) {
-                stmt.setInt(4, turma.getId());
+                stmt.setInt(3, turma.getId());
             }
 
             stmt.executeUpdate();
@@ -60,7 +59,8 @@ public class TurmaAdmDAO {
     }
 
     public TurmaAdm buscarPorId(int id) {
-        String sql = "SELECT * FROM TurmaAdm WHERE Id = ?";
+        // Buscamos na tabela 'Turmas'
+        String sql = "SELECT * FROM Turmas WHERE Id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -70,7 +70,7 @@ public class TurmaAdmDAO {
                     t.setId(rs.getInt("Id"));
                     t.setNome(rs.getString("Nome"));
                     t.setAno(rs.getInt("Ano"));
-                    t.setQuantidadeAlunos(rs.getInt("QuantidadeAlunos"));
+                    // A quantidade aqui pode ficar 0, pois no 'listarTodas' ela será preenchida pela View
                     return t;
                 }
             }
@@ -79,7 +79,8 @@ public class TurmaAdmDAO {
     }
 
     public void excluir(int id) {
-        String sql = "DELETE FROM TurmaAdm WHERE Id = ?";
+        // Deletamos na tabela 'Turmas'
+        String sql = "DELETE FROM Turmas WHERE Id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
