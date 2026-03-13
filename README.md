@@ -69,25 +69,4 @@ Adicione o servidor Tomcat à IDE e execute o artefato.
 🎨 Design e Organização
 O processo de criação passou por uma etapa de prototipagem no Figma e a organização das tarefas foi gerida via Jira, aplicando metodologias ágeis para o desenvolvimento em grupo através do Git.
 
-Desenvolvido por Alunos do Instituto J&F - 2024
-
-
----
-
-### 💡 O que mais você pode adicionar?
-
-Para deixar o README ainda melhor, aqui estão algumas sugestões:
-
-1.  **Diagrama do Banco de Dados (ERD):** Como você usa PostgreSQL, colocar uma imagem do diagrama de como as tabelas (Aluno, Professor, Notas, Turmas) se relacionam é muito valioso.
-2.  **Screenshots:** Coloque fotos da página de Login ou da Home do Aluno. Isso chama muito a atenção de quem visita o repositório.
-3.  **Script do Banco:** Verifique se no seu repositório existe um arquivo `.sql` com os `CREATE TABLE`. Se não existir, é bom criar para que outra pessoa consiga rodar o projeto.
-
-### Respondendo sobre as dependências:
-Como você usa **JSP + Servlets + JDBC** puro (sem Maven/Gradle), é essencial que você verifique se o arquivo `.jar` do driver do PostgreSQL está dentro da pasta `WEB-INF/lib` do seu projeto. Se não estiver, quem baixar o código não conseguirá conectar ao banco.
-
-
-
-[Image of Database Entity Relationship Diagram for School Management System]
-
-
-O que achou dessa estrutura? Se precisar que eu detalhe mais alguma funcionalidade o
+Desenvolvido por Alunos do Instituto J&F - 2026
