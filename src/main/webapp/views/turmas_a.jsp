@@ -50,25 +50,28 @@
   </div>
 
   <div class="card">
-    <table>
-      <thead><tr><th>Nome</th><th>Ano</th><th>Qtd Alunos</th><th>Ações</th></tr></thead>
-      <tbody>
-      <% if (listaTurmas != null && !listaTurmas.isEmpty()) {
-        for (TurmaAdm turma : listaTurmas) { %>
-      <tr>
-        <td><%= turma.getNome() %></td>
-        <td><%= turma.getAno() %></td>
-        <td><%= turma.getQuantidadeAlunos() %></td>
-        <td>
-          <a href="TurmaAdmServlet?acao=editar&id=<%= turma.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
-          <a href="TurmaAdmServlet?acao=pre-excluir&id=<%= turma.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
-        </td>
-      </tr>
-      <% } } else { %>
-      <tr><td colspan="4" style="text-align:center;">Nenhuma turma cadastrada.</td></tr>
-      <% } %>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table>
+        <thead><tr><th>Nome</th><th>Ano</th><th>Qtd Alunos</th><th>Ações</th></tr></thead>
+
+       <tbody>
+        <% if (listaTurmas != null && !listaTurmas.isEmpty()) {
+          for (TurmaAdm turma : listaTurmas) { %>
+        <tr>
+          <td><%= turma.getNome() %></td>
+          <td><%= turma.getAno() %></td>
+          <td><%= turma.getQuantidadeAlunos() %></td>
+          <td>
+            <a href="TurmaAdmServlet?acao=editar&id=<%= turma.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
+            <a href="TurmaAdmServlet?acao=pre-excluir&id=<%= turma.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
+          </td>
+        </tr>
+        <% } } else { %>
+        <tr><td colspan="4" style="text-align:center;">Nenhuma turma cadastrada.</td></tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <%-- MODAL DE FORMULÁRIO --%>
@@ -101,11 +104,6 @@
         <div class="form-group">
           <label>Ano Letivo</label>
           <input type="number" name="ano" value="<%= tEdit != null ? tEdit.getAno() : "2026" %>" required>
-        </div>
-
-        <div class="form-group">
-          <label>Quantidade de Alunos</label>
-          <input type="number" name="quantidadeAlunos" value="<%= tEdit != null ? tEdit.getQuantidadeAlunos() : "0" %>" required>
         </div>
 
         <div class="modal-buttons">

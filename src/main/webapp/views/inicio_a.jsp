@@ -69,7 +69,7 @@
                 <div class="card-icon">
                     <i class="material-icons">badge</i>
                 </div>
-                <h3>Gerenciar Professores</h3>
+                <h3>Gerenciar Profº</h3>
                 <p>Cadastrar docentes e definir logins.</p>
                 <a href="${pageContext.request.contextPath}/ProfessorAdminServlet">Acessar</a>
             </div>

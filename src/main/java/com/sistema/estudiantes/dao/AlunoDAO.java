@@ -43,7 +43,7 @@ public class AlunoDAO {
     public List<Aluno> listar() {
 
         List<Aluno> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Alunos";
+        String sql = "SELECT * FROM Alunos ORDER BY 1";
 
         try (
                 Connection conn = new Conexao().conectar();

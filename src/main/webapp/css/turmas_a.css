@@ -77,13 +77,26 @@ nav .menu {
 
 .avatar { display: flex; align-items: center; gap: 10px; font-weight: 600; }
 .avatar img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--red); }
-
+.content {
+    flex: 1;
+    overflow: hidden;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+}
 .page-header {
     display: flex;
     align-items: center;
-    padding: 40px 5% 20px 5%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
+.page-header h1 {
+    font-size: 1.8rem;
+    color: #111;
+    font-weight: 700;
+}
 .card {
     margin: 0 5%;
     background: white;

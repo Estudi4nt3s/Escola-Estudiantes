@@ -1,6 +1,7 @@
 package com.sistema.estudiantes.servlet;
 
 import com.sistema.estudiantes.dao.AlunoAdminDAO;
+import com.sistema.estudiantes.dao.TurmaAdmDAO;
 import com.sistema.estudiantes.model.Aluno;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -24,7 +25,6 @@ public class AlunoAdminServlet extends HttpServlet {
 
         String acao = request.getParameter("acao");
 
-        // Busca o aluno se for editar OU se for para mostrar o popup de excluir
         if ("editar".equals(acao) || "pre-excluir".equals(acao)) {
             String matriculaStr = request.getParameter("matricula");
             if (matriculaStr != null) {
@@ -36,6 +36,8 @@ public class AlunoAdminServlet extends HttpServlet {
 
         List<Aluno> lista = dao.listarTodos();
         request.setAttribute("listaAlunos", lista);
+        TurmaAdmDAO turmaDao = new TurmaAdmDAO();
+        request.setAttribute("listaTurmas", turmaDao.listarTodas());
 
         RequestDispatcher rd = request.getRequestDispatcher("/views/aluno_a.jsp");
         rd.forward(request, response);
@@ -45,9 +47,7 @@ public class AlunoAdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Garante que caracteres especiais (acentos) não quebrem
         request.setCharacterEncoding("UTF-8");
-
         String acao = request.getParameter("acao");
 
         if ("excluir".equals(acao)) {
@@ -55,7 +55,6 @@ public class AlunoAdminServlet extends HttpServlet {
             dao.excluir(matricula);
         }
         else if ("novo".equals(acao) || "editar".equals(acao)) {
-            // Criamos o objeto Aluno com os dados vindos do formulário do Modal
             Aluno aluno = new Aluno();
 
             if ("editar".equals(acao)) {
@@ -66,12 +65,15 @@ public class AlunoAdminServlet extends HttpServlet {
             aluno.setCpf(request.getParameter("cpf"));
             aluno.setDataNascimento(LocalDate.parse(request.getParameter("dataNascimento")));
             aluno.setTelefonePai(request.getParameter("telefonePai"));
-
-            // O DAO agora resolve a transação entre as tabelas Usuarios e Alunos
+            String turmaIdStr = request.getParameter("turmaId");
+            if (turmaIdStr != null && !turmaIdStr.isEmpty()) {
+                aluno.setTurmaId(Integer.parseInt(turmaIdStr));
+            } else {
+                aluno.setTurmaId(1);
+            }
             dao.salvar(aluno, acao);
         }
 
-        // Após salvar ou excluir, redirecionamos para o GET para atualizar a página e limpar os campos
         response.sendRedirect(request.getContextPath() + "/AlunoAdminServlet");
     }
 }
