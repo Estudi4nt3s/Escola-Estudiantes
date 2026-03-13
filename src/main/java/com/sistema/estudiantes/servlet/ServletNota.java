@@ -1,5 +1,6 @@
 package com.sistema.estudiantes.servlet;
 
+import com.sistema.estudiantes.dao.AlunoDAO;
 import com.sistema.estudiantes.dao.DisciplinaDAO;
 import com.sistema.estudiantes.dao.NotaDAO;
 import com.sistema.estudiantes.dao.ObservacaoDAO;
@@ -24,6 +25,7 @@ public class ServletNota extends HttpServlet {
     private final NotaDAO notaDAO = new NotaDAO();
     private final ObservacaoDAO observacaoDAO = new ObservacaoDAO();
     private final DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+    private final AlunoDAO alunoDAO = new AlunoDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -79,18 +81,21 @@ public class ServletNota extends HttpServlet {
             throws ServletException, IOException {
 
         int alunoId = Integer.parseInt(request.getParameter("id"));
+        System.out.println(alunoId);
 
         List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
         List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
+        List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
 
         if(observacoes == null){
             observacoes = new ArrayList<>();
         }
 
-        request.setAttribute("notas", notasDoAluno);
-        request.setAttribute("disciplinas", todasDisciplinas);
+        request.getSession().setAttribute("notas", notasDoAluno);
+        request.getSession().setAttribute("disciplinas", todasDisciplinas);
         request.setAttribute("observacoes", observacoes);
+        request.getSession().setAttribute("alunoSelecionado", alunos.getFirst());
 
         if (request.getSession().getAttribute("professor") != null) {
             encaminhar(request, response, "/views/notas.jsp");
@@ -139,7 +144,7 @@ public class ServletNota extends HttpServlet {
             else if ("n2".equals(campo)) {
                 nota.setN2(valor);
             }
-
+            System.out.println(nota);
             notaDAO.atualizar(nota);
 
             int alunoId = nota.getIdAluno().getMatricula();

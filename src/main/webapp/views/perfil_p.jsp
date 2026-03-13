@@ -1,12 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="com.sistema.estudiantes.model.Disciplina" %>
 
 
 <%
     Professor professor = (Professor) request.getSession().getAttribute("professor");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     String[] data = (String[]) request.getSession().getAttribute("data");
+    Disciplina materia = (Disciplina) request.getSession().getAttribute("disciplina");
 %>
 
 
@@ -40,16 +42,16 @@
 
 
     <nav>
-        <a class="menu" href="${pageContext.request.contextPath}/views/home_professor.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home_p.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu" href="${pageContext.request.contextPath}/turmas"><i class="material-icons">groups</i>Turmas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
 
 
     <div class="config">
-        <a class="menu" style="color: #ffffff; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 0 15px; cursor: pointer;" onclick="openLogoutModal()">
-            <i class="material-icons" style="color: #fff">output</i>Sair
+        <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
+            <i class="material-icons" style="color: #ffffff">output</i>Sair
         </a>
     </div>
 </aside>
@@ -103,6 +105,7 @@
                 <h3>Informações Institucionais</h3>
                 <div class="linha"><span>Matrícula:</span> <%= professor.getId() %></div>
                 <div class="linha"><span>Usário/E-mail:</span> <%= usuario.getEmail() %></div>
+                <div class="linha"><span>Matéria:</span> <%= materia.getNome().toUpperCase().charAt(0) + materia.getNome().toLowerCase().substring(1,materia.getNome().length()) %></div>
             </div>
         </div>
     </div>
@@ -164,6 +167,15 @@
 
     function openLogoutModal() { document.getElementById('logoutModal').classList.add('show'); }
     function closeLogoutModal() { document.getElementById('logoutModal').classList.remove('show'); }
+
+    window.addEventListener("pageshow", function(event) {
+
+        if (event.persisted) {
+            const loading = document.getElementById("loadingOverlay");
+            if(loading) loading.style.display = "none";
+        }
+
+    });
 </script>
 </body>
 </html>
