@@ -47,7 +47,6 @@
       <span><%= (nome != null) ? nome : "Admin" %></span>
     </div>
   </header>
-
   <div class="page-header">
     <h1>Gerenciar Disciplinas</h1>
     <a href="DisciplinaAdminServlet?acao=novo" class="btn-primary">
@@ -58,7 +57,7 @@
   <div class="card">
     <table>
       <thead>
-      <tr><th>Nome</th><th>Professor</th><th>Carga Horária</th><th>Turma</th><th>Ações</th></tr>
+      <tr><th>Nome</th><th>Professor</th><th>Ações</th></tr>
       </thead>
       <tbody>
       <% if (listaDisciplinas != null && !listaDisciplinas.isEmpty()) {
@@ -66,8 +65,6 @@
       <tr>
         <td><%= d.getNome() %></td>
         <td><%= d.getProfessorNome() %></td>
-        <td><%= d.getCargaHoraria() %>h</td>
-        <td><%= d.getTurmaNome() %></td>
         <td>
           <a href="DisciplinaAdminServlet?acao=editar&id=<%= d.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
           <a href="DisciplinaAdminServlet?acao=pre-excluir&id=<%= d.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
@@ -96,12 +93,6 @@
           <small id="feedbackDisc" style="color: #666; display:block; margin-top:5px;">Verificando..</small>
         </div>
 
-        <div class="form-group" style="margin-bottom: 15px; display: flex; flex-direction: column;">
-          <label style="font-weight: 600; margin-bottom: 8px;">Carga Horária (h)</label>
-          <input type="number" name="cargaHoraria" style="padding: 12px; border: 1px solid #ddd; border-radius: 10px;"
-                 value="<%= dEdit != null ? dEdit.getCargaHoraria() : "40" %>" required>
-        </div>
-
           <div class="form-group" style="margin-bottom: 15px; display: flex; flex-direction: column;">
               <label style="font-weight: 600; margin-bottom: 8px;">Professor</label>
               <input type="text" name="professorNome" list="listaProfs"
@@ -115,23 +106,6 @@
                   } %>
               </datalist>
           </div>
-
-        <div class="form-group" style="margin-bottom: 15px; display: flex; flex-direction: column;">
-          <label style="font-weight: 600; margin-bottom: 8px;">Turma</label>
-          <input type="text" name="turmaNome" list="listaTurmas"
-                 style="padding: 12px; border: 1px solid #ddd; border-radius: 10px;"
-                 value="<%= dEdit != null ? dEdit.getTurmaNome() : "" %>"
-                 placeholder="Selecione ou digite a turma" required>
-
-          <datalist id="listaTurmas">
-            <% if (todasTurmas != null) {
-              for (TurmaAdm t : todasTurmas) { %>
-            <option value="<%= t.getNome() %>"></option>
-            <%  }
-            } %>
-          </datalist>
-        </div>
-
         <div class="modal-buttons" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px;">
           <button type="submit" name="acao" value="<%= acao %>" id="btnSalvar" class="btn-primary">Salvar</button>
           <a href="DisciplinaAdminServlet" class="btn-cancelar" style="padding: 12px 20px; background: #eee; border-radius: 10px; text-decoration: none; color: #666; font-weight: 600;">Cancelar</a>
