@@ -88,7 +88,7 @@
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
-                <input type="text" name="busca" placeholder="Pesquise o aluno" value="<%= busca %>">
+                <input type="text" id="searchAluno" placeholder="Pesquise o aluno">
             </form>
         </div>
 
@@ -182,5 +182,27 @@
         <p>Carregando...</p>
     </div>
 </div>
+<script>
+    const input = document.getElementById("searchAluno");
+
+    input.addEventListener("input", function() {
+
+        const filtro = input.value.toLowerCase();
+        const cards = document.querySelectorAll(".alunos-card");
+
+        cards.forEach(card => {
+
+            const nome = card.querySelector(".alunos-nome").textContent.toLowerCase();
+
+            if(nome.includes(filtro)){
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+</script>
 </body>
 </html>

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +139,78 @@ public class UsuarioDAO {
             return psmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean atualizarToken(Integer id, String tokenRecuperacao, LocalDateTime tokenExpira) {
+        String sql = """
+        UPDATE usuarios
+        SET tokenrecuperacao = ?, tokenexpira = ?
+        WHERE id = ?
+    """;
+
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, tokenRecuperacao);
+            stmt.setTimestamp(2, java.sql.Timestamp.valueOf(tokenExpira));
+            stmt.setInt(3, id);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Usuario buscarPorToken(String token) {
+
+        String sql = "SELECT * FROM usuarios WHERE tokenrecuperacao = ?";
+
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, token);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                Usuario u = new Usuario();
+                u.setId(rs.getInt("id"));
+                u.setEmail(rs.getString("email"));
+                u.setSenha(rs.getString("senha"));
+
+                return u;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public boolean limparToken(Integer id) {
+
+        String sql = """
+        UPDATE usuarios
+        SET tokenrecuperacao = NULL,
+            tokenexpira = NULL
+        WHERE id = ?
+    """;
+
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

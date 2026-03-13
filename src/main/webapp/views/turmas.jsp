@@ -79,7 +79,7 @@
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
-                <input type="text" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
+                <input type="text" id="searchTurma" placeholder="Pesquise a turma">
             </form>
         </div>
 
@@ -89,7 +89,7 @@
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getNome() %></h3>
+                <h3 class="nome-turma"><%= turma.getNome() %></h3>
                 <a href="${pageContext.request.contextPath}/aluno?sub_acao=buscar_todos&id=<%= turma.getId() %>"
                    onclick="document.getElementById('loadingOverlay').style.display='flex'">
                     <i class="material-icons">arrow_forward</i>
@@ -157,5 +157,27 @@
         <p>Carregando...</p>
     </div>
 </div>
+<script>
+    const input = document.getElementById("searchTurma");
+
+    input.addEventListener("input", function() {
+
+        const filtro = input.value.toLowerCase();
+        const cards = document.querySelectorAll(".turmas-card");
+
+        cards.forEach(card => {
+
+            const nome = card.querySelector(".nome-turma").textContent.toLowerCase();
+
+            if(nome.includes(filtro)){
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+</script>
 </body>
 </html>
