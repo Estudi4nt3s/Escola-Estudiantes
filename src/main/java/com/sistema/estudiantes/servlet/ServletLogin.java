@@ -64,8 +64,11 @@ public class ServletLogin extends HttpServlet {
                     if (!profs.isEmpty()) {
                         Professor prof = profs.getFirst();
                         Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplina().getId()));
-                        List<Aula> aulas = aulaDAO.listarComFiltro("professorid = ? AND diasemana = ? order by horarioinicio", prof.getId(), semana);
-                        List<Turma> turmas = turmaDAO.listar();
+                        List<Aula> aulas = aulaDAO.listarComFiltro(
+                                "a.professorid = ? AND a.diasemana = ? ORDER BY horarioinicio",
+                               prof.getId(),
+                                semana
+                        );                        List<Turma> turmas = turmaDAO.listar();
 
                         request.getSession().setAttribute("professor", prof);
                         request.getSession().setAttribute("disciplina", disc);
@@ -89,7 +92,10 @@ public class ServletLogin extends HttpServlet {
                     if (!alunos.isEmpty()) {
                         Aluno aluno = alunos.getFirst();
                         List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", aluno.getTurmaId());
-                        List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
+                        List<Aula> aulas = aulaDAO.listarComFiltro(    "a.diasemana = ? AND a.turmaid = ? ORDER BY horarioinicio",
+                                semana,
+                                aluno.getTurmaId()
+                        );
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
                         List<Nota> notas = notaDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
                         List<Observacao> observacoes = observacaoDAO.listarDisciplina(aluno.getMatricula());

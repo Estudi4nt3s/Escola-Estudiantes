@@ -40,8 +40,8 @@
 
 
     <nav>
-        <a class="menu" href="${pageContext.request.contextPath}/views/home_professor.jsp"><i class="material-icons">home</i>Início</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home_p.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario_p.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/turmas"><i class="material-icons">groups</i>Turmas</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
