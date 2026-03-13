@@ -39,7 +39,7 @@
 
         </nav>
         <div class="config">
-            <a class="menu" style="color: #590101" onclick="openLogoutModal()">
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>

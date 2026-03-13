@@ -1,5 +1,4 @@
 <%@ page import="com.sistema.estudiantes.model.Aluno" %>
-<%@ page import="com.sistema.estudiantes.model.Usuario" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -43,7 +42,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
         <div class="config">
-            <a class="menu" style="color: #590101" onclick="openLogoutModal()">
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -58,7 +57,7 @@
         </div>
 
             <div class="user">
-                <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
+<%--                <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>--%>
 
                     <div class="avatar">
                         <a href="${pageContext.request.contextPath}/views/perfil.jsp">
@@ -209,6 +208,15 @@
         function closeLogoutModal() {
             document.getElementById('logoutModal').classList.remove('show');
         }
+
+        window.addEventListener("pageshow", function(event) {
+
+            if (event.persisted) {
+                const loading = document.getElementById("loadingOverlay");
+                if(loading) loading.style.display = "none";
+            }
+
+        });
 
     </script>
 </body>
