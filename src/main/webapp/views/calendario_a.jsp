@@ -1,4 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.sistema.estudiantes.model.Professor" %>
+<%@ page import="com.sistema.estudiantes.model.Disciplina" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.sistema.estudiantes.model.Turma" %>
+<%@ page import="com.sistema.estudiantes.model.Aula" %>
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -10,6 +18,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendario.css">
 </head>
+<%
+    String[] data = (String[]) request.getSession().getAttribute("data");
+    Professor professor = (Professor) request.getSession().getAttribute("professor");
+    Disciplina materia = (Disciplina) request.getSession().getAttribute("disciplina");
+    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+    @SuppressWarnings("unchecked")
+    List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
+    @SuppressWarnings("unchecked")
+    List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
+
+%>
 
 <body>
 <aside class="sidebar">
@@ -19,15 +38,37 @@
     </div>
 
     <nav>
-        <a class="menu active" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/calendario_a.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp">
             <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" id="btnNotas"
+           href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>">
+            <i class="material-icons">grading</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp">
-            <i class="material-icons">calendar_month</i>Turmas (provisório)</a>
     </nav>
+
+    <div class="config">
+        <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
+    </div>
+</aside>
 <div class="main">
+    <header class="topbar">
+        <div class="date">
+            <i class="material-icons">calendar_today</i>
+            <%=data[2].toUpperCase().charAt(0) + data[2].toLowerCase().substring(1) + ", " + data[0] + "/" + data[1]%>
+        </div>
+
+        <div class="user">
+            <i class="material-icons" id="openNotification">notifications</i>
+            <div class="avatar">
+                <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
+                <span><%=aluno.getNome()%></span>
+            </div>
+        </div>
+    </header>
 
   <div class="calendar-layout">
 

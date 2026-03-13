@@ -86,7 +86,7 @@ body::after { width: 500px; height: 500px; background: rgba(0, 0, 0, 0.4); botto
     outline: none;
 }
 .modal-content input[type="email"]{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 /* ================= LAYOUT PRINCIPAL ================= */
 .container {

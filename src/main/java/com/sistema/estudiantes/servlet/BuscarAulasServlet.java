@@ -1,8 +1,11 @@
 package com.sistema.estudiantes.servlet;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 
+import com.sistema.estudiantes.model.Professor;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.sistema.estudiantes.model.Aula;
+import com.sistema.estudiantes.model.Aluno;
 import com.sistema.estudiantes.dao.AulaDAO;
 
 @WebServlet("/BuscarAulasServlet")
@@ -19,9 +23,36 @@ public class BuscarAulasServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String data = request.getParameter("data");
+        Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+        Professor professor = (Professor) request.getSession().getAttribute("professor");
 
-        AulaDAO aulaDAO = new AulaDAO();
-        List<Aula> aulas = aulaDAO.listarComFiltro("data = ?",data);
+        LocalDate dataSelecionada = LocalDate.parse(data);
+        DayOfWeek dia = dataSelecionada.getDayOfWeek();
+
+        String diaSemana = switch (dia) {
+            case MONDAY -> "SEG";
+            case TUESDAY -> "TER";
+            case WEDNESDAY -> "QUA";
+            case THURSDAY -> "QUI";
+            case FRIDAY -> "SEX";
+            case SATURDAY -> "SÁB";
+            case SUNDAY -> "DOM";
+        };
+
+
+//        AulaDAO aulaDAO = new AulaDAO();
+//        List<Aula> aulas = new List<Aula>("a.diasemana = ? AND a.turmaid = ?", diaSemana, aluno.getTurmaId()) {
+//        };
+//
+//        if (aluno != null) {
+//            aulas = aulaDAO.listarComFiltro(diaSemana, aluno.getTurmaId());
+//        } else if (professor != null) {
+//            aulas = aulaDAO.listarComFiltro(professor.getId(), diaSemana);
+//        } else {
+//            response.sendRedirect(request.getContextPath() + "/index.jsp");
+//            return;
+//        }
+
 
         request.setAttribute("aulas", aulas);
 

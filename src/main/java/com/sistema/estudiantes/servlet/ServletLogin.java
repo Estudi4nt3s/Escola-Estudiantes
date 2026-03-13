@@ -63,9 +63,12 @@ public class ServletLogin extends HttpServlet {
 
                     if (!profs.isEmpty()) {
                         Professor prof = profs.getFirst();
-                        Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplinaId().getId()));
-                        List<Aula> aulas = aulaDAO.listarComFiltro("professorid = ? AND diasemana = ? order by horarioinicio", prof.getId(), semana);
-                        List<Turma> turmas = turmaDAO.listar();
+                        Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplina().getId()));
+                        List<Aula> aulas = aulaDAO.listarComFiltro(
+                                "a.professorid = ? AND a.diasemana = ? ORDER BY horarioinicio",
+                               prof.getId(),
+                                semana
+                        );                        List<Turma> turmas = turmaDAO.listar();
 
                         request.getSession().setAttribute("professor", prof);
                         request.getSession().setAttribute("disciplina", disc);
@@ -84,15 +87,18 @@ public class ServletLogin extends HttpServlet {
                     ProfessorDAO profDAO = new ProfessorDAO();
                     ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
-                    List<Aluno> alunos = alunoDAO.listarComFiltro(usuarioLogado.getId());
+                    List<Aluno> alunos = alunoDAO.listarUsuario(usuarioLogado.getId());
 
                     if (!alunos.isEmpty()) {
                         Aluno aluno = alunos.getFirst();
                         List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", aluno.getTurmaId());
-                        List<Aula> aulas = aulaDAO.listarComFiltro("turmaid = ? AND diasemana = ? order by horarioinicio", aluno.getTurmaId(), semana);
+                        List<Aula> aulas = aulaDAO.listarComFiltro(    "a.diasemana = ? AND a.turmaid = ? ORDER BY horarioinicio",
+                                semana,
+                                aluno.getTurmaId()
+                        );
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
-                        List<Nota> notas = notaDAO.listarComFiltro("alunoid = ?", aluno.getMatricula());
-                        List<ObservacaoProfessor> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
+                        List<Nota> notas = notaDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
+                        List<Observacao> observacoes = observacaoDAO.listarDisciplina(aluno.getMatricula());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];
@@ -101,14 +107,15 @@ public class ServletLogin extends HttpServlet {
                         for (int i = 0; i < limite; i++) {
                             int profId = aulas.get(i).getProfessorId().getId();
                             Professor p = profDAO.buscarPorId(profId);
-                            int discId = p.getDisciplinaId().getId();
+                            int discId = p.getDisciplina().getId();
 
                             for (Disciplina d : todasDisciplinas) {
                                 if (d.getId() == discId) {
                                     String nomeDisc = d.getNome();
                                     String nfd = Normalizer.normalize(nomeDisc, Normalizer.Form.NFD);
                                     Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-                                    materia[i] = pattern.matcher(nfd).replaceAll("");
+                                    materia[i] = d.getNome();
+                                            //pattern.matcher(nfd).replaceAll("");
                                     qtdMateria++;
                                     break;
                                 }
@@ -116,6 +123,7 @@ public class ServletLogin extends HttpServlet {
                         }
 
                         request.getSession().setAttribute("aluno", aluno);
+                        request.getSession().setAttribute("aulas",aulas);
                         request.getSession().setAttribute("turma", !turmas.isEmpty() ? turmas.getFirst() : null);
                         request.getSession().setAttribute("materia", materia);
                         request.getSession().setAttribute("notas", notas);

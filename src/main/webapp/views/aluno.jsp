@@ -1,25 +1,26 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.*" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     String[] data = (String[]) request.getSession().getAttribute("data");
-    List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
-    List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
-    List<ObservacaoProfessor> observacaos = (List<ObservacaoProfessor>) request.getSession().getAttribute("observacoes");
+    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
+    List<Nota> notas = (List<Nota>) request.getAttribute("notas");
+    List<Observacao> observacaos = (List<Observacao>) request.getSession().getAttribute("observacoes");
 
 %>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudiantes - Boletim de <%=usuario.getNome()%></title>
+    <title>Estudiantes - Boletim de <%=aluno.getNome()%></title>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -33,15 +34,18 @@
         <nav>
             <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-            <a class="menu"> <i class="material-icons">menu_book</i>Notas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu active" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
+            <a class="menu active"> <i class="material-icons">grading</i>Notas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
 
         </nav>
+        <div class="config">
+            <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
 
     <main class="main">
-
         <header class="topbar">
             <div class="date">
                 <i class="material-icons">calendar_today</i>
@@ -50,15 +54,22 @@
 
             <div class="user">
                 <div class="avatar">
-                    <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
-                    <span><%=usuario.getNome()%></span>
+                    <a href="${pageContext.request.contextPath}/views/perfil.jsp">
+                        <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
+                    </a>
+                    <span><%=aluno.getNome()%></span>
                 </div>
             </div>
         </header>
 
         <div class="main-content">
             <div class="page-header">
-                <h2 class="page-title">Boletim Escolar: <%=usuario.getNome()%></h2>
+                <h2 class="page-title">Boletim Escolar: <%=aluno.getNome()%></h2>
+
+                <a class="btn-boletim" href="${pageContext.request.contextPath}/gerarBoletim">
+                    <i class="material-icons">picture_as_pdf</i>
+                    Gerar Boletim
+                </a>
             </div>
 
             <div class="table-container">
@@ -87,18 +98,25 @@
 
                                 if (notaEncontrada != null) {
 
-                                    double media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                                    Double n1 = notaEncontrada.getN1();
+                                    Double n2 = notaEncontrada.getN2();
 
-                                    situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                                    Double media = null;
+
+                                    if (n1 != null && n2 != null) {
+                                        media = (notaEncontrada.getN1() + notaEncontrada.getN2()) / 2;
+                                    }
+
+                                    situacao = (n1 == null || n2 == null)?"Em andamento":media >= 7 ? "Aprovado" : "Reprovado";
 
                         %>
                             <tr>
-                                <td><strong><%=disciplina.getNome()%></strong></td>
-                                <td><%=notaEncontrada.getN1()%></td>
-                                <td><%=notaEncontrada.getN2()%></td>
-                                <td><%=media%></td>
+                                <td><strong><%=disciplina.getNome().toUpperCase().charAt(0) + disciplina.getNome().toLowerCase().substring(1,disciplina.getNome().length())%></strong></td>
+                                <td><%=(n1 == null ? "-" : String.format("%.2f", n1))%></td>
+                                <td><%=(n2 == null ? "-" : String.format("%.2f", n2))%></td>
+                                <td><%=(n1 == null || n2 == null) ? "-" : String.format("%.2f", media)%></td>
                                 <td>
-                                    <span class="status <%=media >= 7?"attention":"approved"%>"><%=situacao%></span>
+                                    <span class="status <%=(n1 == null || n2 == null)?"":media >= 7?"approved":"attention"%>"><%=situacao%></span>
                                 </td>
                             </tr>
                         <%
@@ -126,12 +144,19 @@
                     <h3>Observações do Professor</h3>
                 </div>
                 <div class="obs-content">
+
                     <%
                         for(int i = 0;i < observacaos.size();i++){
+                    Professor prof = observacaos.get(i).getIdProfessor();
+                    String disciplina = "Sem disciplina";
+
+                    if(prof.getDisciplina() != null){
+                        disciplina = prof.getDisciplina().getNome();
+                    }
                     %>
-                            <p><strong>Prof. <%=observacaos.get(i).getNomeProfessor()%> (<%=observacaos.get(i).getNomeDisciplina()%>:</strong> "<%=observacaos.get(i).getTexto()%>"</p>
+                            <p><strong>Prof. <%=prof.getNome()%> (<%=disciplina%>:</strong> "<%=observacaos.get(i).getTexto()%>")</p>
                     <%
-                            if((i + 1) == observacaos.size()){
+                            if((i + 1) != observacaos.size()){
                     %>
                                 <hr>
                     <%
@@ -146,6 +171,7 @@
             </div>
         </div>
     </main>
+
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 </body>

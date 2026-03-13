@@ -1,4 +1,7 @@
-
+<%@ page import="com.sistema.estudiantes.model.Aluno" %>
+<%@ page import="com.sistema.estudiantes.model.Usuario" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,9 +13,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/disciplinas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 <%
     String[] data = (String[]) request.getSession().getAttribute("data");
+    Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
+    Map<String,String> conteudo = new HashMap<>();
+    conteudo.put("matemática","calculate");
+    conteudo.put("português","book");
+    conteudo.put("história","history_edu");
+    conteudo.put("geografia","public");
+    conteudo.put("informática","computer");
+    conteudo.put("ciências","science");
 %>
 
 <body>
@@ -26,10 +38,16 @@
     <nav>
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp">
         <i class="material-icons">home</i>Início</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario_a.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu active"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+        <a class="menu" id="btnNotas" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">grading</i>Notas</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
+        <div class="config">
+            <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
+            </a>
+        </div>
     </aside>
 
     <main class="main">
@@ -42,10 +60,14 @@
 
             <div class="user">
                 <i class="material-icons" id="openNotification" style="cursor: pointer;">notifications</i>
-                <div class="avatar">
-                    <img src="https://i.pravatar.cc/40?img=12" alt="avatar">
-                    <span>Mateus Carlos</span>
-                </div>
+
+                    <div class="avatar">
+                        <a href="${pageContext.request.contextPath}/views/perfil.jsp">
+                            <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
+                        </a>
+                            <span><%=aluno.getNome()%></span>
+                    </div>
+
             </div>
         </header>
 
@@ -55,52 +77,52 @@
 
             <div class="disciplinas-grid">
 
-            <div class="disciplina card1">
+            <div class="disciplina matemática">
                 <div class="disciplina-info">
                     <h3>Matemática</h3>
                     <p>Prof. Valdislei</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/matematica.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("matemática")%></i>
             </div>
 
-            <div class="disciplina card2">
+            <div class="disciplina português">
                 <div class="disciplina-info">
                     <h3>Português</h3>
                     <p>Prof. Cláudia</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/portugues.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("português")%></i>
             </div>
 
-            <div class="disciplina card3">
+            <div class="disciplina geografia">
                 <div class="disciplina-info">
                     <h3>Geografia</h3>
                     <p>Prof. Flávio</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/geografia.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("geografia")%></i>
             </div>
 
-            <div class="disciplina card4">
+            <div class="disciplina história">
                 <div class="disciplina-info">
                     <h3>História</h3>
                     <p>Prof. Rosangela</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/historia.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("história")%></i>
             </div>
 
-            <div class="disciplina card5">
+            <div class="disciplina informática">
                 <div class="disciplina-info">
-                    <h3>Inglês</h3>
-                    <p>Prof. Erika</p>
+                    <h3>Informática</h3>
+                    <p>Prof. Diego</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/ingles.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("informática")%></i>
             </div>
 
-            <div class="disciplina card6">
+            <div class="disciplina ciências">
                 <div class="disciplina-info">
                     <h3>Ciências</h3>
                     <p>Prof. Robson</p>
                 </div>
-                <img src="${pageContext.request.contextPath}/utils/ciencias.png" alt="">
+                <i class="material-icons materias"><%=conteudo.get("ciências")%></i>
             </div>
 
             </div>
@@ -145,6 +167,30 @@
     </div>
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+    <div id="loadingOverlay">
+        <div class="loadingBox">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
+        </div>
+    </div>
+    <script>
+
+        const btnNotas = document.getElementById("btnNotas");
+        const loading = document.getElementById("loadingOverlay");
+
+        btnNotas.addEventListener("click", function(e){
+
+            e.preventDefault(); // impede abrir imediatamente
+
+            loading.style.display = "flex";
+
+            setTimeout(()=>{
+                window.location.href = this.href;
+            },500);
+
+        });
+
+    </script>
 </body>
 
 </html>

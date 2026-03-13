@@ -3,7 +3,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Turma" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -28,15 +30,23 @@
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-    for(int i = 0; i < Math.min(aulas.size(), 6); i++){
+    for(int i = 0; i < aulas.size(); i++){
         for (Turma value : turmas) {
             if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getSerie();
+                turma[i] = value.getNome();
                 qtdmateria++;
                 break;
             }
         }
     }
+
+    Map<String,String[]> conteudo = new HashMap<>();
+    conteudo.put("matemática", new String[]{"Estudo de números, operações, equações, porcentagem, geometria e resolução de problemas do dia a dia.","calculate"});
+    conteudo.put("português", new String[]{"Interpretação de textos, gramática, ortografia, produção textual e desenvolvimento da comunicação escrita.","book"});
+    conteudo.put("história", new String[]{"Estudo das sociedades antigas e modernas, acontecimentos históricos e formação do mundo atual.","history_edu"});
+    conteudo.put("geografia", new String[]{"Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.","public"});
+    conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
+    conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
 %>
 <body>
 
@@ -48,14 +58,14 @@
 
         <nav>
             <a class="menu active"><i class="material-icons">home</i>Início</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas_p.jsp"> <i class="material-icons">menu_book</i>Disciplinas</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">calendar_today</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/calendario_p.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
         </nav>
 
         <div class="config">
-            <a class="menu" style="margin-left: -25px;" href="perfil_p.jsp">
-                <i class="material-icons">person</i>Perfil
+            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+                <i class="material-icons">output</i>Sair
             </a>
         </div>
     </aside>
@@ -70,7 +80,7 @@
 
             <div class="user">
                 <div class="avatar">
-                    <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
+                    <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
                     <span><%=professor.getNome()%></span>
                 </div>
             </div>
@@ -89,22 +99,17 @@
                 <div class="flex">
                     <%-- Loop para gerar os cards de conteúdo das aulas --%>
                     <%
-                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) || !(materia == null)){
-                            for(int i = 0;i < Math.min(aulas.size(),6);i++){
+                        System.out.println(materia);
+                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
+                            for(int i = 0;i < aulas.size();i++){
                     %>
-                        <div class="card card<%=materia.getNome().toLowerCase()%>">
+                        <div class="card card <%=materia.getNome().toLowerCase()%>">
                             <h3><%=turma[i]%></h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eum magnam eligendi hic
-                                nesciunt.</p>
-                            <img src="${pageContext.request.contextPath}/utils/<%=materia.getNome().toLowerCase()%>.png" alt="<%=materia.getNome()%>">
+                            <p><%=conteudo.get(materia.getNome().toLowerCase())[0]%></p>
+                            <i class="material-icons materias"><%=conteudo.get(materia.getNome().toLowerCase())[1]%></i>
                         </div>
                     <%
                             }
-                        }
-                        else{
-                    %>
-                        <p>Você não possui aulas agendadas para hoje.</p>
-                    <%
                         }
                     %>
                 </div>
@@ -116,18 +121,25 @@
                 <ul>
                     <%-- Loop para a lista lateral de horários --%>
                     <%
-                        String[] horario = {"07:00 às 08:00","08:00 às 09:00","09:00 às 10:00",
-                                "10:30 às 11:30","11:30 às 12:30","13:30 às 14:30"};
-                    if((!data[2].equals("SÁB") && !data[2].equals("DOM")) || qtdmateria != 0){
+                    if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
                         for(int i = 0;i < qtdmateria;i++){
                             %>
                         <li>
-                            <strong><%=materia.getNome()%></strong> - <%=horario[i]%>
+                            <strong><%=turma[i]%></strong> -
+                            <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
+                             às
+                            <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
                         </li>
                     <%
                         }
                     }
+                        else{
+
                     %>
+                        <p>Você não possui aulas hoje.</p>
+                        <%
+                            }
+                        %>
                 </ul>
             </div>
 

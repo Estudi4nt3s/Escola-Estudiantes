@@ -297,7 +297,7 @@ nav {
 .barra-pesquisa {
     position: relative;
     flex: 1;
-    width: 700px;
+    width: 769px;
 }
 
 .barra-pesquisa i {
@@ -379,5 +379,52 @@ nav {
 }
 
 .opcoes:hover {
-    background: #eee;
+    background: #c4c2c2;
+}
+.acoes-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.popup {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: #FFFFFF;
+    min-width: 170px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    padding: 6px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.popup.show {
+    display: block;
+}
+
+.popup-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.popup-card:hover {
+    background: #f0f0f0;
+}
+
+.popup-card i {
+    font-size: 18px;
+    color: #555;
 }

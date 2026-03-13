@@ -43,7 +43,7 @@ public class AlunoDAO {
     public List<Aluno> listar() {
 
         List<Aluno> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Alunos";
+        String sql = "SELECT * FROM Alunos ORDER BY 1";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -55,6 +55,7 @@ public class AlunoDAO {
                 Usuario u = new Usuario(rs.getInt("usuarioid"));
                 Aluno aluno = new Aluno(
                         rs.getInt("matricula"),
+                        rs.getString("nome"),
                         rs.getString("cpf"),
                         rs.getObject("datanascimento", LocalDate.class),
                         u,
@@ -71,7 +72,7 @@ public class AlunoDAO {
         return lista;
     }
 
-    public List<Aluno> listarComFiltro(int matricula) {
+    public List<Aluno> listarMatricula(int matricula) {
         List<Aluno> alunos = new ArrayList<>();
         String sql = "SELECT * FROM alunos WHERE matricula = ?";
 
@@ -83,8 +84,13 @@ public class AlunoDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Usuario u = new Usuario(rs.getInt("usuarioid"));
+
+                    if(rs.wasNull()) {
+                        u.setId(null);
+                    }
                     Aluno aluno = new Aluno(
                             rs.getInt("matricula"),
+                            rs.getString("nome"),
                             rs.getString("cpf"),
                             rs.getObject("datanascimento", LocalDate.class),
                             u,
@@ -100,13 +106,43 @@ public class AlunoDAO {
         return alunos;
     }
 
+    public List<Aluno> listarUsuario(int usuarioid) {
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = "SELECT * FROM alunos WHERE usuarioid = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuarioid);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario u = new Usuario(rs.getInt("usuarioid"));
+                    Aluno aluno = new Aluno(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getString("cpf"),
+                            rs.getObject("datanascimento", LocalDate.class),
+                            u,
+                            rs.getString("telefonepai"),
+                            rs.getInt("turmaid")
+                    );
+                    alunos.add(aluno);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return alunos;
+    }
+
+
     public List<Aluno> listarPorTurma(int turmaId) {
         List<Aluno> alunos = new ArrayList<>();
         String sql = """
-                    SELECT a.*, u.nome, u.sobrenome
-                    FROM alunos a
-                    INNER JOIN usuarios u ON a.usuarioid = u.id
-                    WHERE a.turmaid = ?;
+                    SELECT *
+                    FROM alunos
+                    WHERE turmaid = ?;
         """;
                 try (Connection conn = Conexao.conectar();
                      PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -116,16 +152,17 @@ public class AlunoDAO {
                     ResultSet rs = stmt.executeQuery();
                     while (rs.next()) {
                         Usuario u = new Usuario(rs.getInt("usuarioid"));
-                        u.setNome(rs.getString("nome"));
-                        u.setSobrenome(rs.getString("sobrenome"));
+                        System.out.println(u);
                         Aluno aluno = new Aluno(
                                 rs.getInt("matricula"),
+                                rs.getString("nome"),
                                 rs.getString("cpf"),
                                 rs.getObject("datanascimento", LocalDate.class),
                                 u,
                                 rs.getString("telefonepai"),
                                 rs.getInt("turmaid")
                         );
+                        System.out.println(aluno);
 
                         alunos.add(aluno);
                     }
@@ -140,15 +177,15 @@ public class AlunoDAO {
         public boolean atualizar(Aluno aluno) {
 
             String sql = "UPDATE Alunos " +
-                    "SET usuarioid = ?" +
+                    "SET usuarioid = ? " +
                     "WHERE matricula = ?";
 
             try (
                     Connection conn = new Conexao().conectar();
                     PreparedStatement psmt = conn.prepareStatement(sql)
             ) {
-                psmt.setInt(4, aluno.getUsuarioId().getId());
-                psmt.setInt(6, aluno.getMatricula());
+                psmt.setInt(1, aluno.getUsuarioId().getId());
+                psmt.setInt(2, aluno.getMatricula());
 
                 return psmt.executeUpdate() > 0;
 

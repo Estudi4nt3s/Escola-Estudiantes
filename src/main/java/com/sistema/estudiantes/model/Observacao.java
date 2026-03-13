@@ -6,27 +6,30 @@ public class Observacao {
     private int id;
     private String texto;
     private LocalDate dataCriacao;
-    private Professor idProfessor;
     private Aluno idAluno;
-    private Disciplina idDisciplina;
+    private Professor idProfessor;
 
     public Observacao() {}
 
-    public Observacao(String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor) {
         this.texto = texto;
         this.dataCriacao = dataCriacao;
-        this.idProfessor = idProfessor;
         this.idAluno = idAluno;
-        this.idDisciplina = idDisciplina;
+        this.idProfessor = idProfessor;
     }
 
-    public Observacao(int id, String texto, LocalDate dataCriacao, Professor idProfessor, Aluno idAluno, Disciplina idDisciplina) {
+    public Observacao(int id, String texto, LocalDate dataCriacao) {
         this.id = id;
         this.texto = texto;
         this.dataCriacao = dataCriacao;
-        this.idProfessor = idProfessor;
+    }
+
+    public Observacao(int id, String texto, LocalDate dataCriacao, Aluno idAluno, Professor idProfessor) {
+        this.id = id;
+        this.texto = texto;
+        this.dataCriacao = dataCriacao;
         this.idAluno = idAluno;
-        this.idDisciplina = idDisciplina;
+        this.idProfessor = idProfessor;
     }
 
     public int getId() {
@@ -49,10 +52,6 @@ public class Observacao {
         return this.idAluno;
     }
 
-    public Disciplina getIdDisciplina() {
-        return this.idDisciplina;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -73,12 +72,8 @@ public class Observacao {
         this.idAluno = idAluno;
     }
 
-    public void setIdDisciplina(Disciplina idDisciplina) {
-        this.idDisciplina = idDisciplina;
-    }
-
     public String toString() {
-        return "Id: " + this.id + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno + "\nId Disciplina: " + this.idDisciplina;
+        return "Id: " + this.id + "\nTexto: " + this.texto + "\nData Criação: " + this.dataCriacao + "\nId Professor: " + this.idProfessor + "\nId Aluno: " + this.idAluno;
     }
 
 }

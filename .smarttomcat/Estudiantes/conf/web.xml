@@ -138,16 +138,6 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet>
-        <servlet-name>ServletLoginAdmin</servlet-name>
-        <servlet-class>com.sistema.estudiantes.servlet.ServletLoginAdmin</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ServletLoginAdmin</servlet-name>
-        <url-pattern>/ServletLoginAdmin</url-pattern>
-    </servlet-mapping>
-
   <!-- The JSP page compiler and execution servlet, which is the mechanism  -->
   <!-- used by Tomcat to support JSP pages.  Traditionally, this servlet    -->
   <!-- is mapped to the URL pattern "*.jsp".  This servlet supports the     -->

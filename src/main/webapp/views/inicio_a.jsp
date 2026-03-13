@@ -1,14 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
-    // Proteção de acesso (verifica se está logado como admin)
     String tipo = (String) session.getAttribute("tipoUsuario");
     String adminNome = (String) session.getAttribute("adminNome");
 
-//    if (tipo == null || !tipo.equals("admin")) {
-//        response.sendRedirect("cadastro.jsp");
-//        return;
-// }
-
+    if (tipo == null || !tipo.equals("admin")) {
+        response.sendRedirect("cadastro.jsp");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -23,36 +21,16 @@
 <body>
 
 <aside class="sidebar">
-    <div class="logo">
-        <i class="material-icons">admin_panel_settings</i>
-        <span>Painel ADM</span>
-    </div>
-
+    <div class="logo"><i class="material-icons">admin_panel_settings</i><span>Painel ADM</span></div>
     <nav>
-        <a class="menu active" href="">
-            <i class="material-icons">home</i>Inicio
-        </a>
-
-        <a class="menu" href="${pageContext.request.contextPath}/AlunoAdminServlet">
-            <i class="material-icons">groups</i>Alunos
-        </a>
-
-        <a class="menu" href="${pageContext.request.contextPath}/TurmaAdminServlet">
-            <i class="material-icons">school</i>Turmas
-        </a>
-
-        <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
-            <i class="material-icons">menu_book</i>Disciplinas
-        </a>
-
-        <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes">
-            <i class="material-icons">settings</i>Configurações
-        </a>
+        <a class="menu active" href="${pageContext.request.contextPath}/views/inicio_a.jsp"><i class="material-icons">home</i>Inicio</a>
+        <a class="menu" href="${pageContext.request.contextPath}/AlunoAdminServlet"><i class="material-icons">groups</i>Alunos</a>
+        <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i>Professores</a>
+        <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i>Turmas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i>Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i>Configurações</a>
     </nav>
-
-    <a class="config" href="${pageContext.request.contextPath}/servletLogout">
-        <i class="material-icons">logout</i>Sair
-    </a>
+    <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i>Sair</a>
 </aside>
 
 <main class="main">
@@ -89,11 +67,20 @@
 
             <div class="admin-card">
                 <div class="card-icon">
+                    <i class="material-icons">badge</i>
+                </div>
+                <h3>Gerenciar Profº</h3>
+                <p>Cadastrar docentes e definir logins.</p>
+                <a href="${pageContext.request.contextPath}/ProfessorAdminServlet">Acessar</a>
+            </div>
+
+            <div class="admin-card">
+                <div class="card-icon">
                     <i class="material-icons">school</i>
                 </div>
                 <h3>Gerenciar Turmas</h3>
                 <p>Organizar turmas e vincular alunos.</p>
-                <a href="turmas_a.jsp">Acessar</a>
+                <a href="${pageContext.request.contextPath}/TurmaAdmServlet">Acessar</a>
             </div>
 
             <div class="admin-card">
@@ -102,16 +89,7 @@
                 </div>
                 <h3>Gerenciar Disciplinas</h3>
                 <p>Criar, remover ou editar disciplinas.</p>
-                <a href="disciplinas_a.jsp">Acessar</a>
-            </div>
-
-            <div class="admin-card danger">
-                <div class="card-icon">
-                    <i class="material-icons">warning</i>
-                </div>
-                <h3>Configurações</h3>
-                <p>Alterações avançadas do sistema.</p>
-                <a href="configuracoes_a.jsp">Configurar</a>
+                <a href="${pageContext.request.contextPath}/DisciplinaAdminServlet">Acessar</a>
             </div>
 
         </div>

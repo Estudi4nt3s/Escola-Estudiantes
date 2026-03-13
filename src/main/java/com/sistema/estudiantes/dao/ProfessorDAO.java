@@ -17,14 +17,14 @@ import java.util.List;
 public class ProfessorDAO {
 
     public void inserir(Professor professor) {
-        String sql = "INSERT INTO Professores (Nome, UsuarioId, disciplinaid) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Professores (nome, UsuarioId, disciplinaid) VALUES (?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, professor.getNome());
-            ps.setInt(2, professor.getUsuarioId().getId());
-            ps.setInt(3, professor.getDisciplinaId().getId());
+            ps.setInt(2, professor.getUsuario().getId());
+            ps.setInt(3, professor.getDisciplina().getId());
             ps.executeUpdate();
 
         } catch (Exception e) {
@@ -34,7 +34,8 @@ public class ProfessorDAO {
 
     public List<Professor> listar(){
         List<Professor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Professores";
+        String sql = "SELECT p.*, d.nome as disciplina FROM Professores p " +
+                "JOIN disciplinas d on p.disciplinaid = d.id";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -43,7 +44,7 @@ public class ProfessorDAO {
         ) {
             while (rs.next()){
                 Usuario u = new Usuario(rs.getInt("usuarioid"));
-                Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                Disciplina d = new Disciplina(rs.getInt("disciplinaid"), rs.getString("disciplina"));
                 Professor professor = new Professor(
                         rs.getInt("id"),
                         rs.getString("nome"),
@@ -60,7 +61,8 @@ public class ProfessorDAO {
 
     public List<Professor> listarComFiltro(int id) {
         List<Professor> professores = new ArrayList<>();
-        String sql = "SELECT id, nome, usuarioid, disciplinaid FROM professores WHERE id = ?";
+        String sql = "SELECT p.*, d.nome as disciplina FROM professores p " +
+                "JOIN disciplinas d ON p.disciplinaid = d.id WHERE p.id = ?";
 
         try (Connection conn = Conexao.conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -69,7 +71,7 @@ public class ProfessorDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Usuario u = new Usuario(rs.getInt("UsuarioId"));
-                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"));
+                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"), rs.getString("disciplina"));
                     Professor prof = new Professor(
                             rs.getInt("id"),
                             rs.getString("nome"),
@@ -86,7 +88,9 @@ public class ProfessorDAO {
     }
 
     public Professor buscarPorId(int id) {
-        String sql = "SELECT * FROM Professores WHERE id = ?";
+        String sql = "SELECT p.*, d.nome as disciplina FROM Professores p " +
+                "JOIN disciplinas d on p.disciplinaid = d.id " +
+                "WHERE p.id = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -99,7 +103,7 @@ public class ProfessorDAO {
                         rs.getInt("id"),
                         rs.getString("nome"),
                         new Usuario(rs.getInt("usuarioid")),
-                        new Disciplina(rs.getInt("disciplinaid"))
+                        new Disciplina(rs.getInt("disciplinaid"), rs.getString("disciplina"))
                 );
             }
 
@@ -110,16 +114,13 @@ public class ProfessorDAO {
     }
 
     public boolean atualizar(Professor professor){
-        String sql = "UPDATE Professores " +
-                "SET nome = ?, usuarioid = ?" +
-                "WHERE id = ?";
+        String sql = "UPDATE Professores SET usuarioid = ? WHERE id = ?";
         try(
                 Connection conn = new Conexao().conectar();
                 PreparedStatement psmt = conn.prepareStatement(sql)
                 ) {
-            psmt.setString(1, professor.getNome());
-            psmt.setInt(2, professor.getUsuarioId().getId());
-            psmt.setInt(3, professor.getId());
+            psmt.setInt(1, professor.getUsuario().getId());
+            psmt.setInt(2, professor.getId());
 
             return psmt.executeUpdate() > 0;
         } catch (SQLException e) {

@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/turmas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -42,11 +43,16 @@
 
     <nav>
         <a class="menu" href="home_p.jsp"><i class="material-icons">home</i>Início</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
-        <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/calendario_p.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu active">
-            <i class="material-icons">calendar_month</i>Turmas</a>
+            <i class="material-icons">groups</i>Turmas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
+    <div class="config">
+        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <i class="material-icons">output</i>Sair
+        </a>
+    </div>
 </aside>
 
 <main class="main">
@@ -58,9 +64,8 @@
         </div>
 
         <div class="user">
-            <i class="material-icons" id="openNotification">notifications</i>
             <div class="avatar">
-                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="">
+                <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
                 <span><%=professor.getNome()%></span>
             </div>
         </div>
@@ -84,8 +89,9 @@
                     for (Turma turma : turmas) {
             %>
             <div class="turmas-card">
-                <h3><%= turma.getSerie() + " " + turma.getLetra() %></h3>
-                <a href="${pageContext.request.contextPath}/aluno?id=<%= turma.getId() %>">
+                <h3><%= turma.getNome() %></h3>
+                <a href="${pageContext.request.contextPath}/aluno?sub_acao=buscar_todos&id=<%= turma.getId() %>"
+                   onclick="document.getElementById('loadingOverlay').style.display='flex'">
                     <i class="material-icons">arrow_forward</i>
                 </a>
             </div>
@@ -145,6 +151,11 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<div id="loadingOverlay">
+    <div class="loadingBox">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+    </div>
+</div>
 </body>
-
 </html>

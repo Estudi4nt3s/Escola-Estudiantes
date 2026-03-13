@@ -2,80 +2,75 @@ package com.sistema.estudiantes.servlet;
 
 import com.sistema.estudiantes.dao.TurmaAdmDAO;
 import com.sistema.estudiantes.model.TurmaAdm;
-
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/TurmaAdminServlet")
+@WebServlet("/TurmaAdmServlet")
 public class TurmaAdmServlet extends HttpServlet {
-
-    private TurmaAdmDAO dao;
-
-    @Override
-    public void init() {
-        dao = new TurmaAdmDAO();
-    }
+    private TurmaAdmDAO dao = new TurmaAdmDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
+        String idParam = request.getParameter("id"); // Pegamos o ID como String primeiro
 
-        if (acao == null) {
-            listar(request, response);
-        } else {
-
-            switch (acao) {
-
-                case "excluir":
-                    excluir(request, response);
-                    break;
-
-                case "editar":
-                    editar(request, response);
-                    break;
-
-                default:
-                    listar(request, response);
-                    break;
+        // Só tentamos buscar a turma se a ação for de editar/excluir E o ID não for nulo
+        if (idParam != null && !idParam.trim().isEmpty()) {
+            if ("editar".equals(acao) || "pre-excluir".equals(acao)) {
+                try {
+                    int id = Integer.parseInt(idParam);
+                    TurmaAdm turma = dao.buscarPorId(id);
+                    request.setAttribute("turmaEditar", turma);
+                } catch (NumberFormatException e) {
+                    // Se o ID não for um número válido, apenas ignora
+                    System.out.println("Erro ao converter ID: " + idParam);
+                }
             }
         }
-    }
 
-    private void listar(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+        // Busca a lista e manda para o JSP
         List<TurmaAdm> lista = dao.listarTodas();
-
         request.setAttribute("listaTurmas", lista);
-        request.getRequestDispatcher("views/turmas_a.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher("/views/turmas_a.jsp").forward(request, response);
     }
 
-    private void excluir(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        int id = Integer.parseInt(request.getParameter("id"));
-
-        dao.excluir(id);
-
-        response.sendRedirect("TurmaAdminServlet");
-    }
-
-    private void editar(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String acao = request.getParameter("acao");
 
-        int id = Integer.parseInt(request.getParameter("id"));
+        try {
+            if ("excluir".equals(acao)) {
+                dao.excluir(Integer.parseInt(request.getParameter("id")));
+            }else if ("novo".equals(acao) || "editar".equals(acao)) {
+            TurmaAdm t = new TurmaAdm();
+            if ("editar".equals(acao)) t.setId(Integer.parseInt(request.getParameter("id")));
 
-        TurmaAdm turma = dao.buscarPorId(id);
+            t.setNome(request.getParameter("nome"));
+            t.setAno(Integer.parseInt(request.getParameter("ano")));
 
-        request.setAttribute("turma", turma);
-        request.getRequestDispatcher("views/form_turma.jsp")
-                .forward(request, response);
+            // REMOVIDO: Não pegamos mais a quantidade do request.
+            // O banco calcula isso sozinho na listagem.
+
+            dao.salvar(t, acao);
+        }
+            // Se chegou aqui, deu certo
+            request.getSession().setAttribute("mensagemSucesso", "Operação realizada com sucesso!");
+
+        } catch (Exception e) {
+            // Se deu erro, guarda a mensagem para mostrar no JSP
+            request.getSession().setAttribute("mensagemErro", "Não foi possível realizar a operação: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        response.sendRedirect("TurmaAdmServlet");
     }
 }
