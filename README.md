@@ -1,3 +1,5 @@
+________________pt-BR________________
+
 # 🏫 Escola Estudiantes
 
 <p align="center">
@@ -40,7 +42,7 @@ O projeto segue os padrões da arquitetura **MVC (Model-View-Controller)** para 
 - **Frontend:** JSP (JavaServer Pages), CSS3 e JavaScript
 - **Banco de Dados:** PostgreSQL
 - **Conexão:** JDBC (Java Database Connectivity)
-- **Design:** [Figma](link-do-seu-figma-aqui)
+- **Design:** [Figma] https://www.figma.com/design/V2DaO5yTUlbII11or9XyVt/Untitled?node-id=0-1&t=IlAW58wlBmOqog5d-1
 - **Gestão de Projeto:** Jira
 
 ---
@@ -71,71 +73,64 @@ O processo de criação passou por uma etapa de prototipagem no Figma e a organi
 
 Desenvolvido por Alunos do Instituto J&F - 2026
 
-______________________________________
-ENGLISH:
 
-🏫 Estudiantes School
+________________en-US________________
 
-📌 About the Project
-Estudiantes School is a functional school management system developed by 11th-grade students from Instituto J&F. The project was conceived during Software Development classes for evaluative and diagnostic purposes, finalized on March 12th.
+
+# 🏫 Estudiantes School
+
+## 📌 About the Project
+**Estudiantes School** is a functional school management system developed by 11th-grade students from **Instituto J&F**. The project was conceived during Software Development classes for evaluative and diagnostic purposes, finalized on March 12th.
 
 The main objective is to offer a versatile platform that meets the needs of Middle and High Schools, allowing the centralized organization of grades, attendance, academic calendars, and user data.
 
-👥 Access Profiles
+
+---
+
+## 👥 Access Profiles
 The system is segmented into three permission levels, directed at the moment of login:
 
-Administrator: Has full control over the ecosystem. Responsible for the global management of teachers and students, editing calendars, and maintaining grades and profiles. Access is protected by a restricted area and a special password.
+1. **Administrator:** Has full control over the ecosystem. Responsible for the global management of teachers and students, editing calendars, and maintaining grades and profiles. Access is protected by a restricted area and a special password.
+2. **Teacher:** Focused on pedagogical management. Teachers can view the class schedule, manage their classes, and specifically perform the entry of grades and individual observations for each student.
+3. **Student:** Focused on the student experience. After registering, the student accesses a home page with the day's schedules, consults the event calendar, views performance by subject, and can generate their school report card.
 
-Teacher: Focused on pedagogical management. Teachers can view the class schedule, manage their classes, and specifically perform the entry of grades and individual observations for each student.
+---
 
-Student: Focused on the student experience. After registering, the student accesses a home page with the day's schedules, consults the event calendar, views performance by subject, and can generate their school report card.
+## 🚀 Key Features
+- **Academic Calendar:** Tracking of holidays and school events.
+- **Subject Module:** Space for consulting grades and pedagogical feedback (observations).
+- **Editable Profile:** Autonomy for students to update their basic information.
+- **Report Card Generator:** Automatic issuance of the performance document.
+- **Security:** Password recovery via email and authentication by access levels.
 
-🚀 Key Features
-Schedule Management: Dynamic visualization of the day's classes (Teacher, Time, and Subject).
+---
 
-Academic Calendar: Tracking of holidays and school events.
+## 🛠️ Technologies and Tools
+The project follows the **MVC (Model-View-Controller)** architecture patterns to ensure organization and scalability:
 
-Subject Module: Space for consulting grades and pedagogical feedback (observations).
+- **Language:** Java (Backend)
+- **Web Server:** Apache Tomcat (Servlets)
+- **Frontend:** JSP (JavaServer Pages), CSS3 e JavaScript
+- **Database::** PostgreSQL
+- **Connection:** JDBC (Java Database Connectivity)
+- **Design:** [Figma](https://www.figma.com/design/V2DaO5yTUlbII11or9XyVt/Untitled?node-id=0-1&t=IlAW58wlBmOqog5d-1)
+- **Project Management:** Jira
 
-Editable Profile: Autonomy for students to update their basic information.
+---
 
-Report Card Generator: Automatic issuance of the performance document.
+## ⚙️ How to run the project
 
-Security: Password recovery via email and authentication by access levels.
-
-🛠️ Technologies and Tools
-The project follows the MVC (Model-View-Controller) architecture patterns to ensure organization and scalability:
-
-Language: Java (Backend)
-
-Web Server: Apache Tomcat (Servlets)
-
-Frontend: JSP (JavaServer Pages), CSS3, and JavaScript
-
-Database: PostgreSQL
-
-Connection: JDBC (Java Database Connectivity)
-
-Design: Figma
-
-Project Management: Jira
-
-⚙️ How to Run the Project
-Prerequisites
+### Prerequisites
 To run this project locally, you will need:
-
-JDK 11 or higher.
-
-Apache Tomcat 9 or higher.
-
-PostgreSQL installed and running.
-
-The PostgreSQL JDBC driver (postgresql-42.x.x.jar) in the project's lib folder or Tomcat's lib folder.
-
-Installation
-Clone the repository:
-
-Bash
+1. **JDK 11** or higher.
+2. **Apache Tomcat 9** or higher.
+3. **PostgreSQL** installed and running.
+4. The PostgreSQL JDBC driver (postgresql-42.x.x.jar) in the project's lib folder or Tomcat's lib folder.
+ 
+### Instalação
+1. Clone the repository:
+   ```bash
+  
 git clone https://github.com/Estudi4nt3s/Escola-Estudiantes.git
 Import the project into your IDE (Recommended: IntelliJ IDEA).
 
