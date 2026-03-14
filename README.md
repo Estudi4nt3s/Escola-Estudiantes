@@ -73,6 +73,7 @@ O processo de criação passou por uma etapa de prototipagem no Figma e a organi
 
 Desenvolvido por Alunos do Instituto J&F - 2026
 
+<hr>
 
 ________________en-US________________
 
