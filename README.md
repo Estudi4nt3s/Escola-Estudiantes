@@ -70,3 +70,82 @@ Adicione o servidor Tomcat à IDE e execute o artefato.
 O processo de criação passou por uma etapa de prototipagem no Figma e a organização das tarefas foi gerida via Jira, aplicando metodologias ágeis para o desenvolvimento em grupo através do Git.
 
 Desenvolvido por Alunos do Instituto J&F - 2026
+
+______________________________________
+ENGLISH:
+
+🏫 Estudiantes School
+
+📌 About the Project
+Estudiantes School is a functional school management system developed by 11th-grade students from Instituto J&F. The project was conceived during Software Development classes for evaluative and diagnostic purposes, finalized on March 12th.
+
+The main objective is to offer a versatile platform that meets the needs of Middle and High Schools, allowing the centralized organization of grades, attendance, academic calendars, and user data.
+
+👥 Access Profiles
+The system is segmented into three permission levels, directed at the moment of login:
+
+Administrator: Has full control over the ecosystem. Responsible for the global management of teachers and students, editing calendars, and maintaining grades and profiles. Access is protected by a restricted area and a special password.
+
+Teacher: Focused on pedagogical management. Teachers can view the class schedule, manage their classes, and specifically perform the entry of grades and individual observations for each student.
+
+Student: Focused on the student experience. After registering, the student accesses a home page with the day's schedules, consults the event calendar, views performance by subject, and can generate their school report card.
+
+🚀 Key Features
+Schedule Management: Dynamic visualization of the day's classes (Teacher, Time, and Subject).
+
+Academic Calendar: Tracking of holidays and school events.
+
+Subject Module: Space for consulting grades and pedagogical feedback (observations).
+
+Editable Profile: Autonomy for students to update their basic information.
+
+Report Card Generator: Automatic issuance of the performance document.
+
+Security: Password recovery via email and authentication by access levels.
+
+🛠️ Technologies and Tools
+The project follows the MVC (Model-View-Controller) architecture patterns to ensure organization and scalability:
+
+Language: Java (Backend)
+
+Web Server: Apache Tomcat (Servlets)
+
+Frontend: JSP (JavaServer Pages), CSS3, and JavaScript
+
+Database: PostgreSQL
+
+Connection: JDBC (Java Database Connectivity)
+
+Design: Figma
+
+Project Management: Jira
+
+⚙️ How to Run the Project
+Prerequisites
+To run this project locally, you will need:
+
+JDK 11 or higher.
+
+Apache Tomcat 9 or higher.
+
+PostgreSQL installed and running.
+
+The PostgreSQL JDBC driver (postgresql-42.x.x.jar) in the project's lib folder or Tomcat's lib folder.
+
+Installation
+Clone the repository:
+
+Bash
+git clone https://github.com/Estudi4nt3s/Escola-Estudiantes.git
+Import the project into your IDE (Recommended: IntelliJ IDEA).
+
+Configure the database using the SQL script (if available in the /database folder).
+
+Configure the JDBC connection file with your PostgreSQL credentials.
+
+Add the Tomcat server to the IDE and run the artifact.
+
+🎨 Design and Organization
+The creation process went through a prototyping stage in Figma, and task organization was managed via Jira, applying agile methodologies for group development through Git.
+
+Developed by Students of Instituto J&F - 2026
