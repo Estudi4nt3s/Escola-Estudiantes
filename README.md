@@ -128,11 +128,10 @@ To run this project locally, you will need:
 3. **PostgreSQL** installed and running.
 4. The PostgreSQL JDBC driver (postgresql-42.x.x.jar) in the project's lib folder or Tomcat's lib folder.
  
-### Instalação
+### Installation
 1. Clone the repository:
    ```bash
-  
-git clone https://github.com/Estudi4nt3s/Escola-Estudiantes.git
+   git clone [https://github.com/Estudi4nt3s/Escola-Estudiantes.git](https://github.com/Estudi4nt3s/Escola-Estudiantes.git)
 Import the project into your IDE (Recommended: IntelliJ IDEA).
 
 Configure the database using the SQL script (if available in the /database folder).
