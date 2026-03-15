@@ -29,12 +29,15 @@ public class ServletLogin extends HttpServlet {
 
         System.out.println("Tentativa de login: " + email);
 
+
         UsuarioDAO userDAO = new UsuarioDAO();
         List<Usuario> users = userDAO.listarComFiltro("email = ?", email);
+        System.out.println("Usuarios encontrados: " + users.size());
 
         if (!users.isEmpty()) {
             Usuario usuarioLogado = users.getFirst();
             boolean validarSenha = usuarioLogado.getSenha().equals(senha);
+            System.out.println("Senha válida" + validarSenha);
 
             if (validarSenha) {
                 // Configuração de Data para a Sessão
@@ -64,11 +67,8 @@ public class ServletLogin extends HttpServlet {
                     if (!profs.isEmpty()) {
                         Professor prof = profs.getFirst();
                         Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplina().getId()));
-                        List<Aula> aulas = aulaDAO.listarComFiltro(
-                                "a.professorid = ? AND a.diasemana = ? ORDER BY horarioinicio",
-                               prof.getId(),
-                                semana
-                        );                        List<Turma> turmas = turmaDAO.listar();
+                        List<Aula> aulas = aulaDAO.listarPorProfessor(prof.getId(), semana);
+                        List<Turma> turmas = turmaDAO.listar();
 
                         request.getSession().setAttribute("professor", prof);
                         request.getSession().setAttribute("disciplina", disc);
@@ -87,18 +87,28 @@ public class ServletLogin extends HttpServlet {
                     ProfessorDAO profDAO = new ProfessorDAO();
                     ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
-                    List<Aluno> alunos = alunoDAO.listarUsuario(usuarioLogado.getId());
+                    System.out.println("Buscando aluno com usuarioid: " + usuarioLogado.getId());
+                    List<Aluno> alunos = alunoDAO.listarUsuarioAluno(usuarioLogado.getId());
+                    System.out.println("Alunos encontrados: " + alunos.size());
 
                     if (!alunos.isEmpty()) {
                         Aluno aluno = alunos.getFirst();
+                        System.out.println("Aluno: " + aluno.getNome() + " | TurmaId: " + aluno.getTurmaId());
+
                         List<Turma> turmas = turmaDAO.listarComFiltro("id = ?", aluno.getTurmaId());
-                        List<Aula> aulas = aulaDAO.listarComFiltro(    "a.diasemana = ? AND a.turmaid = ? ORDER BY horarioinicio",
-                                semana,
-                                aluno.getTurmaId()
-                        );
+                        System.out.println("Turmas: " + turmas.size());
+
+                        List<Aula> aulas = aulaDAO.listarPorTurma(semana, aluno.getTurmaId());
+                        System.out.println("Aulas: " + aulas.size());
+
                         List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
+                        System.out.println("Disciplinas: " + todasDisciplinas.size());
+
                         List<Nota> notas = notaDAO.listarComFiltro("alunomatricula = ?", aluno.getMatricula());
+                        System.out.println("Notas: " + notas.size());
+
                         List<Observacao> observacoes = observacaoDAO.listarDisciplina(aluno.getMatricula());
+                        System.out.println("Observacoes: " + observacoes.size());
 
                         int qtdMateria = 0;
                         String[] materia = new String[6];

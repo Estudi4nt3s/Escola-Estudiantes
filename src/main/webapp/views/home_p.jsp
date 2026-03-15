@@ -27,15 +27,22 @@
     @SuppressWarnings("unchecked")
     List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
 
+    if (professor == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
+    }
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-    for(int i = 0; i < aulas.size(); i++){
-        for (Turma value : turmas) {
-            if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getNome();
-                qtdmateria++;
-                break;
+
+    if (aulas != null && turmas != null) {
+        for (int i = 0; i < Math.min(aulas.size(), 6); i++) {
+            for (Turma value : turmas) {
+                if (value.getId() == aulas.get(i).getTurmaId().getId()) {
+                    turma[i] = value.getNome();
+                    qtdmateria++;
+                    break;
+                }
             }
         }
     }
@@ -47,6 +54,14 @@
     conteudo.put("geografia", new String[]{"Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.","public"});
     conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
     conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
+
+    boolean temAulas = !data[2].equals("SÁB") && !data[2].equals("DOM")
+            && materia != null
+            && aulas != null
+            && !aulas.isEmpty();
+
+        String nomeDisc = temAulas ? materia.getNome().toLowerCase() : "";
+    String[] infoDisc = temAulas && conteudo.containsKey(nomeDisc) ? conteudo.get(nomeDisc) : new String[]{"", ""};
 %>
 <body>
 
@@ -98,20 +113,14 @@
 
                 <div class="flex">
                     <%-- Loop para gerar os cards de conteúdo das aulas --%>
-                    <%
-                        System.out.println(materia);
-                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
-                            for(int i = 0;i < aulas.size();i++){
-                    %>
-                        <div class="card card <%=materia.getNome().toLowerCase()%>">
+                        <% if (temAulas) {
+                            for (int i = 0; i < qtdmateria; i++) { %>
+                        <div class="card <%=nomeDisc%>">
                             <h3><%=turma[i]%></h3>
-                            <p><%=conteudo.get(materia.getNome().toLowerCase())[0]%></p>
-                            <i class="material-icons materias"><%=conteudo.get(materia.getNome().toLowerCase())[1]%></i>
+                            <p><%=infoDisc[0]%></p>
+                            <i class="material-icons materias"><%=infoDisc[1]%></i>
                         </div>
-                    <%
-                            }
-                        }
-                    %>
+                        <% } } %>
                 </div>
 
             </div>
@@ -119,27 +128,17 @@
             <div class="content-today">
                 <h2>Aulas de Hoje</h2>
                 <ul>
-                    <%-- Loop para a lista lateral de horários --%>
-                    <%
-                    if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
-                        for(int i = 0;i < qtdmateria;i++){
-                            %>
-                        <li>
-                            <strong><%=turma[i]%></strong> -
-                            <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
-                             às
-                            <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
-                        </li>
-                    <%
-                        }
-                    }
-                        else{
-
-                    %>
-                        <p>Você não possui aulas hoje.</p>
-                        <%
-                            }
-                        %>
+                    <% if (temAulas) {
+                        for (int i = 0; i < qtdmateria; i++) { %>
+                    <li>
+                        <strong><%=turma[i]%></strong> -
+                        <%=String.format("%02d", aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d", aulas.get(i).getHorarioInicio().getMinute())%>
+                        às
+                        <%=String.format("%02d", aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d", aulas.get(i).getHorarioFim().getMinute())%>
+                    </li>
+                    <% } } else { %>
+                    <p>Você não possui aulas hoje.</p>
+                    <% } %>
                 </ul>
             </div>
 

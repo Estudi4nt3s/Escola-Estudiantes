@@ -136,6 +136,37 @@ public class AlunoDAO {
         return alunos;
     }
 
+    public List<Aluno> listarUsuarioAluno(int usuarioid) {
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = "SELECT * FROM alunos WHERE usuarioid = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuarioid);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println("matricula: " + rs.getInt("matricula"));
+                    System.out.println("nome: " + rs.getString("nome"));
+                    System.out.println("turmaid: " + rs.getInt("turmaid"));
+                    Aluno aluno = new Aluno(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getString("cpf"),
+                            rs.getObject("datanascimento", LocalDate.class),
+                            null,
+                            null,
+                            rs.getInt("turmaid")
+                    );
+                    alunos.add(aluno);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return alunos;
+    }
 
     public List<Aluno> listarPorTurma(int turmaId) {
         List<Aluno> alunos = new ArrayList<>();
