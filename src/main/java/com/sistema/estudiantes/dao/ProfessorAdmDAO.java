@@ -87,4 +87,71 @@ public class ProfessorAdmDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return null;
     }
+    // Verifica se o professor existe pelo nome (usado no AJAX do Modal de Disciplinas)
+    public boolean verificarSeExistePorNome(String nome) {
+        String sql = "SELECT COUNT(*) FROM Professores WHERE Nome = ?";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nome);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Cadastra um professor rapidamente quando ele não é encontrado
+    // Note: Como sua tabela Professores exige DisciplinaId,
+    // aqui ele será criado com uma disciplina padrão (ex: ID 1) ou nula se o banco permitir.
+    public boolean cadastrarRapido(String nomeCompleto, String email) {
+        // 1. Primeiro cria o usuário para ter o login
+        String sqlUser = "INSERT INTO Usuarios (Email, Senha, Perfil) VALUES (?, '123456', 'PROFESSOR')";
+        String sqlProf = "INSERT INTO Professores (Nome, UsuarioId, DisciplinaId) VALUES (?, ?, ?)";
+
+        try (Connection conn = Conexao.conectar()) {
+            conn.setAutoCommit(false); // Transação para garantir que cria os dois ou nenhum
+
+            try (PreparedStatement psUser = conn.prepareStatement(sqlUser, Statement.RETURN_GENERATED_KEYS)) {
+                psUser.setString(1, email);
+                psUser.executeUpdate();
+
+                ResultSet rs = psUser.getGeneratedKeys();
+                if (rs.next()) {
+                    int usuarioId = rs.getInt(1);
+
+                    try (PreparedStatement psProf = conn.prepareStatement(sqlProf)) {
+                        psProf.setString(1, nomeCompleto);
+                        psProf.setInt(2, usuarioId);
+                        psProf.setInt(3, 1); // ID da Disciplina padrão (Ajuste conforme seu banco)
+                        psProf.executeUpdate();
+                    }
+                }
+                conn.commit();
+                return true;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Método auxiliar que o Servlet também pode usar
+    public void criarProfessorBasico(String nome, int disciplinaId) {
+        String sql = "INSERT INTO Professores (Nome, DisciplinaId) VALUES (?, ?)";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nome);
+            ps.setInt(2, disciplinaId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

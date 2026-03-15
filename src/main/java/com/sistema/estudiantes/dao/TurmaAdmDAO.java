@@ -10,36 +10,32 @@ public class TurmaAdmDAO {
 
     public List<TurmaAdm> listarTodas() {
         List<TurmaAdm> lista = new ArrayList<>();
-        // Note que usamos 'Turmas t' para a tabela principal
-        String sql = "SELECT t.*, COALESCE(v.qntdAlunos, 0) as total " +
-                "FROM Turmas t " +
-                "LEFT JOIN vwQntdAlunosTurma v ON t.Nome = v.Nome " +
-                "ORDER BY t.Id DESC";
+        // SQL AJUSTADO: Busca o Ano e conta os alunos vinculados na tabela Alunos
+        String sql = "SELECT t.Id, t.Nome, t.Ano, " +
+                "(SELECT COUNT(*) FROM Alunos a WHERE a.TurmaId = t.Id) as QtdAlunos " +
+                "FROM Turmas t ORDER BY t.Nome";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
                 TurmaAdm t = new TurmaAdm();
                 t.setId(rs.getInt("Id"));
                 t.setNome(rs.getString("Nome"));
-                t.setAno(rs.getInt("Ano"));
-                t.setQuantidadeAlunos(rs.getInt("total"));
+                t.setAno(rs.getInt("Ano")); // Adicionado busca do Ano
+                t.setQuantidadeAlunos(rs.getInt("QtdAlunos")); // Preenche a quantidade calculada
                 lista.add(t);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
     public void salvar(TurmaAdm turma, String acao) {
-        String sql;
-        // Removido 'QuantidadeAlunos' do INSERT e UPDATE, pois a View cuida disso
-        if ("novo".equals(acao)) {
-            sql = "INSERT INTO Turmas (Nome, Ano) VALUES (?, ?)";
-        } else {
-            sql = "UPDATE Turmas SET Nome = ?, Ano = ? WHERE Id = ?";
-        }
+        String sql = "novo".equals(acao) ?
+                "INSERT INTO Turmas (Nome, Ano) VALUES (?, ?)" :
+                "UPDATE Turmas SET Nome = ?, Ano = ? WHERE Id = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -53,13 +49,11 @@ public class TurmaAdmDAO {
 
             stmt.executeUpdate();
         } catch (Exception e) {
-            System.err.println("Erro no DAO salvar: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     public TurmaAdm buscarPorId(int id) {
-        // Buscamos na tabela 'Turmas'
         String sql = "SELECT * FROM Turmas WHERE Id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -70,7 +64,6 @@ public class TurmaAdmDAO {
                     t.setId(rs.getInt("Id"));
                     t.setNome(rs.getString("Nome"));
                     t.setAno(rs.getInt("Ano"));
-                    // A quantidade aqui pode ficar 0, pois no 'listarTodas' ela será preenchida pela View
                     return t;
                 }
             }
@@ -79,7 +72,6 @@ public class TurmaAdmDAO {
     }
 
     public void excluir(int id) {
-        // Deletamos na tabela 'Turmas'
         String sql = "DELETE FROM Turmas WHERE Id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

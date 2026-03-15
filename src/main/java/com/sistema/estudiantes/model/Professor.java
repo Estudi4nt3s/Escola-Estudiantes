@@ -12,6 +12,17 @@ public class Professor {
         this.id = id;
     }
 
+    // Novo: Construtor para buscas rápidas (usado no DisciplinaAdminServlet)
+    public Professor(int id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
+    // Novo: Construtor para facilitar criações apenas com nome
+    public Professor(String nome) {
+        this.nome = nome;
+    }
+
     // Construtor completo
     public Professor(int id, String nome, Usuario usuario, Disciplina disciplina) {
         this.id = id;

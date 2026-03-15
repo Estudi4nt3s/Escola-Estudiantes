@@ -1,20 +1,26 @@
 package com.sistema.estudiantes.servlet;
 
+import com.sistema.estudiantes.dao.AdministradorDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
+import jakarta.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/servletConfiguracoes")
 public class ServletConfiguracoes extends HttpServlet {
 
+    // Seguindo seu padrão, instanciamos o DAO
+    private AdministradorDAO dao = new AdministradorDAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // O DAO busca métricas e ranking direto do banco
+        request.setAttribute("rankingReal", dao.obterRankingAlunos());
+        request.setAttribute("totalAlunos", dao.contarTotalAlunos());
+        request.setAttribute("mediaGeral", dao.calcularMediaGeral());
+
         request.getRequestDispatcher("/views/configuracoes_a.jsp").forward(request, response);
     }
 
@@ -22,22 +28,13 @@ public class ServletConfiguracoes extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Pegando novos parâmetros úteis
-        String anoLetivo = request.getParameter("anoLetivo");
-        String limiteAlunos = request.getParameter("limiteAlunos");
-        String matriculasAbertas = request.getParameter("matriculasAbertas");
         String novaSenha = request.getParameter("novaSenha");
-
         HttpSession session = request.getSession();
+        String idAdmin = (String) session.getAttribute("adminId");
 
-        // Salvando na sessão para simular um banco de dados
-        session.setAttribute("anoLetivo", anoLetivo);
-        session.setAttribute("limiteAlunos", limiteAlunos);
-        session.setAttribute("matriculasAbertas", "on".equals(matriculasAbertas));
-
-        // Se a senha não estiver vazia, você processaria a troca aqui
+        // Lógica de atualização de senha via DAO
         if (novaSenha != null && !novaSenha.trim().isEmpty()) {
-            System.out.println("Senha alterada para: " + novaSenha);
+            dao.atualizarSenha(Integer.parseInt(idAdmin), novaSenha);
         }
 
         response.sendRedirect("servletConfiguracoes?status=success");
