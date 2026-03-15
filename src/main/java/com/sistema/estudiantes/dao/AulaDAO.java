@@ -111,7 +111,7 @@ public class AulaDAO {
         return aulas;
     }
 
-    public List<Aula> listarComFiltro(Optional<String> condicao, String valor1, int valor2) {
+    public List<Aula> listarComFiltro(String condicao, String valor1, int valor2) {
 
         List<Aula> aulas = new ArrayList<>();
         String sql = """
@@ -156,7 +156,73 @@ public class AulaDAO {
         return aulas;
     }
 
+    public List<Aula> listarPorProfessor(int professorId, String diaSemana) {
+        List<Aula> aulas = new ArrayList<>();
+        String sql = """
+        SELECT a.*, p.nome AS professornome, d.nome AS disciplinanome
+        FROM aulas a
+        LEFT JOIN professores p ON a.professorid = p.id
+        LEFT JOIN disciplinas d ON p.disciplinaid = d.id
+        WHERE a.professorid = ? AND a.diasemana = ? ORDER BY horarioinicio""";
 
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, professorId);
+            stmt.setString(2, diaSemana);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    p.setNome(rs.getString("professornome"));
+                    Disciplina d = new Disciplina(rs.getInt("id"));
+                    d.setNome(rs.getString("disciplinanome"));
+                    p.setDisciplina(d);
+                    Turma t = new Turma(rs.getInt("turmaid"));
+                    aulas.add(new Aula(rs.getInt("id"),
+                            rs.getObject("horarioinicio", LocalTime.class),
+                            rs.getObject("horariofim", LocalTime.class),
+                            p, t, rs.getString("diasemana")));
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return aulas;
+    }
+
+    public List<Aula> listarPorTurma(String diaSemana, int turmaId) {
+        List<Aula> aulas = new ArrayList<>();
+        String sql = """
+        SELECT a.*, p.nome AS professornome, d.nome AS disciplinanome
+        FROM aulas a
+        LEFT JOIN professores p ON a.professorid = p.id
+        LEFT JOIN disciplinas d ON p.disciplinaid = d.id
+        WHERE a.diasemana = ? AND a.turmaid = ? ORDER BY horarioinicio""";
+
+        try (
+                Connection conn = new Conexao().conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setString(1, diaSemana);
+            stmt.setInt(2, turmaId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    p.setNome(rs.getString("professornome"));
+                    Disciplina d = new Disciplina(rs.getInt("id"));
+                    d.setNome(rs.getString("disciplinanome"));
+                    p.setDisciplina(d);
+                    Turma t = new Turma(rs.getInt("turmaid"));
+                    aulas.add(new Aula(rs.getInt("id"),
+                            rs.getObject("horarioinicio", LocalTime.class),
+                            rs.getObject("horariofim", LocalTime.class),
+                            p, t, rs.getString("diasemana")));
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return aulas;
+    }
 
     public boolean atualizar(Aula a) {
         String sql = """

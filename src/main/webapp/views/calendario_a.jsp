@@ -169,7 +169,7 @@
 
   function carregarAulas(data){
 
-    fetch("<%= request.getContextPath() %>/BuscarAulasServlet?data=" + data)
+    fetch("<%= request.getContextPath() %>/BuscarAulasAlunoServlet?data=" + data)
             .then(response => response.text())
             .then(html => {
               document.getElementById("aulaLista").innerHTML = html;
