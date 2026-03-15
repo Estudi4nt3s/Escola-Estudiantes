@@ -47,7 +47,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/calendario_a.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
         <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"><i class="material-icons">menu_book</i>Minhas Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">grading</i>Notas</a>
+        <a class="menu" id="btnNotas" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%=aluno.getMatricula()%>"> <i class="material-icons">grading</i>Notas</a>
         <a class="menu active"><i class="material-icons">person</i>Perfil</a>
     </nav>
     <div class="config">
@@ -66,7 +66,7 @@
         </div>
 
         <div class="user">
-            <i class="material-icons" id="openNotification" onclick="toggleNotifications()">notifications</i>
+<%--            <i class="material-icons" id="openNotification" onclick="toggleNotifications()">notifications</i>--%>
             <div class="avatar">
                 <img id="top-avatar-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
                 <span><%= aluno.getNome() %></span>
@@ -91,9 +91,9 @@
             </div>
 
 
-            <button class="btn-edit-perfil" onclick="location.href='editarPerfil.jsp'">
-                <i class="material-icons" style="font-size: 18px; vertical-align: middle;">edit</i> Editar Perfil
-            </button>
+<%--            <button class="btn-edit-perfil" onclick="location.href='editarPerfil.jsp'">--%>
+<%--                <i class="material-icons" style="font-size: 18px; vertical-align: middle;">edit</i> Editar Perfil--%>
+<%--            </button>--%>
         </div>
 
         <div class="perfil-detalhes">
@@ -167,7 +167,7 @@
         <p>Deseja encerrar sua sessão no sistema?</p>
         <div class="logout-buttons">
             <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
-            <a href="${pageContext.request.contextPath}/logout" class="btn-confirm">Sim, Sair</a>
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
         </div>
     </div>
 </div>
@@ -181,21 +181,18 @@
         document.getElementById('photoModal').classList.add('show');
     }
 
-    document.addEventListener("DOMContentLoaded", function(){
+    const btnNotas = document.getElementById("btnNotas");
+    const loading = document.getElementById("loadingOverlay");
 
-        const btnNotas = document.getElementById("btnNotas");
-        const loading = document.getElementById("loadingOverlay");
+    btnNotas.addEventListener("click", function(e){
 
-        if(btnNotas){
-            btnNotas.addEventListener("click", function(e){
-                e.preventDefault();
-                loading.style.display = "flex";
+        e.preventDefault(); // impede abrir imediatamente
 
-                setTimeout(()=>{
-                    window.location.href = this.href;
-                },500);
-            });
-        }
+        loading.style.display = "flex";
+
+        setTimeout(()=>{
+            window.location.href = this.href;
+        },500);
 
     });
 
@@ -227,6 +224,15 @@
         const notif = document.getElementById('notificationOverlay');
         if (event.target == notif) notif.classList.remove('show');
     }
+
+    window.addEventListener("pageshow", function(event) {
+
+        if (event.persisted) {
+            const loading = document.getElementById("loadingOverlay");
+            if(loading) loading.style.display = "none";
+        }
+
+    });
 </script>
 </body>
 </html>

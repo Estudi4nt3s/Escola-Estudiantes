@@ -31,7 +31,11 @@
             <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
 
             <input type="text" name="usuario" id="usuario" placeholder="Usuário" required>
-            <input type="password" name="senha" id="senha" placeholder="Senha" required>
+            <div class="input-wrapper">
+                <input type="password" name="senha" placeholder="Senha" required>
+                <i class="material-icons" style="color: #ffd27a"
+                   onclick="alternarVisibilidade(event)">visibility</i>
+            </div>
 
             <button type="submit" class="btn-primary">Entrar</button>
             <button type="button" class="btn-primary" onclick="fecharAdmin()">Cancelar</button>

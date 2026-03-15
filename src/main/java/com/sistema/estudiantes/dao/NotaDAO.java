@@ -80,7 +80,6 @@ public class NotaDAO {
 
                     Disciplina disciplina = new Disciplina(rs.getInt("disciplinaid"));
                     Aluno aluno = new Aluno(rs.getInt("alunomatricula"));
-
                     Nota nota = new Nota(
                             rs.getInt("id"),
                             disciplina,
@@ -89,7 +88,6 @@ public class NotaDAO {
                             n2
                     );
                     listaNota.add(nota);
-                    System.out.println("Nota: " + nota.getN2());
                 }
             }
         } catch (SQLException e) {
@@ -101,7 +99,7 @@ public class NotaDAO {
     public boolean atualizar(Nota n) {
         String sql = """
         UPDATE Notas
-           SET disciplinaid = ?, alunoid = ?, N1 = ?, N2 = ?
+           SET disciplinaid = ?, alunomatricula = ?, N1 = ?, N2 = ?
          WHERE Id = ?
     """;
 

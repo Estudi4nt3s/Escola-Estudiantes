@@ -64,8 +64,8 @@
         </nav>
 
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
-                <i class="material-icons">output</i>Sair
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
+                <i class="material-icons" style="color: #ffffff">output</i>Sair
             </a>
         </div>
     </aside>
@@ -146,6 +146,19 @@
         </section>
 
     </main>
+    <div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
+        <div class="logout-modal-content" onclick="event.stopPropagation()">
+            <div class="logout-icon">
+                <i class="material-icons">help_outline</i>
+            </div>
+            <h2>Confirmar Saída</h2>
+            <p>Deseja encerrar sua sessão no sistema?</p>
+            <div class="logout-buttons">
+                <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
+            </div>
+        </div>
+    </div>
 
     <script src="<%=request.getContextPath()%>/js/notificacoes.js"></script>
 </body>

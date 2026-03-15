@@ -151,7 +151,7 @@
     <h2>Ops! Página não encontrada</h2>
     <p>Parece que o caminho para o conhecimento foi interrompido. Verifique se o endereço está correto ou retorne ao portal.</p>
 
-    <a href="${pageContext.request.contextPath}/index.jsp" class="btn-home">
+    <a href="index.jsp" class="btn-home">
         <i class="material-icons">home</i>
         Ir para o Início
     </a>

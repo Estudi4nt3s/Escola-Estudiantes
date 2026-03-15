@@ -64,7 +64,7 @@
                 person</i>Perfil</a>
         </nav>
         <div class="config">
-            <a class="menu" style="color: #590101" href="sair">
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="user">
-                <i class="material-icons" id="openNotification">notifications</i>
+<%--                <i class="material-icons" id="openNotification">notifications</i>--%>
                 <div class="avatar">
                     <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
                     <span><%=aluno.getNome()%></span>
@@ -193,6 +193,20 @@
             <p>Carregando...</p>
         </div>
     </div>
+
+    <div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
+        <div class="logout-modal-content" onclick="event.stopPropagation()">
+            <div class="logout-icon">
+                <i class="material-icons">help_outline</i>
+            </div>
+            <h2>Confirmar Saída</h2>
+            <p>Deseja encerrar sua sessão no sistema?</p>
+            <div class="logout-buttons">
+                <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
+            </div>
+        </div>
+    </div>
     <script>
 
         const btnNotas = document.getElementById("btnNotas");
@@ -209,6 +223,30 @@
             },500);
 
         });
+
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('show');
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
+        }
+
+        window.addEventListener("pageshow", function(event) {
+
+            if (event.persisted) {
+                const loading = document.getElementById("loadingOverlay");
+                if(loading) loading.style.display = "none";
+            }
+
+        });
+
+
     </script>
 </body>
 </html>
