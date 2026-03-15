@@ -7,8 +7,8 @@
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     String[] data = (String[]) request.getSession().getAttribute("data");
-    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
-    List<Nota> notas = (List<Nota>) request.getAttribute("notas");
+    List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
+    List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
     List<Observacao> observacaos = (List<Observacao>) request.getSession().getAttribute("observacoes");
 
 %>

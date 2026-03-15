@@ -111,7 +111,7 @@ public class AulaDAO {
         return aulas;
     }
 
-    public List<Aula> listarComFiltro(Optional<String> condicao, String valor1, int valor2) {
+    public List<Aula> listarComFiltro(String condicao, String valor1, int valor2) {
 
         List<Aula> aulas = new ArrayList<>();
         String sql = """
