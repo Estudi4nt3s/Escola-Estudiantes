@@ -475,7 +475,7 @@ nav {
     transform: translateX(4px);
 }
 
-.content-today li:first-child {
+.content-today atual{
     background: rgba(209, 29, 34, 0.08);
     border: 1px solid rgba(209, 29, 34, 0.2);
     font-weight: 600;
