@@ -1,83 +1,224 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.*" %>
+<%@ page import="com.sistema.estudiantes.model.RankingDTO" %>
 <%
+  // Recuperando dados do Servlet
   String nome = (String) session.getAttribute("adminNome");
-  String anoLetivo = (String) session.getAttribute("anoLetivo");
-  String limite = (String) session.getAttribute("limiteAlunos");
-  Boolean matriculas = (Boolean) session.getAttribute("matriculasAbertas");
+  List<RankingDTO> ranking = (List<RankingDTO>) request.getAttribute("rankingReal");
+  Integer totalAlunos = (Integer) request.getAttribute("totalAlunos");
+  Double mediaGeralObj = (Double) request.getAttribute("mediaGeral");
+
+  // Tratando a média para evitar erro de Cast
+  String mediaGeral = (mediaGeralObj != null) ? String.format("%.2f", mediaGeralObj) : "0.00";
+
   String status = request.getParameter("status");
+  String tipo = (String) session.getAttribute("tipoUsuario");
+
+  // Proteção de Rota
+  if (tipo == null || !tipo.equals("admin")) {
+    response.sendRedirect("cadastro.jsp");
+    return;
+  }
 %>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Configurações do Sistema</title>
+  <title>Configurações Avançadas | ADM</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/configuracoes_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
 <aside class="sidebar">
-  <div class="logo"><i class="material-icons">admin_panel_settings</i><span>Painel ADM</span></div>
+  <div class="logo">
+    <i class="material-icons">admin_panel_settings</i>
+    <span>Painel ADM</span>
+  </div>
   <nav>
-    <a class="menu" href="${pageContext.request.contextPath}/views/inicio_a.jsp"><i class="material-icons">home</i>Inicio</a>
-    <a class="menu" href="${pageContext.request.contextPath}/AlunoAdminServlet"><i class="material-icons">groups</i>Alunos</a>
-    <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i>Professores</a>
-    <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i>Turmas</a>
-    <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i>Disciplinas</a>
-    <a class="menu active" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i>Configurações</a>
+    <a class="menu" href="${pageContext.request.contextPath}/views/inicio_a.jsp">
+      <i class="material-icons">home</i><span>Inicio</span>
+    </a>
+    <a class="menu" href="${pageContext.request.contextPath}/AlunoAdminServlet">
+      <i class="material-icons">groups</i><span>Alunos</span>
+    </a>
+    <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet">
+      <i class="material-icons">badge</i><span>Professores</span>
+    </a>
+    <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet">
+      <i class="material-icons">school</i><span>Turmas</span>
+    </a>
+    <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
+      <i class="material-icons">menu_book</i><span>Disciplinas</span>
+    </a>
+    <a class="menu active" href="${pageContext.request.contextPath}/servletConfiguracoes">
+      <i class="material-icons">settings</i><span>Configurações</span>
+    </a>
   </nav>
-  <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i>Sair</a>
+  <a class="config" href="${pageContext.request.contextPath}/servletLogout">
+    <i class="material-icons">logout</i><span>Sair</span>
+  </a>
 </aside>
 
 <main class="main">
   <header class="topbar">
-    <div class="date"><i class="material-icons">settings</i> Configurações Avançadas</div>
+    <div class="date"><i class="material-icons">admin_panel_settings</i>Área Administrativa</div>
     <div class="avatar">
       <img src="https://i.pravatar.cc/45?img=5">
       <span><%= (nome != null) ? nome : "Admin" %></span>
     </div>
   </header>
 
-  <div class="card" style="height: auto; margin-top: 20px; padding-bottom: 20px;">
-    <h2>Parâmetros do Sistema</h2>
-
-    <% if ("success".equals(status)) { %>
-    <p style="color: green; margin-bottom: 15px; font-weight: 600;">✓ Alterações salvas com sucesso!</p>
-    <% } %>
-
-    <form action="${pageContext.request.contextPath}/servletConfiguracoes" method="post">
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div class="form-group">
-          <label>Ano Letivo Atual</label>
-          <input type="text" name="anoLetivo" placeholder="Ex: 2026" value="<%= anoLetivo != null ? anoLetivo : "2026" %>">
-        </div>
-
-        <div class="form-group">
-          <label>Máximo de Alunos/Turma</label>
-          <input type="number" name="limiteAlunos" value="<%= limite != null ? limite : "40" %>">
+  <div class="content">
+    <div class="card profile-header" style="display: flex; align-items: center; gap: 25px; margin-bottom: 20px;">
+      <div class="profile-avatar">
+        <img src="https://i.pravatar.cc/100?img=5" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--red);">
+      </div>
+      <div class="profile-info">
+        <h2 style="margin: 0; color: #333;"><%= (nome != null) ? nome : "Administrador Geral" %></h2>
+        <div style="display: flex; gap: 10px; margin-top: 5px;">
+          <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold;">SISTEMA ATIVO</span>
+          <span style="background: #e3f2fd; color: #1565c0; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold;">ROOT</span>
         </div>
       </div>
+    </div>
 
-      <div class="form-group" style="flex-direction: row; align-items: center; gap: 10px; margin: 10px 0;">
-        <input type="checkbox" name="matriculasAbertas" style="width: 20px; height: 20px;" <%= (matriculas != null && matriculas) ? "checked" : "" %>>
-        <label style="margin-bottom: 0;">Permitir Novas Matrículas no Sistema</label>
+    <div class="action-grid">
+      <div class="card action-btn" onclick="abrirModal('modalMetricas')">
+        <i class="material-icons" style="color:#3498db">analytics</i>
+        <h4>Métricas</h4>
       </div>
-
-      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-
-      <div class="form-group">
-        <label>Redefinir Senha do Administrador</label>
-        <input type="password" name="novaSenha" placeholder="Digite apenas se desejar alterar">
+      <div class="card action-btn" onclick="abrirModal('modalRanking')">
+        <i class="material-icons" style="color:#f1c40f">star</i>
+        <h4>Ranking</h4>
       </div>
+      <div class="card action-btn" onclick="abrirModal('modalRelatorios')">
+        <i class="material-icons" style="color:#9b59b6">history_edu</i>
+        <h4>Relatórios</h4>
+      </div>
+      <div class="card action-btn" onclick="abrirModal('modalComunicados')">
+        <i class="material-icons" style="color:#e74c3c">campaign</i>
+        <h4>Comunicados</h4>
+      </div>
+    </div>
 
-      <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
-        <i class="material-icons">save</i> Aplicar Configurações
-      </button>
-    </form>
+    <div class="card">
+      <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+        <i class="material-icons">lock</i> Segurança da Conta
+      </h3>
+
+      <% if ("success".equals(status)) { %>
+      <p style="background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 600;">
+        ✓ Alteração realizada com sucesso!
+      </p>
+      <% } %>
+
+      <form action="${pageContext.request.contextPath}/servletConfiguracoes" method="post">
+        <div class="form-group">
+          <label>Redefinir Senha do Administrador</label>
+          <input type="password" name="novaSenha" placeholder="Digite a nova senha para alterar" required>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; height: 50px;">
+          <i class="material-icons">save</i> Atualizar Credenciais
+        </button>
+      </form>
+    </div>
   </div>
 </main>
+
+<div id="modalMetricas" class="overlay" style="display:none">
+  <div class="modal">
+    <h2><i class="material-icons">analytics</i> Estatísticas Gerais</h2>
+    <div style="margin: 20px 0;">
+      <p>Total de Alunos Matriculados: <b><%= (totalAlunos != null) ? totalAlunos : "Carregando..." %></b></p>
+      <p>Média Geral da Instituição: <b><%= mediaGeral %></b></p>
+    </div>
+    <button onclick="fecharModal('modalMetricas')" class="btn-primary" style="width:100%">Fechar</button>
+  </div>
+</div>
+
+<div id="modalRanking" class="overlay" style="display:none">
+  <div class="modal">
+    <h2><i class="material-icons">star</i> Top 3 Alunos</h2>
+    <table style="margin: 20px 0; width: 100%; border-collapse: collapse;">
+      <thead>
+      <tr style="text-align: left; border-bottom: 2px solid #eee;">
+        <th>Aluno</th>
+        <th>Média</th>
+      </tr>
+      </thead>
+      <tbody>
+      <%
+        if(ranking != null && !ranking.isEmpty()) {
+          for(RankingDTO r : ranking) { // Corrigido para RankingDTO
+      %>
+      <tr style="border-bottom: 1px solid #eee;">
+        <td style="padding: 10px 0;"><%= r.getNome() %></td>
+        <td style="color: var(--red); font-weight: bold;"><%= String.format("%.2f", r.getMedia()) %></td>
+      </tr>
+      <%
+        }
+      } else {
+      %>
+      <tr><td colspan="2" style="padding: 10px 0; text-align: center;">Nenhum dado disponível.</td></tr>
+      <% } %>
+      </tbody>
+    </table>
+    <button onclick="fecharModal('modalRanking')" class="btn-primary" style="width:100%">Fechar</button>
+  </div>
+</div>
+
+<div id="modalRelatorios" class="overlay" style="display:none">
+  <div class="modal" style="max-width: 600px; padding: 30px;">
+
+    <div style="text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 20px;">
+      <i class="material-icons" style="font-size: 50px; color: #9b59b6;">picture_as_pdf</i>
+      <h2 style="margin: 10px 0 5px;">Boletim Institucional</h2>
+      <p style="color: #666; font-size: 14px; margin: 0;">Relatório de Desempenho Acadêmico - 2026</p>
+    </div>
+
+    <div style="margin-bottom: 25px;">
+      <h4 style="color: #333; margin-bottom: 10px;">Conteúdo do Documento:</h4>
+      <ul style="color: #555; font-size: 14px; line-height: 1.6; padding-left: 20px;">
+        <li><b>Desempenho por Turma:</b> Médias agrupadas por sala.</li>
+        <li><b>Visão da Disciplina:</b> Notas detalhadas por matéria.</li>
+        <li><b>Corpo Docente:</b> Professores responsáveis por cada disciplina.</li>
+        <li><b>Indicadores:</b> Número de alunos avaliados por turma.</li>
+      </ul>
+    </div>
+
+    <a href="gerarRelatorio" class="btn-primary"
+       style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap: 10px; height: 50px; background-color: #9b59b6; border-radius: 8px;">
+      <i class="material-icons">file_download</i> Gerar Boletim em PDF
+    </a>
+
+    <button onclick="fecharModal('modalRelatorios')"
+            style="width: 100%; margin-top: 15px; background: none; border: none; cursor: pointer; color: #888; font-size: 14px;">
+      Cancelar e Voltar
+    </button>
+  </div>
+</div>
+
+<div id="modalComunicados" class="overlay" style="display:none">
+  <div class="modal">
+    <h2><i class="material-icons">campaign</i> Enviar Comunicado</h2>
+    <div class="form-group" style="margin-top: 15px;">
+      <label>Assunto do Aviso</label>
+      <input type="text" placeholder="Ex: Reunião de Pais">
+      <label style="margin-top:10px;">Mensagem</label>
+      <textarea style="width: 100%; border-radius: 10px; padding: 10px; border: 1px solid #ddd; height: 80px;"></textarea>
+    </div>
+    <button class="btn-primary" style="width:100%; margin-top:10px;">Disparar para Todos</button>
+    <button onclick="fecharModal('modalComunicados')" class="btn-cancelar" style="width:100%; border:none; background:none; margin-top:10px; cursor:pointer; color:#888;">Cancelar</button>
+  </div>
+</div>
+
+<script>
+  function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+  function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+  window.onclick = function(event) { if (event.target.className === 'overlay') event.target.style.display = "none"; }
+</script>
 
 </body>
 </html>

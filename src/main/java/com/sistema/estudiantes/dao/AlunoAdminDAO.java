@@ -12,7 +12,6 @@ public class AlunoAdminDAO {
 
     public List<Aluno> listarTodos() {
         List<Aluno> lista = new ArrayList<>();
-        // Agora buscamos tudo direto da tabela Alunos
         String sql = "SELECT * FROM Alunos ORDER BY Matricula";
 
         try (Connection conn = Conexao.conectar();
@@ -22,16 +21,18 @@ public class AlunoAdminDAO {
             while (rs.next()) {
                 Aluno a = new Aluno();
                 a.setMatricula(rs.getInt("Matricula"));
-                a.setNome(rs.getString("Nome")); // Nome agora vem de Alunos
+                a.setNome(rs.getString("Nome"));
                 a.setCpf(rs.getString("Cpf"));
-                a.setTelefonePai(rs.getString("TelefonePai"));
+                // Ajustado para 'telefone' conforme a imagem do seu banco
+                a.setTelefonePai(rs.getString("telefone"));
                 a.setTurmaId(rs.getInt("TurmaId"));
+                // Ajustado para 'emailresponsavel' conforme a imagem do seu banco
+                a.setEmailResponsavel(rs.getString("emailresponsavel"));
 
                 if (rs.getDate("DataNascimento") != null) {
                     a.setDataNascimento(rs.getDate("DataNascimento").toLocalDate());
                 }
 
-                // UsuarioId ainda pode existir, mas não precisamos de JOIN
                 Usuario user = new Usuario();
                 user.setId(rs.getInt("usuarioid"));
                 a.setUsuarioId(user);
@@ -49,8 +50,8 @@ public class AlunoAdminDAO {
         try {
             conn = Conexao.conectar();
             if ("novo".equals(acao)) {
-                // Incluímos 'Nome' e 'TurmaId' diretamente aqui
-                String sqlAluno = "INSERT INTO Alunos (Nome, Cpf, DataNascimento, TelefonePai, TurmaId) VALUES (?, ?, ?, ?, ?)";
+                // INSERT completo com emailresponsavel e telefone
+                String sqlAluno = "INSERT INTO Alunos (Nome, Cpf, DataNascimento, telefone, TurmaId, emailresponsavel) VALUES (?, ?, ?, ?, ?, ?)";
                 PreparedStatement stmtA = conn.prepareStatement(sqlAluno);
 
                 stmtA.setString(1, aluno.getNome());
@@ -58,17 +59,20 @@ public class AlunoAdminDAO {
                 stmtA.setDate(3, Date.valueOf(aluno.getDataNascimento()));
                 stmtA.setString(4, aluno.getTelefonePai());
                 stmtA.setInt(5, aluno.getTurmaId());
+                stmtA.setString(6, aluno.getEmailResponsavel());
 
                 stmtA.executeUpdate();
             } else if ("editar".equals(acao)) {
-                String sqlUpAluno = "UPDATE Alunos SET Nome = ?, Cpf = ?, DataNascimento = ?, TelefonePai = ?, TurmaId = ? WHERE Matricula = ?";
+                // UPDATE completo
+                String sqlUpAluno = "UPDATE Alunos SET Nome = ?, Cpf = ?, DataNascimento = ?, telefone = ?, TurmaId = ?, emailresponsavel = ? WHERE Matricula = ?";
                 PreparedStatement stmtA = conn.prepareStatement(sqlUpAluno);
                 stmtA.setString(1, aluno.getNome());
                 stmtA.setString(2, aluno.getCpf());
                 stmtA.setDate(3, Date.valueOf(aluno.getDataNascimento()));
                 stmtA.setString(4, aluno.getTelefonePai());
                 stmtA.setInt(5, aluno.getTurmaId());
-                stmtA.setInt(6, aluno.getMatricula());
+                stmtA.setString(6, aluno.getEmailResponsavel());
+                stmtA.setInt(7, aluno.getMatricula());
                 stmtA.executeUpdate();
             }
         } catch (Exception e) {
@@ -90,22 +94,23 @@ public class AlunoAdminDAO {
                     a.setNome(rs.getString("Nome"));
                     a.setCpf(rs.getString("Cpf"));
                     a.setDataNascimento(rs.getDate("DataNascimento").toLocalDate());
-                    a.setTelefonePai(rs.getString("TelefonePai"));
+                    a.setTelefonePai(rs.getString("telefone"));
                     a.setTurmaId(rs.getInt("TurmaId"));
+                    a.setEmailResponsavel(rs.getString("emailresponsavel"));
                     return a;
                 }
             }
         } catch (Exception e) { e.printStackTrace(); }
         return null;
     }
+
     public void excluir(int matricula) {
         String sqlNotas = "DELETE FROM notas WHERE alunomatricula = ?";
         String sqlObs = "DELETE FROM observacoes WHERE alunomatricula = ?";
-        String sqlAluno = "DELETE FROM alunos WHERE matricula = ?";
+        String sqlAluno = "DELETE FROM Alunos WHERE Matricula = ?";
 
         try (Connection conn = Conexao.conectar()) {
             conn.setAutoCommit(false);
-
             try (PreparedStatement st1 = conn.prepareStatement(sqlNotas);
                  PreparedStatement st2 = conn.prepareStatement(sqlObs);
                  PreparedStatement st3 = conn.prepareStatement(sqlAluno)) {
@@ -127,5 +132,25 @@ public class AlunoAdminDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Aluno buscarPorCpf(String cpf) {
+        String sql = "SELECT * FROM Alunos WHERE Cpf = ?";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, cpf);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Aluno a = new Aluno();
+                    a.setMatricula(rs.getInt("Matricula"));
+                    a.setNome(rs.getString("Nome"));
+                    a.setCpf(rs.getString("Cpf"));
+                    a.setTelefonePai(rs.getString("telefone"));
+                    a.setEmailResponsavel(rs.getString("emailresponsavel"));
+                    return a;
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
     }
 }
