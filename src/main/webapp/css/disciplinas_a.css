@@ -57,11 +57,13 @@ nav .menu {
 
 .config { margin-top: auto; padding: 25px; color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; }
 
-/* MAIN CONTENT */
+/* MAIN CONTENT - O container que segura a Topbar e o Content */
 .main {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -73,64 +75,83 @@ nav .menu {
     justify-content: space-between;
     padding: 0 40px;
     box-shadow: var(--soft-shadow);
+    flex-shrink: 0; /* Garante que a barra não encolha */
 }
 
 .avatar { display: flex; align-items: center; gap: 10px; font-weight: 600; }
 .avatar img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--red); }
-
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
 .page-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 40px 5% 20px 5%;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.page-header h1 {
+    font-size: 1.8rem;
+    color: #333;
 }
 
 .card {
-    margin: 0 5%;
     background: white;
     padding: 25px;
     border-radius: 20px;
     box-shadow: var(--shadow);
-    overflow-y: auto;
+    /* Em vez de width: 100%, usamos align-self para garantir o preenchimento */
+    align-self: stretch;
+    box-sizing: border-box;
+    /* Removemos margens que poderiam estar anulando o padding do pai */
+    margin: 0;
 }
 
 /* TABELA */
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-th { color: #888; font-size: 0.9rem; text-transform: uppercase; }
+th { color: #888; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 
 /* BOTÕES E ÍCONES */
 .btn-primary {
     background: var(--red);
     color: white !important;
-    padding: 12px 20px;
-    border-radius: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: 0.3s;
 }
+
+.btn-primary:hover { background: var(--red-dark); }
 
 .icon-btn { text-decoration: none !important; margin-right: 8px; }
 .icon-btn.edit { color: #3498db; }
 .icon-btn.delete { color: #e74c3c; }
 
-/* ==========================================================================
-   MODAL FLUTUANTE (OVERLAY)
-   ========================================================================== */
+/* MODAIS */
 .overlay {
-    position: fixed;   /* Fixa na tela inteira */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* Fundo escuro */
-    backdrop-filter: blur(4px);    /* Desfoque ao fundo */
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;     /* Sempre na frente de tudo */
+    z-index: 9999;
     animation: fadeIn 0.3s ease;
 }
 
@@ -144,12 +165,14 @@ th { color: #888; font-size: 0.9rem; text-transform: uppercase; }
     animation: scaleUp 0.3s ease;
 }
 
-.form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-.form-group label { margin-bottom: 5px; font-weight: 600; color: #444; }
-.form-group input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+.form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+.form-group label { margin-bottom: 8px; font-weight: 600; color: #444; }
+.form-group input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; transition: 0.3s; }
+.form-group input:focus { border-color: var(--red); }
 
-.modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.btn-cancelar { padding: 12px 20px; background: #eee; border-radius: 8px; text-decoration: none; color: #666; font-weight: 600; }
+.modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px; }
+.btn-cancelar { padding: 12px 20px; background: #f1f1f1; border-radius: 10px; text-decoration: none; color: #666; font-weight: 600; transition: 0.3s; }
+.btn-cancelar:hover { background: #e5e5e5; }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }

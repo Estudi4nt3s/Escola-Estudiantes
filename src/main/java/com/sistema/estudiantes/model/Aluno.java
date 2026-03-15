@@ -11,6 +11,7 @@ public class Aluno {
     private Usuario usuario_id;
     private String telefonePai;
     private int turmaId;
+    private String emailResponsavel;
 
     public Aluno() {}
 
@@ -59,6 +60,10 @@ public class Aluno {
         return this.turmaId;
     }
 
+    public String getEmailResponsavel() {
+        return emailResponsavel;
+    }
+
     public void setMatricula(int matricula) {
         this.matricula = matricula;
     }
@@ -85,6 +90,10 @@ public class Aluno {
 
     public void setTurmaId(int turmaId) {
         this.turmaId = turmaId;
+    }
+
+    public void setEmailResponsavel(String emailResponsavel) {
+        this.emailResponsavel = emailResponsavel;
     }
 
     public String toString() {

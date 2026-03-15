@@ -4,7 +4,6 @@ import com.sistema.estudiantes.dao.DisciplinaAdmDAO;
 import com.sistema.estudiantes.dao.ProfessorAdmDAO;
 import com.sistema.estudiantes.dao.TurmaAdmDAO;
 import com.sistema.estudiantes.model.DisciplinasAdm;
-import com.sistema.estudiantes.model.TurmaAdm;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -28,10 +27,15 @@ public class DisciplinaAdminServlet extends HttpServlet {
         request.setAttribute("listaTurmasAuto", turmaDao.listarTodas());
         request.setAttribute("listaProfessoresAuto", professorDao.listarComTudo());
 
-        if (idParam != null && "editar".equals(acao)) {
-            request.setAttribute("disciplinaEditar", dao.buscarPorId(Integer.parseInt(idParam)));
+        if (idParam != null && ("editar".equals(acao) || "pre-excluir".equals(acao))) {
+            try {
+                int id = Integer.parseInt(idParam);
+                DisciplinasAdm d = dao.buscarPorId(id);
+                request.setAttribute("disciplinaEditar", d);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
-
         List<DisciplinasAdm> lista = dao.listarTodasComRelacionamentos();
         request.setAttribute("listaDisciplinas", lista);
 
@@ -44,20 +48,27 @@ public class DisciplinaAdminServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String acao = request.getParameter("acao");
 
-        // 1. Criar Professor Rápido (Ajustado para o novo DAO que só pede nome e discId)
+        if ("verificarProfessor".equals(acao)) {
+            String nome = request.getParameter("nome");
+            boolean existe = professorDao.verificarSeExistePorNome(nome);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"existe\": " + existe + "}");
+            return;
+        }
+
         if ("criarProfessorRapido".equals(acao)) {
             String nome = request.getParameter("nome");
             String sobrenome = request.getParameter("sobrenome");
-            // Se o seu DAO agora só recebe Nome e DisciplinaId:
-            String nomeCompleto = nome + " " + sobrenome;
-            int disciplinaId = Integer.parseInt(request.getParameter("disciplinaId"));
+            String email = request.getParameter("email");
 
-            dao.criarProfessorBasico(nomeCompleto, disciplinaId);
+            // Se o seu DisciplinaAdmDAO tiver o método criarProfessorBasico, use-o:
+            String nomeCompleto = nome + " " + sobrenome;
+            professorDao.cadastrarRapido(nomeCompleto, email); // Verifique se este método existe no seu DAO
+
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
-        // 2. Salvar, Editar ou Excluir
         if ("excluir".equals(acao)) {
             String idStr = request.getParameter("id");
             if (idStr != null) dao.excluir(Integer.parseInt(idStr));
@@ -69,13 +80,10 @@ public class DisciplinaAdminServlet extends HttpServlet {
             }
 
             d.setNome(request.getParameter("nome"));
-            // IMPORTANTE: Se você removeu Carga Horária do banco, o DAO ignora,
-            // mas o Servlet ainda precisa tratar se o campo vier do form
-            String cargaStr = request.getParameter("cargaHoraria");
-            d.setCargaHoraria(cargaStr != null && !cargaStr.isEmpty() ? Integer.parseInt(cargaStr) : 0);
-
             d.setProfessorNome(request.getParameter("professorNome"));
-            d.setTurmaNome(request.getParameter("turmaNome"));
+
+            String turma = request.getParameter("turmaNome");
+            if(turma != null) d.setTurmaNome(turma);
 
             dao.salvar(d, acao);
         }

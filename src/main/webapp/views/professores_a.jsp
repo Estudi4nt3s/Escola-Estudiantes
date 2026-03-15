@@ -2,11 +2,22 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sistema.estudiantes.model.Professor" %>
 <%@ page import="com.sistema.estudiantes.model.Disciplina" %>
+<%@ page import="com.sistema.estudiantes.model.DisciplinasAdm" %>
 
 <%
     String adminNome = (String) session.getAttribute("adminNome");
     List<Professor> listaProfessores = (List<Professor>) request.getAttribute("listaProfessores");
-    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("listaDisciplinas");
+    String tipo = (String) session.getAttribute("tipoUsuario");
+
+    if (tipo == null || !tipo.equals("admin")) {
+        response.sendRedirect("cadastro.jsp");
+        return;
+    }
+    // Lista para o Modal de Filtro (Usando DisciplinasAdm conforme o seu Servlet envia)
+    List<DisciplinasAdm> listaFiltro = (List<DisciplinasAdm>) request.getAttribute("listaDisciplinasAuto");
+
+    // Lista para o Modal de Cadastro (Usando Disciplina conforme o seu Model Professor espera)
+    List<Disciplina> listaCadastro = (List<Disciplina>) request.getAttribute("listaDisciplinas");
 
     String acaoModal = request.getParameter("acao");
     Professor profEdit = (Professor) request.getAttribute("professorEditar");
@@ -43,7 +54,7 @@
         <div class="date"><i class="material-icons">badge</i> Gerenciamento de Docentes</div>
         <div class="avatar">
             <img src="https://i.pravatar.cc/45?img=12">
-            <span><%= adminNome %></span>
+            <span><%= (adminNome != null) ? adminNome : "Admin" %></span>
         </div>
     </header>
 
@@ -52,36 +63,33 @@
             <h1>Professores Cadastrados</h1>
             <div style="display: flex; gap: 10px;">
                 <button class="btn-filter" onclick="toggleFilter()"><i class="material-icons">filter_list</i> Filtros</button>
-                <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get">
-                    <button class="btn-primary" name="acao" value="novo"><i class="material-icons">add</i> Novo Professor</button>
-                </form>
+                <a href="${pageContext.request.contextPath}/ProfessorAdminServlet?acao=novo" class="btn-primary" style="text-decoration: none;">
+                    <i class="material-icons">add</i> Novo Professor
+                </a>
             </div>
         </div>
 
+        <%-- FILTROS --%>
         <div id="filterModal" class="overlay" style="display: none;">
             <div class="modal">
                 <h2>Filtros Avançados</h2>
-
                 <div class="form-group">
                     <label>Nome do Professor</label>
                     <input type="text" id="inputNomeBusca" onkeyup="filtrarTabela()" placeholder="Nome...">
                 </div>
-
                 <div class="form-group">
                     <label>Disciplina</label>
                     <select id="selectDisciplinaBusca" onchange="filtrarTabela()">
                         <option value="">Todas as disciplinas</option>
-                        <% if (disciplinas != null) { for (Disciplina d : disciplinas) { %>
+                        <% if (listaFiltro != null) { for (DisciplinasAdm d : listaFiltro) { %>
                         <option value="<%= d.getNome() %>"><%= d.getNome() %></option>
                         <% } } %>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>E-mail</label>
                     <input type="text" id="inputEmailBusca" onkeyup="filtrarTabela()" placeholder="Parte do e-mail...">
                 </div>
-
                 <div class="modal-buttons">
                     <button class="btn-cancelar" onclick="toggleFilter()">Fechar</button>
                     <button class="btn-primary" onclick="limparFiltros()">Limpar Tudo</button>
@@ -94,11 +102,7 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Disciplina</th>
-                        <th>E-mail</th>
-                        <th>Ações</th>
+                        <th>ID</th><th>Nome</th><th>Disciplina</th><th>E-mail</th><th>Ações</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -110,14 +114,8 @@
                         <td><%= p.getDisciplina() != null ? p.getDisciplina().getNome() : "N/A" %></td>
                         <td><%= p.getUsuario() != null ? p.getUsuario().getEmail() : "Sem e-mail" %></td>
                         <td>
-                            <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get" style="display:inline;">
-                                <input type="hidden" name="id" value="<%= p.getId() %>">
-                                <button type="submit" name="acao" value="editar" class="icon-btn edit"><i class="material-icons">edit</i></button>
-                            </form>
-                            <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="get" style="display:inline;">
-                                <input type="hidden" name="id" value="<%= p.getId() %>">
-                                <button type="submit" name="acao" value="pre-excluir" class="icon-btn delete"><i class="material-icons">delete</i></button>
-                            </form>
+                            <a href="ProfessorAdminServlet?acao=editar&id=<%= p.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
+                            <a href="ProfessorAdminServlet?acao=pre-excluir&id=<%= p.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
                         </td>
                     </tr>
                     <% } } else { %>
@@ -130,34 +128,33 @@
 
         <%-- MODAL DE SALVAR --%>
         <% if (modalSalvar) { %>
-        <div class="overlay">
+        <div class="overlay" style="display: flex;">
             <div class="modal">
                 <h2><%= "editar".equals(acaoModal) ? "Editar Professor" : "Novo Professor" %></h2>
                 <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="post">
                     <input type="hidden" name="acao" value="<%= "editar".equals(acaoModal) ? "editar" : "cadastrar" %>">
-                    <% if ("editar".equals(acaoModal) && profEdit != null) { %>
-                    <input type="hidden" name="id" value="<%= profEdit.getId() %>">
-                    <% } %>
+                    <% if (profEdit != null) { %><input type="hidden" name="id" value="<%= profEdit.getId() %>"><% } %>
+
                     <div class="form-group">
                         <label>Nome Completo</label>
-                        <input type="text" id="inputNome" name="nome" value="<%= profEdit != null ? profEdit.getNome() : "" %>" required>
+                        <input type="text" id="inputNome" name="nome" value="<%= profEdit != null ? profEdit.getNome() : "" %>" required oninput="gerarEmail()">
                     </div>
                     <div class="form-group">
                         <label>Disciplina</label>
                         <select id="selectDisciplina" name="disciplinaId" required onchange="gerarEmail()">
                             <option value="">Selecione...</option>
-                            <% if (disciplinas != null) { for (Disciplina d : disciplinas) {
+                            <% if (listaCadastro != null) { for (Disciplina d : listaCadastro) {
                                 boolean isSelected = (profEdit != null && profEdit.getDisciplina() != null && profEdit.getDisciplina().getId() == d.getId()); %>
                             <option value="<%= d.getId() %>" <%= isSelected ? "selected" : "" %>><%= d.getNome() %></option>
                             <% } } %>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>E-mail (Login)</label>
-                        <input type="email" id="inputEmail" name="email" value="<%= (profEdit != null && profEdit.getUsuario() != null) ? profEdit.getUsuario().getEmail() : "" %>" readonly>
+                        <label>E-mail (Login Sugerido)</label>
+                        <input type="text" id="inputEmail" name="email" value="<%= (profEdit != null && profEdit.getUsuario() != null) ? profEdit.getUsuario().getEmail() : "" %>" readonly>
                     </div>
                     <div class="modal-buttons">
-                        <a href="${pageContext.request.contextPath}/ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
+                        <a href="ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
                         <button type="submit" class="btn-primary">Salvar</button>
                     </div>
                 </form>
@@ -167,7 +164,7 @@
 
         <%-- MODAL EXCLUIR --%>
         <% if (modalExcluir && profEdit != null) { %>
-        <div class="overlay">
+        <div class="overlay" style="display: flex;">
             <div class="modal" style="text-align: center;">
                 <i class="material-icons" style="font-size: 56px; color: var(--red);">warning</i>
                 <h2 style="margin: 15px 0;">Excluir?</h2>
@@ -176,13 +173,13 @@
                     <input type="hidden" name="id" value="<%= profEdit.getId() %>">
                     <div class="modal-buttons" style="justify-content: center;">
                         <button type="submit" name="acao" value="excluir" class="btn-primary" style="background: var(--red);">Confirmar</button>
-                        <a href="${pageContext.request.contextPath}/ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
+                        <a href="ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-    <% } %>
+        <% } %>
+    </div> <%-- Fim Content --%>
 </main>
 
 <script>
@@ -195,7 +192,6 @@
         const nomeBusca = document.getElementById("inputNomeBusca").value.toUpperCase();
         const discBusca = document.getElementById("selectDisciplinaBusca").value.toUpperCase();
         const emailBusca = document.getElementById("inputEmailBusca").value.toLowerCase();
-
         const linhas = document.querySelectorAll("table tbody tr");
 
         linhas.forEach(linha => {
@@ -207,11 +203,7 @@
             const matchDisc = (discBusca === "" || disc.includes(discBusca));
             const matchEmail = email.includes(emailBusca);
 
-            if (matchNome && matchDisc && matchEmail) {
-                linha.style.display = "";
-            } else {
-                linha.style.display = "none";
-            }
+            linha.style.display = (matchNome && matchDisc && matchEmail) ? "" : "none";
         });
     }
 
@@ -223,11 +215,16 @@
     }
 
     function gerarEmail() {
-        const nome = document.getElementById('inputNome').value.toLowerCase().split(' ')[0];
+        const inputNome = document.getElementById('inputNome').value.trim();
         const select = document.getElementById('selectDisciplina');
-        const materia = select.options[select.selectedIndex].text.toLowerCase()
-            .normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
-        if(nome && materia) document.getElementById('inputEmail').value = nome + "." + materia;
+        const inputEmail = document.getElementById('inputEmail');
+
+        if(inputNome && select.selectedIndex > 0) {
+            const primeiroNome = inputNome.split(' ')[0].toLowerCase();
+            const materia = select.options[select.selectedIndex].text.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+            inputEmail.value = primeiroNome + "." + materia + "@escola.com";
+        }
     }
 </script>
 </body>
