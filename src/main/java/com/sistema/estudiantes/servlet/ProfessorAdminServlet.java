@@ -16,7 +16,7 @@ public class ProfessorAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DisciplinaAdmDAO discDao = new DisciplinaAdmDAO();
-        request.setAttribute("listaDisciplinas", discDao.listar());
+        request.setAttribute("listaDisciplinas", discDao.listarTodasComRelacionamentos());
         request.setAttribute("listaProfessores", dao.listarComTudo());
         request.getRequestDispatcher("/views/professores_a.jsp").forward(request, response);
     }

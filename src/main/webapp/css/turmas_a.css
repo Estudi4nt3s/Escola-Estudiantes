@@ -77,18 +77,21 @@ nav .menu {
 
 .avatar { display: flex; align-items: center; gap: 10px; font-weight: 600; }
 .avatar img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--red); }
+
+/* CONTENT AJUSTADO */
 .content {
     flex: 1;
-    overflow: hidden;
-    padding: 20px 40px;
+    overflow-y: auto; /* Permite scroll se a tabela for grande */
+    padding: 40px;    /* Espaçamento interno garantido aqui */
     display: flex;
     flex-direction: column;
 }
+
 .page-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     width: 100%;
 }
 
@@ -97,13 +100,15 @@ nav .menu {
     color: #111;
     font-weight: 700;
 }
+
+/* CARD AJUSTADO */
 .card {
-    margin: 0 5%;
     background: white;
     padding: 25px;
     border-radius: 20px;
     box-shadow: var(--shadow);
-    overflow-y: auto;
+    width: 100%; /* Agora ele ocupa todo o espaço do content */
+    margin: 0;   /* Removi o 5% para parar de espremer */
 }
 
 /* TABELA */
@@ -128,21 +133,19 @@ th { color: #888; font-size: 0.9rem; text-transform: uppercase; }
 .icon-btn.edit { color: #3498db; }
 .icon-btn.delete { color: #e74c3c; }
 
-/* ==========================================================================
-   MODAL FLUTUANTE (OVERLAY)
-   ========================================================================== */
+/* MODAL */
 .overlay {
-    position: fixed;   /* Fixa na tela inteira */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5); /* Fundo escuro */
-    backdrop-filter: blur(4px);    /* Desfoque ao fundo */
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;     /* Sempre na frente de tudo */
+    z-index: 9999;
     animation: fadeIn 0.3s ease;
 }
 
@@ -165,20 +168,12 @@ th { color: #888; font-size: 0.9rem; text-transform: uppercase; }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-::-webkit-scrollbar {
-    width: 8px;
-}
 
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, var(--red), var(--red-dark));
     border-radius: 20px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
 }
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--red-dark);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--red-dark); }

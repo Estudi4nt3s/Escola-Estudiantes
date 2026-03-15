@@ -58,7 +58,7 @@
 
         <nav>
             <a class="menu active"><i class="material-icons">home</i>Início</a>
-<%--            <a class="menu" href="${pageContext.request.contextPath}/views/calendario.jsp"><i class="material-icons">calendar_month</i>Calendário</a>--%>
+            <a class="menu" href="${pageContext.request.contextPath}/views/calendario_p.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/turmas.jsp"><i class="material-icons">groups</i>Turmas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
         </nav>
@@ -161,37 +161,5 @@
     </div>
 
     <script src="<%=request.getContextPath()%>/js/notificacoes.js"></script>
-<script>
-    const btnNotas = document.getElementById("btnNotas");
-    const loading = document.getElementById("loadingOverlay");
-
-    btnNotas.addEventListener("click", function(e){
-
-        e.preventDefault(); // impede abrir imediatamente
-
-        loading.style.display = "flex";
-
-        setTimeout(()=>{
-            window.location.href = this.href;
-        },500);
-
-    });
-
-    function openLogoutModal() {
-        document.getElementById('logoutModal').classList.add('show');
-    }
-
-    function closeLogoutModal() {
-        document.getElementById('logoutModal').classList.remove('show');
-    }
-    window.addEventListener("pageshow", function(event) {
-
-        if (event.persisted) {
-            const loading = document.getElementById("loadingOverlay");
-            if(loading) loading.style.display = "none";
-        }
-
-    });
-</script>
 </body>
 </html>

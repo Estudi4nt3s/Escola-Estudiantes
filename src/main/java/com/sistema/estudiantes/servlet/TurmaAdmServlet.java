@@ -19,9 +19,8 @@ public class TurmaAdmServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
-        String idParam = request.getParameter("id"); // Pegamos o ID como String primeiro
+        String idParam = request.getParameter("id");
 
-        // Só tentamos buscar a turma se a ação for de editar/excluir E o ID não for nulo
         if (idParam != null && !idParam.trim().isEmpty()) {
             if ("editar".equals(acao) || "pre-excluir".equals(acao)) {
                 try {
@@ -29,13 +28,11 @@ public class TurmaAdmServlet extends HttpServlet {
                     TurmaAdm turma = dao.buscarPorId(id);
                     request.setAttribute("turmaEditar", turma);
                 } catch (NumberFormatException e) {
-                    // Se o ID não for um número válido, apenas ignora
                     System.out.println("Erro ao converter ID: " + idParam);
                 }
             }
         }
 
-        // Busca a lista e manda para o JSP
         List<TurmaAdm> lista = dao.listarTodas();
         request.setAttribute("listaTurmas", lista);
         request.getRequestDispatcher("/views/turmas_a.jsp").forward(request, response);
@@ -49,25 +46,36 @@ public class TurmaAdmServlet extends HttpServlet {
 
         try {
             if ("excluir".equals(acao)) {
-                dao.excluir(Integer.parseInt(request.getParameter("id")));
-            }else if ("novo".equals(acao) || "editar".equals(acao)) {
-            TurmaAdm t = new TurmaAdm();
-            if ("editar".equals(acao)) t.setId(Integer.parseInt(request.getParameter("id")));
+                String idStr = request.getParameter("id");
+                if (idStr != null) {
+                    dao.excluir(Integer.parseInt(idStr));
+                }
+            } else if ("novo".equals(acao) || "editar".equals(acao)) {
+                TurmaAdm t = new TurmaAdm();
 
-            t.setNome(request.getParameter("nome"));
-            t.setAno(Integer.parseInt(request.getParameter("ano")));
+                // Trata o ID apenas para edição
+                if ("editar".equals(acao)) {
+                    String idStr = request.getParameter("id");
+                    if (idStr != null && !idStr.isEmpty()) {
+                        t.setId(Integer.parseInt(idStr));
+                    }
+                }
 
-            // REMOVIDO: Não pegamos mais a quantidade do request.
-            // O banco calcula isso sozinho na listagem.
+                t.setNome(request.getParameter("nome"));
 
-            dao.salvar(t, acao);
-        }
-            // Se chegou aqui, deu certo
+                // Trata o Ano vindo do formulário
+                String anoStr = request.getParameter("ano");
+                t.setAno(anoStr != null && !anoStr.isEmpty() ? Integer.parseInt(anoStr) : 0);
+
+                dao.salvar(t, acao);
+            }
+
+            // Sucesso
             request.getSession().setAttribute("mensagemSucesso", "Operação realizada com sucesso!");
 
         } catch (Exception e) {
-            // Se deu erro, guarda a mensagem para mostrar no JSP
-            request.getSession().setAttribute("mensagemErro", "Não foi possível realizar a operação: " + e.getMessage());
+            // Erro
+            request.getSession().setAttribute("mensagemErro", "Erro: " + e.getMessage());
             e.printStackTrace();
         }
 

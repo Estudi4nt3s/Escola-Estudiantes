@@ -5,7 +5,7 @@
 
 <%
   String tipo = (String) session.getAttribute("tipoUsuario");
-  String adminNome = (String) session.getAttribute("adminNome");
+  String nomeAdmin = (String) session.getAttribute("adminNome");
 
   if (tipo == null || !tipo.equals("admin")) {
     response.sendRedirect("views/cadastro.jsp");
@@ -15,7 +15,6 @@
   List<TurmaAdm> todasAsTurmas = (List<TurmaAdm>) request.getAttribute("listaTurmas");
   String acao = request.getParameter("acao");
 %>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -45,10 +44,10 @@
 
 <main class="main">
   <header class="topbar">
-    <div class="date"><i class="material-icons">groups</i> Área Administrativa</div>
+    <div class="date"><i class="material-icons">admin_panel_settings</i>Área Administrativa</div>
     <div class="avatar">
       <img src="https://i.pravatar.cc/45?img=5">
-      <span><%= adminNome %></span>
+      <span><%= (nomeAdmin != null) ? nomeAdmin : "Admin" %></span>
     </div>
   </header>
 
@@ -63,11 +62,14 @@
       </div>
     </div>
 
+    <%-- MODAL DE FILTROS --%>
     <div id="filterModal" class="overlay" style="display: none; justify-content: center; align-items: center;">
       <div class="modal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <h2>Filtros Avançados</h2>
-          <button onclick="toggleFilter()" style="background:none; border:none; cursor:pointer;"><i class="material-icons">close</i></button>
+          <button onclick="toggleFilter()" style="border:none; background:#eee; padding:5px; border-radius:50%; cursor:pointer;">
+            <i class="material-icons">close</i>
+          </button>
         </div>
         <div class="form-group">
           <label>Nome</label>
@@ -101,22 +103,30 @@
       </div>
     </div>
 
+    <%-- TABELA DE ALUNOS --%>
     <div class="card">
       <div class="table-responsive">
         <table>
           <thead>
           <tr>
-            <th>Matrícula</th><th>Nome</th><th>CPF</th><th>Data Nasc.</th><th>Telefone Pai</th><th>Turma</th><th style="text-align: center;">Status</th><th>Ações</th>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone Pai</th>
+            <th>E-mail Responsável</th>
+            <th>Turma</th>
+            <th style="text-align: center;">Status</th>
+            <th>Ações</th>
           </tr>
           </thead>
           <tbody>
           <% if (listaAlunos != null && !listaAlunos.isEmpty()) { for (Aluno aluno : listaAlunos) { %>
           <tr>
-            <td><%= aluno.getMatricula() %></td>
-            <td><%= aluno.getNome() %></td>
+            <td><strong>#<%= aluno.getMatricula() %></strong></td>
+            <td class="text-truncate"><%= aluno.getNome() %></td>
             <td><%= aluno.getCpf() %></td>
-            <td><%= aluno.getDataNascimento() %></td>
             <td><%= aluno.getTelefonePai() %></td>
+            <td class="text-truncate"><%= (aluno.getEmailResponsavel() != null) ? aluno.getEmailResponsavel() : "---" %></td>
             <td>
               <% String nomeTurmaExibir = "N/A";
                 if (aluno.getTurmaId() > 0 && todasAsTurmas != null) {
@@ -124,20 +134,25 @@
                 } %> <%= nomeTurmaExibir %>
             </td>
             <td style="text-align: center;">
-              <% boolean temUsuario = (aluno.getUsuarioId() != null && aluno.getUsuarioId().getId() > 0); %>
-              <span style="color: <%= temUsuario ? "#27ae60" : "#f39c12" %>;">
-                <i class="fas <%= temUsuario ? "fa-check-circle" : "fa-exclamation-circle" %>"></i>
+              <%
+                boolean temUsuario = (aluno.getUsuarioId() != null && aluno.getUsuarioId().getId() > 0);
+              %>
+              <span class="status-badge <%= temUsuario ? "status-success" : "status-warning" %>">
+              <i class="fas <%= temUsuario ? "fa-check-circle" : "fa-exclamation-circle" %>"></i>
+              <%= temUsuario ? "Vinculado" : "Pendente" %>
               </span>
             </td>
             <td>
-              <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get" style="display:inline;">
-                <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
-                <button type="submit" class="icon-btn edit" name="acao" value="editar"><i class="material-icons">edit</i></button>
-              </form>
-              <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get" style="display:inline;">
-                <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
-                <button type="submit" class="icon-btn delete" name="acao" value="pre-excluir"><i class="material-icons">delete</i></button>
-              </form>
+              <div style="display: flex; gap: 5px;">
+                <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get">
+                  <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
+                  <button type="submit" class="icon-btn edit" name="acao" value="editar"><i class="material-icons">edit</i></button>
+                </form>
+                <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get">
+                  <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
+                  <button type="submit" class="icon-btn delete" name="acao" value="pre-excluir"><i class="material-icons">delete</i></button>
+                </form>
+              </div>
             </td>
           </tr>
           <% } } else { %>
@@ -147,84 +162,91 @@
         </table>
       </div>
     </div>
+
     <%
-      // LÓGICA DOS MODAIS
       String acaoModal = request.getParameter("acao");
       Aluno alunoEdit = (Aluno) request.getAttribute("alunoEditar");
       boolean modalSalvar = "novo".equals(acaoModal) || "editar".equals(acaoModal);
       boolean modalExcluir = "pre-excluir".equals(acaoModal);
     %>
-    <%-- MODAL DE SALVAR --%>
+
+    <%-- MODAL DE SALVAR (NOVO/EDITAR) --%>
     <% if (modalSalvar) { %>
     <div class="overlay">
-      <div class="modal">
+      <div class="modal scroll-modal">
         <h2><%= "editar".equals(acaoModal) ? "Editar Aluno" : "Novo Aluno" %></h2>
         <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="post">
           <% if ("editar".equals(acaoModal) && alunoEdit != null) { %>
           <input type="hidden" name="matricula" value="<%= alunoEdit.getMatricula() %>">
           <% } %>
-          <div class="form-group">
-            <label>Nome Completo</label>
-            <input type="text" name="nome" value="<%= alunoEdit != null ? alunoEdit.getNome() : "" %>" required>
-          </div>
-          <div class="form-group">
 
-            <label>CPF</label>
-            <input type="text" name="cpf" value="<%= alunoEdit != null ? alunoEdit.getCpf() : "" %>" required>
-          </div>
-          <div class="form-group">
-            <label>Data de Nascimento</label>
-            <input type="date" name="dataNascimento" value="<%= alunoEdit != null ? alunoEdit.getDataNascimento() : "" %>" required>
-          </div>
-          <div class="form-group">
-            <label>Telefone Pai</label>
-            <input type="text" name="telefonePai" value="<%= alunoEdit != null ? alunoEdit.getTelefonePai() : "" %>" required>
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>Nome Completo</label>
+              <input type="text" name="nome" value="<%= alunoEdit != null ? alunoEdit.getNome() : "" %>" placeholder="Nome do aluno" required>
+            </div>
+            <div class="form-group flex-1">
+              <label>CPF</label>
+              <input type="text" name="cpf" value="<%= alunoEdit != null ? alunoEdit.getCpf() : "" %>" placeholder="000.000.000-00" required>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Turma</label>
-            <select name="turmaId" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-              <option value="">Selecione uma turma</option>
-              <%
-                List<com.sistema.estudiantes.model.TurmaAdm> turmas = (List<com.sistema.estudiantes.model.TurmaAdm>) request.getAttribute("listaTurmas");
-                if (turmas != null) {
-                  for (com.sistema.estudiantes.model.TurmaAdm t : turmas) {
-                    String selected = (alunoEdit != null && alunoEdit.getTurmaId() == t.getId()) ? "selected" : "";
-              %>
-              <option value="<%= t.getId() %>" <%= selected %>>
-                <%= t.getNome() %>
-              </option>
-              <%
-                  }
-                }
-              %>
-            </select>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Data de Nascimento</label>
+              <input type="date" name="dataNascimento" value="<%= alunoEdit != null ? alunoEdit.getDataNascimento() : "" %>" required>
+            </div>
+            <div class="form-group flex-1">
+              <label>Turma</label>
+              <select name="turmaId" required>
+                <option value="">Selecione...</option>
+                <% if (todasAsTurmas != null) { for (TurmaAdm t : todasAsTurmas) {
+                  String selected = (alunoEdit != null && alunoEdit.getTurmaId() == t.getId()) ? "selected" : "";
+                %>
+                <option value="<%= t.getId() %>" <%= selected %>><%= t.getNome() %></option>
+                <% } } %>
+              </select>
+            </div>
           </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Telefone Pai</label>
+              <input type="text" name="telefonePai" value="<%= alunoEdit != null ? alunoEdit.getTelefonePai() : "" %>" placeholder="(11) 99999-9999" required>
+            </div>
+            <div class="form-group flex-1">
+              <label>E-mail Responsável (Automático)</label>
+              <input type="email" name="emailResponsavel" value="<%= alunoEdit != null ? alunoEdit.getEmailResponsavel() : "" %>" placeholder="email@exemplo.com" required>
+            </div>
+          </div>
+
           <div class="modal-buttons">
-            <button type="submit" name="acao" value="<%= acaoModal %>" class="btn-primary">Salvar</button>
-            <a href="${pageContext.request.contextPath}/AlunoAdminServlet" class="btn-cancelar">Cancelar</a>
+            <button type="submit" name="acao" value="<%= acaoModal %>" class="btn-primary">Confirmar Dados</button>
+            <a href="${pageContext.request.contextPath}/AlunoAdminServlet" class="btn-cancelar">Voltar</a>
           </div>
         </form>
       </div>
     </div>
     <% } %>
+
     <%-- MODAL DE EXCLUSÃO --%>
     <% if (modalExcluir && alunoEdit != null) { %>
     <div class="overlay">
       <div class="modal" style="text-align: center;">
         <i class="material-icons" style="font-size: 56px; color: #e74c3c;">warning</i>
-        <h2 style="margin: 15px 0;">Você tem certeza?</h2>
-        <p>Deseja realmente excluir o aluno <strong><%= alunoEdit.getNome() %></strong>?</p>
+        <h2 style="margin: 15px 0;">Remover Registro</h2>
+        <p>Você está prestes a excluir o aluno <strong><%= alunoEdit.getNome() %></strong>. Esta ação não pode ser desfeita.</p>
         <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="post">
           <input type="hidden" name="matricula" value="<%= alunoEdit.getMatricula() %>">
-          <div class="modal-buttons" style="justify-content: center; margin-top: 25px;">
-            <button type="submit" name="acao" value="excluir" class="btn-primary" style="background: #e74c3c;">Sim, Excluir</button>
+          <div class="modal-buttons" style="justify-content: center; gap: 15px; margin-top: 25px;">
+            <button type="submit" name="acao" value="excluir" class="btn-danger">Confirmar Exclusão</button>
             <a href="${pageContext.request.contextPath}/AlunoAdminServlet" class="btn-cancelar">Cancelar</a>
           </div>
         </form>
       </div>
     </div>
     <% } %>
+
     <%-- ALERTAS --%>
     <%
       String msgErro = (String) session.getAttribute("mensagemErro");
@@ -259,15 +281,17 @@
 
     document.querySelectorAll("table tbody tr").forEach(linha => {
       if (linha.cells.length < 8) return;
-      const tdMatricula = linha.cells[0].textContent.trim();
+
+      // Ajuste de índices por conta da nova coluna (Email agora é a 4)
+      const tdMatricula = linha.cells[0].textContent.replace('#', '').trim();
       const tdNome = linha.cells[1].textContent.toUpperCase();
       const tdTurma = linha.cells[5].textContent.trim().toUpperCase();
-      const statusIcon = linha.querySelector('.fa-check-circle') ? 'vinculado' : 'pendente';
+      const statusText = linha.querySelector('.status-badge').textContent.toLowerCase();
 
       const bate = tdNome.includes(nomeBusca) &&
               (matriculaBusca === "" || tdMatricula === matriculaBusca) &&
               (turmaBusca === "" || tdTurma.includes(turmaBusca)) &&
-              (statusBusca === "" || statusIcon === statusBusca);
+              (statusBusca === "" || statusText.includes(statusBusca));
 
       linha.style.display = bate ? "" : "none";
     });
