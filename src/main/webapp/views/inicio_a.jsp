@@ -3,10 +3,10 @@
     String tipo = (String) session.getAttribute("tipoUsuario");
     String adminNome = (String) session.getAttribute("adminNome");
 
-    if (tipo == null || !tipo.equals("admin")) {
-        response.sendRedirect("cadastro.jsp");
-        return;
-    }
+//    if (tipo == null || !tipo.equals("admin")) {
+//        response.sendRedirect("cadastro.jsp");
+//        return;
+//    }
 %>
 
 <!DOCTYPE html>
@@ -28,6 +28,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i>Professores</a>
         <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i>Turmas</a>
         <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i>Disciplinas</a>
+        <a class="menu" href="${pageContext.request.contextPath}/ChatIAServlet"><i class="material-icons">psychology</i><span>IA Administrativa</span></a>
         <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i>Configurações</a>
     </nav>
     <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i>Sair</a>

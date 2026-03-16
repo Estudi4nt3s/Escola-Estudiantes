@@ -7,25 +7,21 @@
 <%
     String adminNome = (String) session.getAttribute("adminNome");
     List<Professor> listaProfessores = (List<Professor>) request.getAttribute("listaProfessores");
+    List<DisciplinasAdm> listaCadastro = (List<DisciplinasAdm>) request.getAttribute("listaDisciplinas");
+
+    String acaoModal = request.getParameter("acao");
+    if (acaoModal == null) { acaoModal = (String) request.getAttribute("acao"); }
+    Professor profEdit = (Professor) request.getAttribute("professorEditar");
     String tipo = (String) session.getAttribute("tipoUsuario");
 
     if (tipo == null || !tipo.equals("admin")) {
         response.sendRedirect("cadastro.jsp");
         return;
     }
-    // Lista para o Modal de Filtro (Usando DisciplinasAdm conforme o seu Servlet envia)
-    List<DisciplinasAdm> listaFiltro = (List<DisciplinasAdm>) request.getAttribute("listaDisciplinasAuto");
-
-    // Lista para o Modal de Cadastro (Usando Disciplina conforme o seu Model Professor espera)
-    List<Disciplina> listaCadastro = (List<Disciplina>) request.getAttribute("listaDisciplinas");
-
-    String acaoModal = request.getParameter("acao");
-    Professor profEdit = (Professor) request.getAttribute("professorEditar");
-
     boolean modalSalvar = "novo".equals(acaoModal) || "editar".equals(acaoModal);
     boolean modalExcluir = "pre-excluir".equals(acaoModal);
+    boolean precisaAlerta = "novo".equals(acaoModal) || ("editar".equals(acaoModal) && (profEdit != null && (profEdit.getDisciplina() == null)));
 %>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -33,9 +29,12 @@
     <title>Gerenciar Professores</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/professor_a.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        @keyframes piscar { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .blink-link { animation: piscar 1.5s infinite; color: var(--red); font-weight: bold; text-decoration: underline; cursor: pointer; }
+    </style>
 </head>
 <body>
-
 <aside class="sidebar">
     <div class="logo"><i class="material-icons">admin_panel_settings</i><span>Painel ADM</span></div>
     <nav>
@@ -44,7 +43,12 @@
         <a class="menu active" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i>Professores</a>
         <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i>Turmas</a>
         <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i>Disciplinas</a>
-        <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i>Configurações</a>
+        <a class="menu" href="${pageContext.request.contextPath}/ChatIAServlet">
+            <i class="material-icons">psychology</i><span>IA Administrativa</span>
+        </a>
+        <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes">
+            <i class="material-icons">settings</i><span>Configurações</span>
+        </a>
     </nav>
     <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i>Sair</a>
 </aside>
@@ -52,89 +56,76 @@
 <main class="main">
     <header class="topbar">
         <div class="date"><i class="material-icons">badge</i> Gerenciamento de Docentes</div>
-        <div class="avatar">
-            <img src="https://i.pravatar.cc/45?img=12">
-            <span><%= (adminNome != null) ? adminNome : "Admin" %></span>
-        </div>
+        <div class="avatar"><span><%= (adminNome != null) ? adminNome : "Admin" %></span></div>
     </header>
 
     <div class="content">
         <div class="page-header">
             <h1>Professores Cadastrados</h1>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-filter" onclick="toggleFilter()"><i class="material-icons">filter_list</i> Filtros</button>
-                <a href="${pageContext.request.contextPath}/ProfessorAdminServlet?acao=novo" class="btn-primary" style="text-decoration: none;">
-                    <i class="material-icons">add</i> Novo Professor
-                </a>
-            </div>
-        </div>
-
-        <%-- FILTROS --%>
-        <div id="filterModal" class="overlay" style="display: none;">
-            <div class="modal">
-                <h2>Filtros Avançados</h2>
-                <div class="form-group">
-                    <label>Nome do Professor</label>
-                    <input type="text" id="inputNomeBusca" onkeyup="filtrarTabela()" placeholder="Nome...">
-                </div>
-                <div class="form-group">
-                    <label>Disciplina</label>
-                    <select id="selectDisciplinaBusca" onchange="filtrarTabela()">
-                        <option value="">Todas as disciplinas</option>
-                        <% if (listaFiltro != null) { for (DisciplinasAdm d : listaFiltro) { %>
-                        <option value="<%= d.getNome() %>"><%= d.getNome() %></option>
-                        <% } } %>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="text" id="inputEmailBusca" onkeyup="filtrarTabela()" placeholder="Parte do e-mail...">
-                </div>
-                <div class="modal-buttons">
-                    <button class="btn-cancelar" onclick="toggleFilter()">Fechar</button>
-                    <button class="btn-primary" onclick="limparFiltros()">Limpar Tudo</button>
-                </div>
-            </div>
+            <a href="${pageContext.request.contextPath}/ProfessorAdminServlet?acao=novo" class="btn-primary"><i class="material-icons">add</i> Novo Professor</a>
         </div>
 
         <div class="card">
             <div class="table-container">
                 <table>
                     <thead>
-                    <tr>
-                        <th>ID</th><th>Nome</th><th>Disciplina</th><th>E-mail</th><th>Ações</th>
-                    </tr>
+                    <tr><th>ID</th><th>Nome</th><th>Disciplina</th><th>E-mail</th><th>Senha</th><th>Ações</th></tr>
                     </thead>
                     <tbody>
-                    <% if (listaProfessores != null && !listaProfessores.isEmpty()) {
-                        for (Professor p : listaProfessores) { %>
+                    <% if (listaProfessores != null) {
+                        for (Professor p : listaProfessores) {
+                            boolean semDisciplina = (p.getDisciplina() == null || p.getDisciplina().getNome() == null);
+                    %>
                     <tr>
                         <td><%= p.getId() %></td>
                         <td><%= p.getNome() %></td>
-                        <td><%= p.getDisciplina() != null ? p.getDisciplina().getNome() : "N/A" %></td>
-                        <td><%= p.getUsuario() != null ? p.getUsuario().getEmail() : "Sem e-mail" %></td>
                         <td>
-                            <a href="ProfessorAdminServlet?acao=editar&id=<%= p.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
-                            <a href="ProfessorAdminServlet?acao=pre-excluir&id=<%= p.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
+                            <% if (semDisciplina) { %>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <a href="ProfessorAdminServlet?acao=editar&id=<%= p.getId() %>" class="blink-link">Sem disciplina</a>
+                                <a href="ProfessorAdminServlet?acao=editar&id=<%= p.getId() %>" class="btn-primary" style="padding: 2px 8px; font-size: 11px; background: var(--blue);">Vincular</a>
+                            </div>
+                            <% } else { %>
+                            <%= p.getDisciplina().getNome() %>
+                            <% } %>
+                        </td>
+                        <td><%= (p.getUsuario() != null && p.getUsuario().getEmail() != null) ? p.getUsuario().getEmail() : "Sem e-mail" %></td>
+                        <td><code><%= (p.getUsuario() != null && p.getUsuario().getSenha() != null) ? p.getUsuario().getSenha() : "---" %></code></td>
+                        <td style="display: flex; gap: 8px;">
+                            <div class="actions-container">
+                                <a href="ProfessorAdminServlet?acao=editar&id=<%= p.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
+                                <a href="ProfessorAdminServlet?acao=pre-excluir&id=<%= p.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
+                            </div>
                         </td>
                     </tr>
-                    <% } } else { %>
-                    <tr><td colspan="5" style="text-align:center;">Nenhum professor cadastrado.</td></tr>
-                    <% } %>
+                    <% } } %>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <%-- MODAL DE SALVAR --%>
+        <%-- MODAL SALVAR --%>
         <% if (modalSalvar) { %>
-        <div class="overlay" style="display: flex;">
+        <% if (precisaAlerta) { %>
+        <div id="modalAviso" class="overlay" style="display: flex; z-index: 2000; background: rgba(0,0,0,0.8);">
+            <div class="modal" style="text-align: center; border: 2px solid var(--red);">
+                <i class="material-icons" style="font-size: 60px; color: var(--red);">warning</i>
+                <h2>Atenção</h2>
+                <p>É necessário vincular uma disciplina para concluir o cadastro.</p>
+                <div class="modal-buttons" style="display: flex;justify-content: center; gap: 10px;">
+                    <a href="${pageContext.request.contextPath}/DisciplinaAdminServlet" class="btn-primary" style="text-decoration: none; color: white;">Gerenciar Disciplinas</a>
+                    <button class="btn-cancelar" onclick="fecharAviso()">Continuar</button>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <div class="overlay" style="display: flex; z-index: 1000;">
             <div class="modal">
                 <h2><%= "editar".equals(acaoModal) ? "Editar Professor" : "Novo Professor" %></h2>
                 <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="post">
                     <input type="hidden" name="acao" value="<%= "editar".equals(acaoModal) ? "editar" : "cadastrar" %>">
                     <% if (profEdit != null) { %><input type="hidden" name="id" value="<%= profEdit.getId() %>"><% } %>
-
                     <div class="form-group">
                         <label>Nome Completo</label>
                         <input type="text" id="inputNome" name="nome" value="<%= profEdit != null ? profEdit.getNome() : "" %>" required oninput="gerarEmail()">
@@ -143,14 +134,16 @@
                         <label>Disciplina</label>
                         <select id="selectDisciplina" name="disciplinaId" required onchange="gerarEmail()">
                             <option value="">Selecione...</option>
-                            <% if (listaCadastro != null) { for (Disciplina d : listaCadastro) {
-                                boolean isSelected = (profEdit != null && profEdit.getDisciplina() != null && profEdit.getDisciplina().getId() == d.getId()); %>
+                            <% if (listaCadastro != null) {
+                                for (DisciplinasAdm d : listaCadastro) {
+                                    boolean isSelected = (profEdit != null && profEdit.getDisciplina() != null && profEdit.getDisciplina().getId() == d.getId());
+                            %>
                             <option value="<%= d.getId() %>" <%= isSelected ? "selected" : "" %>><%= d.getNome() %></option>
                             <% } } %>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>E-mail (Login Sugerido)</label>
+                        <label>E-mail</label>
                         <input type="text" id="inputEmail" name="email" value="<%= (profEdit != null && profEdit.getUsuario() != null) ? profEdit.getUsuario().getEmail() : "" %>" readonly>
                     </div>
                     <div class="modal-buttons">
@@ -166,64 +159,28 @@
         <% if (modalExcluir && profEdit != null) { %>
         <div class="overlay" style="display: flex;">
             <div class="modal" style="text-align: center;">
-                <i class="material-icons" style="font-size: 56px; color: var(--red);">warning</i>
-                <h2 style="margin: 15px 0;">Excluir?</h2>
+                <h2>Excluir?</h2>
                 <p>Deseja remover <strong><%= profEdit.getNome() %></strong>?</p>
                 <form action="${pageContext.request.contextPath}/ProfessorAdminServlet" method="post">
+                    <input type="hidden" name="acao" value="excluir">
                     <input type="hidden" name="id" value="<%= profEdit.getId() %>">
-                    <div class="modal-buttons" style="justify-content: center;">
-                        <button type="submit" name="acao" value="excluir" class="btn-primary" style="background: var(--red);">Confirmar</button>
-                        <a href="ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
-                    </div>
+                    <button type="submit" class="btn-primary" style="background: var(--red);">Confirmar</button>
+                    <a href="ProfessorAdminServlet" class="btn-cancelar">Cancelar</a>
                 </form>
             </div>
         </div>
         <% } %>
-    </div> <%-- Fim Content --%>
+    </div>
 </main>
 
 <script>
-    function toggleFilter() {
-        const modal = document.getElementById("filterModal");
-        modal.style.display = (modal.style.display === "flex") ? "none" : "flex";
-    }
-
-    function filtrarTabela() {
-        const nomeBusca = document.getElementById("inputNomeBusca").value.toUpperCase();
-        const discBusca = document.getElementById("selectDisciplinaBusca").value.toUpperCase();
-        const emailBusca = document.getElementById("inputEmailBusca").value.toLowerCase();
-        const linhas = document.querySelectorAll("table tbody tr");
-
-        linhas.forEach(linha => {
-            const nome = linha.cells[1].textContent.toUpperCase();
-            const disc = linha.cells[2].textContent.toUpperCase();
-            const email = linha.cells[3].textContent.toLowerCase();
-
-            const matchNome = nome.includes(nomeBusca);
-            const matchDisc = (discBusca === "" || disc.includes(discBusca));
-            const matchEmail = email.includes(emailBusca);
-
-            linha.style.display = (matchNome && matchDisc && matchEmail) ? "" : "none";
-        });
-    }
-
-    function limparFiltros() {
-        document.getElementById("inputNomeBusca").value = "";
-        document.getElementById("selectDisciplinaBusca").value = "";
-        document.getElementById("inputEmailBusca").value = "";
-        filtrarTabela();
-    }
-
+    function fecharAviso() { document.getElementById("modalAviso").style.display = "none"; }
     function gerarEmail() {
-        const inputNome = document.getElementById('inputNome').value.trim();
+        const nome = document.getElementById('inputNome').value.trim().split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
         const select = document.getElementById('selectDisciplina');
-        const inputEmail = document.getElementById('inputEmail');
-
-        if(inputNome && select.selectedIndex > 0) {
-            const primeiroNome = inputNome.split(' ')[0].toLowerCase();
-            const materia = select.options[select.selectedIndex].text.toLowerCase()
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
-            inputEmail.value = primeiroNome + "." + materia + "@escola.com";
+        if(nome && select.selectedIndex > 0) {
+            const mat = select.options[select.selectedIndex].text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+            document.getElementById('inputEmail').value = nome + "." + mat;
         }
     }
 </script>
