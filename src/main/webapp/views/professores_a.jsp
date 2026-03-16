@@ -56,7 +56,10 @@
 <main class="main">
     <header class="topbar">
         <div class="date"><i class="material-icons">badge</i> Gerenciamento de Docentes</div>
-        <div class="avatar"><span><%= (adminNome != null) ? adminNome : "Admin" %></span></div>
+        <div class="avatar">
+            <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
+            <span><%= (adminNome != null) ? adminNome : "Admin" %></span>
+        </div>
     </header>
 
     <div class="content">

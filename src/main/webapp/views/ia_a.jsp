@@ -48,7 +48,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i><span>Professores</span></a>
         <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i><span>Turmas</span></a>
         <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i><span>Disciplinas</span></a>
-        <a class="menu ctive" href="${pageContext.request.contextPath}/ia_adm.jsp"><i class="material-icons">psychology</i><span>IA Administrativa</span></a>
+        <a class="menu active" href="${pageContext.request.contextPath}/ia_adm.jsp"><i class="material-icons">psychology</i><span>IA Administrativa</span></a>
         <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i><span>Configurações</span></a>
     </nav>
     <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i><span>Sair</span></a>
@@ -58,7 +58,7 @@
     <header class="topbar">
         <div class="date"><i class="material-icons">psychology</i> Assistente IA Escolar</div>
         <div class="avatar">
-            <img src="https://i.pravatar.cc/45?img=5">
+            <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
             <span><%= (nome != null) ? nome : "Admin" %></span>
         </div>
     </header>
