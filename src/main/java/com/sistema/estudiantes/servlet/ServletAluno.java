@@ -62,6 +62,7 @@ public class ServletAluno extends HttpServlet {
         Turma turma = (turmas != null && !turmas.isEmpty()) ? turmas.get(0) : null;
 
         request.setAttribute("turmaSelecionada", turma);
+        request.getSession().setAttribute("turmaSelecionada", turma);
     }
 
     protected void encaminhar(HttpServletRequest request, HttpServletResponse response, String jsp)

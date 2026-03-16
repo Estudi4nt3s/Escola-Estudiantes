@@ -824,3 +824,24 @@ a {
     padding: 10px 40px;
     border: none;
 }
+
+.btn-sair-fixo {
+    position: fixed;
+    bottom: 40px;      /* Distância da parte inferior da tela */
+    right: 40px;       /* Distância da lateral direita (onde você circulou) */
+    background-color: #c62828; /* Vermelho combinando com o botão "+ Adicionar" */
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    z-index: 9999;     /* Garante que fique por cima de tudo na página */
+    transition: background-color 0.2s;
+}
+
+.btn-sair-fixo:hover {
+    background-color: #a71b1b; /* Fica um pouco mais escuro ao passar o mouse */
+}
