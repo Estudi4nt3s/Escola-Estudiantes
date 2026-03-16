@@ -75,13 +75,15 @@
 
     <div class="main-content">
         <div class="alunos-topo">
-            <form action="aluno" method="get">
-                <select class="alunos-titulo" name="id" onchange="this.form.submit()">
-            <%
-                Turma turmaSelecionada = (Turma) request.getAttribute("turmaSelecionada");
-                for(Turma turma:turmas){
-            %>
-                    <option value="<%=turma.getId()%>" <%=turma.getId() == turmaSelecionada.getId()?"selected":""%>><%= turma.getNome() %></option>
+            <form action="aluno" method="get" id="formTurma">
+                <select class="alunos-titulo" name="id" id="selectTurma">
+                    <%
+                        Turma turmaSelecionada = (Turma) request.getAttribute("turmaSelecionada");
+                        for(Turma turma : turmas){
+                    %>
+                    <option value="<%=turma.getId()%>" <%=turma.getId() == turmaSelecionada.getId() ? "selected" : ""%>>
+                        <%= turma.getNome() %>
+                    </option>
                     <% } %>
                 </select>
             </form>
@@ -98,28 +100,31 @@
                 if (alunos != null && !alunos.isEmpty()) {
                     for (Aluno aluno : alunos) {
             %>
-            <div class="alunos-card">
-                <div class="alunos-nome">
-                    <%= aluno.getNome()%>
-                </div>
+            <a class="aaaaa" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>">
+                <div class="alunos-card" style="margin-bottom: 7px">
+                        <div class="alunos-nome">
+                            <%=aluno.getNome()%>
+                        </div>
 
-                <div class="acoes-container">
-                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>
+<%--                <div class="acoes-container">--%>
+<%--                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>--%>
 
-                    <div class="popup">
-                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
-                           onclick="document.getElementById('loadingOverlay').style.display='flex'">
-                            <i class="material-icons popup-icones">edit_note</i>
-                            <span>Notas</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/observacao?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
-                           onclick="document.getElementById('loadingOverlay').style.display='flex'">
-                            <i class="material-icons popup-icones">assignment</i>
-                            <span>Observações</span>
-                        </a>
-                    </div>
+<%--                    <div class="popup">--%>
+<%--                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"--%>
+<%--                           onclick="document.getElementById('loadingOverlay').style.display='flex'">--%>
+<%--                            <i class="material-icons popup-icones">edit_note</i>--%>
+<%--                            <span>Notas</span>--%>
+<%--                        </a>--%>
+<%--                        <a href="${pageContext.request.contextPath}/observacao?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"--%>
+<%--                           onclick="document.getElementById('loadingOverlay').style.display='flex'">--%>
+<%--                            <i class="material-icons popup-icones">assignment</i>--%>
+<%--                            <span>Observações</span>--%>
+<%--                        </a>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
                 </div>
-            </div>
+            </a>
+
             <%
                 }
             } else {
@@ -197,18 +202,21 @@
 </div>
 
 <script>
-    const btnNotas = document.getElementById("btnNotas");
+    // Pegamos o select, o formulário e a tela de loading
+    const selectTurma = document.getElementById("selectTurma");
+    const formTurma = document.getElementById("formTurma");
     const loading = document.getElementById("loadingOverlay");
 
-    btnNotas.addEventListener("click", function(e){
+    // Ouvimos o evento "change" (quando o usuário troca a opção do select)
+    selectTurma.addEventListener("change", function(e) {
 
-        e.preventDefault(); // impede abrir imediatamente
-
+        // 1. Mostra a tela de carregamento
         loading.style.display = "flex";
 
-        setTimeout(()=>{
-            window.location.href = this.href;
-        },500);
+        // 2. Aguarda 500ms e depois envia o formulário com a nova turma selecionada
+        setTimeout(() => {
+            formTurma.submit();
+        }, 500);
 
     });
 

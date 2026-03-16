@@ -99,7 +99,7 @@
                 <div class="flex">
                     <%-- Loop para gerar os cards de conteúdo das aulas --%>
                     <%
-                        System.out.println(materia);
+                        System.out.println(materia.getNome());
                         if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
                             for(int i = 0;i < aulas.size();i++){
                     %>

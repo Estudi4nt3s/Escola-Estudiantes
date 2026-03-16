@@ -4,10 +4,7 @@ import com.sistema.estudiantes.dao.AlunoDAO;
 import com.sistema.estudiantes.dao.DisciplinaDAO;
 import com.sistema.estudiantes.dao.NotaDAO;
 import com.sistema.estudiantes.dao.ObservacaoDAO;
-import com.sistema.estudiantes.model.Aluno;
-import com.sistema.estudiantes.model.Disciplina;
-import com.sistema.estudiantes.model.Nota;
-import com.sistema.estudiantes.model.Observacao;
+import com.sistema.estudiantes.model.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -70,9 +67,9 @@ public class ServletNota extends HttpServlet {
             observacoes = new ArrayList<>();
         }
 
-        request.setAttribute("notas", notas);
-        request.setAttribute("disciplinas", todasDisciplinas);
-        request.setAttribute("observacoes", observacoes);
+        request.getSession().setAttribute("notas", notas);
+        request.getSession().setAttribute("disciplinas", todasDisciplinas);
+        request.getSession().setAttribute("observacoes", observacoes);
 
         encaminhar(request, response, "/views/notas.jsp");
     }
@@ -88,13 +85,22 @@ public class ServletNota extends HttpServlet {
         List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
         List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
 
-        if(observacoes == null){
-            observacoes = new ArrayList<>();
+        Professor professor = (Professor) request.getSession().getAttribute("professor");
+        int professorId = professor.getId();
+
+        List<Observacao> filtradas = new ArrayList<>();
+
+        if(observacoes != null){
+            for (Observacao o : observacoes) {
+                if (o.getIdProfessor().getId() == professorId) {
+                    filtradas.add(o);
+                }
+            }
         }
 
         request.getSession().setAttribute("notas", notasDoAluno);
         request.getSession().setAttribute("disciplinas", todasDisciplinas);
-        request.setAttribute("observacoes", observacoes);
+        request.getSession().setAttribute("observacoes", filtradas);
         request.getSession().setAttribute("alunoSelecionado", alunos.getFirst());
 
         if (request.getSession().getAttribute("professor") != null) {
@@ -136,7 +142,8 @@ public class ServletNota extends HttpServlet {
         if (nota != null) {
 
             String campo = request.getParameter("campo");
-            double valor = Double.parseDouble(request.getParameter("valor"));
+            Double valor = request.getParameter("valor").equals("null")?null:Double.parseDouble(request.getParameter("valor"));
+            System.out.println(valor);
 
             if ("n1".equals(campo)) {
                 nota.setN1(valor);
@@ -144,7 +151,7 @@ public class ServletNota extends HttpServlet {
             else if ("n2".equals(campo)) {
                 nota.setN2(valor);
             }
-            System.out.println(nota);
+            System.out.println("Nota N2: " + nota.getN2());
             notaDAO.atualizar(nota);
 
             int alunoId = nota.getIdAluno().getMatricula();

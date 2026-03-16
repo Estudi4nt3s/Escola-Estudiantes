@@ -56,7 +56,6 @@ public class ServletLogin extends HttpServlet {
                     DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
                     AulaDAO aulaDAO = new AulaDAO();
                     TurmaDAO turmaDAO = new TurmaDAO();
-                    ObservacaoDAO observacaoDAO = new ObservacaoDAO();
 
                     // Busca na tabela Professor usando usuarioid
                     List<Professor> profs = profDAO.listarComFiltro(usuarioLogado.getId());

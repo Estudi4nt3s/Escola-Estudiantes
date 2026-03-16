@@ -3,16 +3,8 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.time.LocalTime" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
-<%
-//    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-//    response.setHeader("Pragma", "no-cache");
-//    response.setDateHeader("Expires", 0);
-//    if (session.getAttribute("usuario") == null) {
-//        response.sendRedirect("../index.jsp");
-//    }
-%>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -42,7 +34,7 @@
     conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
     conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
 
-
+    LocalTime agora = LocalTime.now();
 %>
 <body>
 
@@ -122,7 +114,8 @@
                         if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !Boolean.parseBoolean((materia[0]))){
                             for(int i = 0;i < qtdmateria;i++){
                              %>
-                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> -
+                    <li class="<%=agora.isAfter(aulas.get(i).getHorarioInicio()) && agora.isBefore(aulas.get(i).getHorarioFim())?"atual":""%>">
+                        <strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> -
                         <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
                          às
                          <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
