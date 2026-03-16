@@ -45,12 +45,13 @@ public class AlunoAdminDAO {
         return lista;
     }
 
-    public void salvar(Aluno aluno, String acao) {
+    public boolean salvar(Aluno aluno, String acao) {
         Connection conn = null;
+        boolean sucesso = false; // Variável para controlar o status
         try {
             conn = Conexao.conectar();
+
             if ("novo".equals(acao)) {
-                // INSERT completo com emailresponsavel e telefone
                 String sqlAluno = "INSERT INTO Alunos (Nome, Cpf, DataNascimento, telefone, TurmaId, emailresponsavel) VALUES (?, ?, ?, ?, ?, ?)";
                 PreparedStatement stmtA = conn.prepareStatement(sqlAluno);
 
@@ -61,9 +62,12 @@ public class AlunoAdminDAO {
                 stmtA.setInt(5, aluno.getTurmaId());
                 stmtA.setString(6, aluno.getEmailResponsavel());
 
-                stmtA.executeUpdate();
+                int linhasAfetadas = stmtA.executeUpdate();
+                sucesso = (linhasAfetadas > 0); // Será true se inseriu algo
+                stmtA.close();
+                stmtA.close();
+
             } else if ("editar".equals(acao)) {
-                // UPDATE completo
                 String sqlUpAluno = "UPDATE Alunos SET Nome = ?, Cpf = ?, DataNascimento = ?, telefone = ?, TurmaId = ?, emailresponsavel = ? WHERE Matricula = ?";
                 PreparedStatement stmtA = conn.prepareStatement(sqlUpAluno);
                 stmtA.setString(1, aluno.getNome());
@@ -73,13 +77,18 @@ public class AlunoAdminDAO {
                 stmtA.setInt(5, aluno.getTurmaId());
                 stmtA.setString(6, aluno.getEmailResponsavel());
                 stmtA.setInt(7, aluno.getMatricula());
-                stmtA.executeUpdate();
+
+                int linhasAfetadas = stmtA.executeUpdate();
+                sucesso = (linhasAfetadas > 0); // Será true se alterou algo
+                stmtA.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            sucesso = false; // Se der erro, retorna falso
         } finally {
             Conexao.desconectar(conn);
         }
+        return sucesso; // Agora retorna o valor correto
     }
 
     public Aluno buscarPorMatricula(int matricula) {
@@ -153,4 +162,5 @@ public class AlunoAdminDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return null;
     }
+
 }

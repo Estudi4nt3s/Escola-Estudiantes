@@ -7,10 +7,10 @@
   String tipo = (String) session.getAttribute("tipoUsuario");
   String nomeAdmin = (String) session.getAttribute("adminNome");
 
-  if (tipo == null || !tipo.equals("admin")) {
-    response.sendRedirect("views/cadastro.jsp");
-    return;
-  }
+//  if (tipo == null || !tipo.equals("admin")) {
+//    response.sendRedirect("views/cadastro.jsp");
+//    return;
+//  }
   List<Aluno> listaAlunos = (List<Aluno>) request.getAttribute("listaAlunos");
   List<TurmaAdm> todasAsTurmas = (List<TurmaAdm>) request.getAttribute("listaTurmas");
   String acao = request.getParameter("acao");
@@ -37,6 +37,9 @@
     <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i>Professores</a>
     <a class="menu" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i>Turmas</a>
     <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i>Disciplinas</a>
+    <a class="menu" href="${pageContext.request.contextPath}/ChatIAServlet">
+      <i class="material-icons">psychology</i><span>IA Administrativa</span>
+    </a>
     <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i>Configurações</a>
   </nav>
   <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i>Sair</a>
@@ -46,7 +49,7 @@
   <header class="topbar">
     <div class="date"><i class="material-icons">admin_panel_settings</i>Área Administrativa</div>
     <div class="avatar">
-      <img src="https://i.pravatar.cc/45?img=5">
+      <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
       <span><%= (nomeAdmin != null) ? nomeAdmin : "Admin" %></span>
     </div>
   </header>
@@ -56,6 +59,12 @@
       <h1>Gerenciar Alunos</h1>
       <div style="display: flex; gap: 10px; align-items: center;">
         <button class="btn-filter" onclick="toggleFilter()"><i class="material-icons">filter_list</i> Filtros</button>
+
+        <%-- BOTÃO PARA ABRIR O MODAL (Sem formulário em volta) --%>
+        <button class="btn-primary" onclick="toggleImport()" style="background-color: #27ae60;">
+          <i class="material-icons">upload</i> Importar CSV
+        </button>
+
         <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get">
           <button class="btn-primary" name="acao" value="novo"><i class="material-icons">add</i> Novo Aluno</button>
         </form>
@@ -98,7 +107,7 @@
         </div>
         <div class="modal-buttons">
           <button class="btn-clear" onclick="limparFiltros()">Limpar</button>
-          <button class="btn-primary" onclick="toggleFilter()">Fechar</button>
+          <button class="btn-cancelar" onclick="toggleFilter()">Fechar</button>
         </div>
       </div>
     </div>
@@ -143,7 +152,8 @@
               </span>
             </td>
             <td>
-              <div style="display: flex; gap: 5px;">
+              <div class="actions-container" style="display: flex; gap: 5px;">
+
                 <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="get">
                   <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
                   <button type="submit" class="icon-btn edit" name="acao" value="editar"><i class="material-icons">edit</i></button>
@@ -187,7 +197,10 @@
             </div>
             <div class="form-group flex-1">
               <label>CPF</label>
-              <input type="text" name="cpf" value="<%= alunoEdit != null ? alunoEdit.getCpf() : "" %>" placeholder="000.000.000-00" required>
+              <input type="text" name="cpf"
+                     placeholder="000.000.000-00"
+                     pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+                     title="Digite um CPF válido" required>
             </div>
           </div>
 
@@ -221,14 +234,30 @@
           </div>
 
           <div class="modal-buttons">
-            <button type="submit" name="acao" value="<%= acaoModal %>" class="btn-primary">Confirmar Dados</button>
-            <a href="${pageContext.request.contextPath}/AlunoAdminServlet" class="btn-cancelar">Voltar</a>
+            <button type="submit" name="acao" value="<%= "editar".equals(acaoModal) ? "editar" : "novo" %>" class="btn-primary">
+              Confirmar
+            </button>            <a href="${pageContext.request.contextPath}/AlunoAdminServlet" class="btn-cancelar">Cancelar</a>
           </div>
         </form>
       </div>
     </div>
     <% } %>
-
+    <%-- MODAL DE IMPORTAÇÃO (NOVO) --%>
+    <div id="importModal" class="overlay" style="display: none; justify-content: center; align-items: center;">
+      <div class="modal">
+        <h2>Importar Alunos (CSV)</h2>
+        <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Selecione o arquivo .csv</label>
+            <input type="file" name="file" accept=".csv" required style="width: 100%; margin-top: 10px;">
+          </div>
+          <div class="modal-buttons" style="margin-top: 20px;">
+            <button type="button" class="btn-cancelar" onclick="toggleImport()">Cancelar</button>
+            <button type="submit" name="acao" value="importar" class="btn-primary">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
     <%-- MODAL DE EXCLUSÃO --%>
     <% if (modalExcluir && alunoEdit != null) { %>
     <div class="overlay">
@@ -238,7 +267,7 @@
         <p>Você está prestes a excluir o aluno <strong><%= alunoEdit.getNome() %></strong>. Esta ação não pode ser desfeita.</p>
         <form action="${pageContext.request.contextPath}/AlunoAdminServlet" method="post">
           <input type="hidden" name="matricula" value="<%= alunoEdit.getMatricula() %>">
-          <div class="modal-buttons" style="justify-content: center; gap: 15px; margin-top: 25px;">
+          <div class="modal-buttons">
             <button type="submit" name="acao" value="excluir" class="btn-danger">Confirmar Exclusão</button>
             <a href="${pageContext.request.contextPath}/AlunoAdminServlet" class="btn-cancelar">Cancelar</a>
           </div>
@@ -247,31 +276,14 @@
     </div>
     <% } %>
 
-    <%-- ALERTAS --%>
-    <%
-      String msgErro = (String) session.getAttribute("mensagemErro");
-      String msgSucesso = (String) session.getAttribute("mensagemSucesso");
-      if (msgErro != null) {
-    %>
-    <div class="alert alert-danger">
-      <span><%= msgErro %></span>
-      <button onclick="this.parentElement.style.display='none'">&times;</button>
-    </div>
-    <% session.removeAttribute("mensagemErro"); } %>
-    <% if (msgSucesso != null) { %>
-    <div class="alert alert-success">
-      <span><%= msgSucesso %></span>
-      <button onclick="this.parentElement.style.display='none'">&times;</button>
-    </div>
-    <% session.removeAttribute("mensagemSucesso"); } %>
   </div>
 </main>
-
 <script>
-  function toggleFilter() {
-    const modal = document.getElementById("filterModal");
-    modal.style.display = (modal.style.display === "flex") ? "none" : "flex";
-  }
+
+  function toggleFilter() { const m = document.getElementById("filterModal"); m.style.display = (m.style.display === "flex") ? "none" : "flex"; }
+
+  // Nova função para o modal de importação
+  function toggleImport() { const m = document.getElementById("importModal"); m.style.display = (m.style.display === "flex") ? "none" : "flex"; }
 
   function filtrarTabela() {
     const nomeBusca = document.getElementById("inputNome").value.toUpperCase();
@@ -280,9 +292,9 @@
     const statusBusca = document.getElementById("filterStatus").value;
 
     document.querySelectorAll("table tbody tr").forEach(linha => {
+      // Verifica se a linha tem células suficientes (para evitar erro em linha vazia)
       if (linha.cells.length < 8) return;
 
-      // Ajuste de índices por conta da nova coluna (Email agora é a 4)
       const tdMatricula = linha.cells[0].textContent.replace('#', '').trim();
       const tdNome = linha.cells[1].textContent.toUpperCase();
       const tdTurma = linha.cells[5].textContent.trim().toUpperCase();
@@ -305,5 +317,27 @@
     filtrarTabela();
   }
 </script>
+<%-- MODAL DE FEEDBACK (ALERTAS) --%>
+<%
+  String msgErroSessao = (String) session.getAttribute("mensagemErro");
+  String msgSucessoSessao = (String) session.getAttribute("mensagemSucesso");
+
+  if (msgErroSessao != null || msgSucessoSessao != null) {
+%>
+<div class="alert-overlay" id="feedbackModal">
+  <div class="alert-modal">
+    <i class="material-icons" style="font-size: 48px; color: <%= (msgErroSessao != null) ? "#e74c3c" : "#27ae60" %>;">
+      <%= (msgErroSessao != null) ? "error" : "check_circle" %>
+    </i>
+    <h3><%= (msgErroSessao != null) ? "Atenção" : "Sucesso!" %></h3>
+    <p><%= (msgErroSessao != null) ? msgErroSessao : msgSucessoSessao %></p>
+    <button class="btn-ok" onclick="document.getElementById('feedbackModal').style.display='none'">OK</button>
+  </div>
+</div>
+<%
+    session.removeAttribute("mensagemErro");
+    session.removeAttribute("mensagemSucesso");
+  }
+%>
 </body>
 </html>

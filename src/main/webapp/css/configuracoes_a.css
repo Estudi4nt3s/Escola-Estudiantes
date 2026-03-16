@@ -36,7 +36,12 @@ body {
     flex-shrink: 0;
     z-index: 10;
 }
-
+/* Adicione isso ao seu arquivo CSS */
+.chart-container {
+    position: relative;
+    height: 250px; /* Altura fixa para manter o alinhamento */
+    width: 100%;
+}
 .logo {
     display: flex;
     align-items: center;

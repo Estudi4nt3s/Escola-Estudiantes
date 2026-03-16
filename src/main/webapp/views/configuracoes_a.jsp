@@ -14,7 +14,6 @@
   String status = request.getParameter("status");
   String tipo = (String) session.getAttribute("tipoUsuario");
 
-  // Proteção de Rota
   if (tipo == null || !tipo.equals("admin")) {
     response.sendRedirect("cadastro.jsp");
     return;
@@ -25,6 +24,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <title>Configurações Avançadas | ADM</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/configuracoes_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -52,6 +52,9 @@
     <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
       <i class="material-icons">menu_book</i><span>Disciplinas</span>
     </a>
+    <a class="menu" href="${pageContext.request.contextPath}/ChatIAServlet">
+      <i class="material-icons">psychology</i><span>IA Administrativa</span>
+    </a>
     <a class="menu active" href="${pageContext.request.contextPath}/servletConfiguracoes">
       <i class="material-icons">settings</i><span>Configurações</span>
     </a>
@@ -65,7 +68,7 @@
   <header class="topbar">
     <div class="date"><i class="material-icons">admin_panel_settings</i>Área Administrativa</div>
     <div class="avatar">
-      <img src="https://i.pravatar.cc/45?img=5">
+      <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
       <span><%= (nome != null) ? nome : "Admin" %></span>
     </div>
   </header>
@@ -97,32 +100,20 @@
         <i class="material-icons" style="color:#9b59b6">history_edu</i>
         <h4>Relatórios</h4>
       </div>
-      <div class="card action-btn" onclick="abrirModal('modalComunicados')">
-        <i class="material-icons" style="color:#e74c3c">campaign</i>
-        <h4>Comunicados</h4>
-      </div>
     </div>
+    <div class="card" style="margin-top: 20px;">
+      <h3><i class="material-icons">bar_chart</i> Painel de Desempenho</h3>
+      <div style="display: flex; gap: 40px; justify-content: space-around; padding: 20px;">
 
-    <div class="card">
-      <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-        <i class="material-icons">lock</i> Segurança da Conta
-      </h3>
-
-      <% if ("success".equals(status)) { %>
-      <p style="background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 600;">
-        ✓ Alteração realizada com sucesso!
-      </p>
-      <% } %>
-
-      <form action="${pageContext.request.contextPath}/servletConfiguracoes" method="post">
-        <div class="form-group">
-          <label>Redefinir Senha do Administrador</label>
-          <input type="password" name="novaSenha" placeholder="Digite a nova senha para alterar" required>
+        <div class="chart-container" style="width: 45%;">
+          <canvas id="graficoNotas"></canvas>
         </div>
-        <button type="submit" class="btn-primary" style="width: 100%; height: 50px;">
-          <i class="material-icons">save</i> Atualizar Credenciais
-        </button>
-      </form>
+
+        <div class="chart-container" style="width: 45%;">
+          <canvas id="graficoVinculacao"></canvas>
+        </div>
+
+      </div>
     </div>
   </div>
 </main>
@@ -199,22 +190,43 @@
     </button>
   </div>
 </div>
-
-<div id="modalComunicados" class="overlay" style="display:none">
-  <div class="modal">
-    <h2><i class="material-icons">campaign</i> Enviar Comunicado</h2>
-    <div class="form-group" style="margin-top: 15px;">
-      <label>Assunto do Aviso</label>
-      <input type="text" placeholder="Ex: Reunião de Pais">
-      <label style="margin-top:10px;">Mensagem</label>
-      <textarea style="width: 100%; border-radius: 10px; padding: 10px; border: 1px solid #ddd; height: 80px;"></textarea>
-    </div>
-    <button class="btn-primary" style="width:100%; margin-top:10px;">Disparar para Todos</button>
-    <button onclick="fecharModal('modalComunicados')" class="btn-cancelar" style="width:100%; border:none; background:none; margin-top:10px; cursor:pointer; color:#888;">Cancelar</button>
-  </div>
-</div>
-
 <script>
+  window.onload = function() {
+    // Gráfico de Vinculação
+    new Chart(document.getElementById('graficoVinculacao'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Vinculados', 'Pendentes'],
+        datasets: [{
+          data: [<%= request.getAttribute("totalVinculados") %>, <%= request.getAttribute("totalPendentes") %>],
+          backgroundColor: ['#27ae60', '#f39c12']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Importante para respeitar o height da div
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // Gráfico de Barras
+    new Chart(document.getElementById('graficoNotas'), {
+      type: 'bar',
+      data: {
+        labels: ['Média Geral'],
+        datasets: [{
+          label: 'Nota Média',
+          data: [<%= mediaGeralObj %>],
+          backgroundColor: '#d11d22'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, max: 10 } }
+      }
+    });
+  };
   function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
   function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
   window.onclick = function(event) { if (event.target.className === 'overlay') event.target.style.display = "none"; }

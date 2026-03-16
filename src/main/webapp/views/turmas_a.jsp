@@ -36,6 +36,9 @@
     <a class="menu" href="${pageContext.request.contextPath}/ProfessorAdminServlet"><i class="material-icons">badge</i>Professores</a>
     <a class="menu active" href="${pageContext.request.contextPath}/TurmaAdmServlet"><i class="material-icons">school</i>Turmas</a>
     <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet"><i class="material-icons">menu_book</i>Disciplinas</a>
+    <a class="menu" href="${pageContext.request.contextPath}/ChatIAServlet">
+      <i class="material-icons">psychology</i><span>IA Administrativa</span>
+    </a>
     <a class="menu" href="${pageContext.request.contextPath}/servletConfiguracoes"><i class="material-icons">settings</i>Configurações</a>
   </nav>
   <a class="config" href="${pageContext.request.contextPath}/servletLogout"><i class="material-icons">logout</i>Sair</a>
@@ -45,7 +48,7 @@
   <header class="topbar">
     <div class="date"><i class="material-icons">admin_panel_settings</i>Área Administrativa</div>
     <div class="avatar">
-      <img src="https://i.pravatar.cc/45?img=5">
+      <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
       <span><%= (nome != null) ? nome : "Admin" %></span>
     </div>
   </header>
@@ -71,8 +74,14 @@
             <td><%= turma.getAno() %></td>
             <td><%= turma.getQuantidadeAlunos() %></td>
             <td>
-              <a href="TurmaAdmServlet?acao=editar&id=<%= turma.getId() %>" class="icon-btn edit"><i class="material-icons">edit</i></a>
-              <a href="TurmaAdmServlet?acao=pre-excluir&id=<%= turma.getId() %>" class="icon-btn delete"><i class="material-icons">delete</i></a>
+              <div class="actions-container">
+                <a href="TurmaAdmServlet?acao=editar&id=<%= turma.getId() %>" class="icon-btn edit">
+                  <i class="material-icons">edit</i>
+                </a>
+                <a href="TurmaAdmServlet?acao=pre-excluir&id=<%= turma.getId() %>" class="icon-btn delete">
+                  <i class="material-icons">delete</i>
+                </a>
+              </div>
             </td>
           </tr>
           <% } } else { %>

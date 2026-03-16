@@ -41,7 +41,7 @@ public class AdministradorDAO {
                 "FROM alunos a " +
                 "JOIN notas n ON a.matricula = n.alunomatricula " +
                 "GROUP BY a.nome " +
-                "ORDER BY media DESC";
+                "ORDER BY media";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement psmt = conn.prepareStatement(sql);
@@ -84,14 +84,45 @@ public class AdministradorDAO {
         return 0;
     }
 
-    public void atualizarSenha(int id, String novaSenha) {
-        // ATENÇÃO: Ajuste o nome da tabela (Admins ou Administradores) conforme seu banco real
-        String sql = "UPDATE Admins SET Senha = ? WHERE Id = ?";
+    public int contarAlunosVinculados() {
+        // Exemplo: se no banco for "usuario_id", mude aqui:
+        String sql = "SELECT COUNT(*) FROM alunos WHERE usuarioid IS NOT NULL";
         try (Connection conn = Conexao.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, novaSenha);
-            ps.setInt(2, id);
-            ps.executeUpdate();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) { e.printStackTrace(); }
+        return 0;
+    }
+
+    public int contarAlunosPendentes() {
+        // Mesma correção aqui
+        String sql = "SELECT COUNT(*) FROM alunos WHERE usuarioid IS NULL";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) { e.printStackTrace(); }
+        return 0;
+    }
+    // 1. Resumo quantitativo (Para a IA entender o tamanho da base)
+    public String obterResumoEstatisticas() {
+        return String.format(
+                "Total de alunos: %d. Media geral da escola: %.2f. " +
+                        "Alunos vinculados: %d. Alunos pendentes: %d.",
+                contarTotalAlunos(), calcularMediaGeral(),
+                contarAlunosVinculados(), contarAlunosPendentes()
+        );
+    }
+
+    // 2. Ranking de desempenho (Para a IA identificar turmas ou alunos de destaque)
+    public String obterRankingParaIA() {
+        List<RankingDTO> ranking = obterRankingAlunos();
+        StringBuilder sb = new StringBuilder("Top alunos: ");
+        for (int i = 0; i < Math.min(ranking.size(), 5); i++) {
+            sb.append(ranking.get(i).getNome()).append(" (")
+                    .append(String.format("%.2f", ranking.get(i).getMedia())).append("), ");
+        }
+        return sb.toString();
     }
 }
