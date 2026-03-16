@@ -7,10 +7,10 @@
   String tipo = (String) session.getAttribute("tipoUsuario");
   String nomeAdmin = (String) session.getAttribute("adminNome");
 
-  if (tipo == null || !tipo.equals("admin")) {
-    response.sendRedirect("views/cadastro.jsp");
-    return;
-  }
+//  if (tipo == null || !tipo.equals("admin")) {
+//    response.sendRedirect("views/cadastro.jsp");
+//    return;
+//  }
   List<Aluno> listaAlunos = (List<Aluno>) request.getAttribute("listaAlunos");
   List<TurmaAdm> todasAsTurmas = (List<TurmaAdm>) request.getAttribute("listaTurmas");
   String acao = request.getParameter("acao");

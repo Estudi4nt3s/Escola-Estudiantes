@@ -7,15 +7,19 @@ import jakarta.servlet.http.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import io.github.cdimascio.dotenv.Dotenv;
 
 @WebServlet("/ChatIAServlet")
 public class ChatIAServlet extends HttpServlet {
     private AdministradorDAO dao = new AdministradorDAO();
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect("views/ia_a.jsp");
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pergunta = request.getParameter("pergunta");
-        String apiKey = System.getenv("GEMINI_API_KEY");
-
+        Dotenv dotenv = Dotenv.load();
+        String apiKey = dotenv.get("GEMINI_API_KEY");
         String contexto = dao.obterResumoEstatisticas() + " " + dao.obterRankingParaIA();
         String jsonInput = "{\"contents\":[{\"parts\":[{\"text\":\"Você é um assistente administrativo escolar. Dados: "
                 + contexto + ". Pergunta: " + pergunta + "\"}]}]}";

@@ -2,11 +2,11 @@
 <%
     String nome = (String) session.getAttribute("adminNome");
     String tipo = (String) session.getAttribute("tipoUsuario");
-
-    if (tipo == null || !tipo.equals("admin")) {
-        response.sendRedirect("cadastro.jsp");
-        return;
-    }
+//
+//    if (tipo == null || !tipo.equals("admin")) {
+//        response.sendRedirect("cadastro.jsp");
+//        return;
+//    }
 %>
 <!DOCTYPE html>
 <html lang="pt-BR">
