@@ -33,10 +33,12 @@ public class ServletLogin extends HttpServlet {
         List<Usuario> users = userDAO.listarComFiltro("email = ?", email);
 
         if (!users.isEmpty()) {
+            System.out.println("Entrou");
             Usuario usuarioLogado = users.getFirst();
             boolean validarSenha = usuarioLogado.getSenha().equals(senha);
 
             if (validarSenha) {
+                System.out.println("Sai bixo");
                 // Configuração de Data para a Sessão
                 LocalDate hoje = LocalDate.now();
                 String dia = String.format("%02d", hoje.getDayOfMonth());
@@ -77,6 +79,9 @@ public class ServletLogin extends HttpServlet {
                         request.getRequestDispatcher("views/home_p.jsp").forward(request, response);
                         return;
                     }
+                    else{
+                        request.setAttribute("erro", "Usuário não encontrado");
+                    }
                 } else {
                     AlunoDAO alunoDAO = new AlunoDAO();
                     NotaDAO notaDAO = new NotaDAO();
@@ -104,9 +109,11 @@ public class ServletLogin extends HttpServlet {
 
                         int limite = Math.min(aulas.size(), 6);
                         for (int i = 0; i < limite; i++) {
-                            int profId = aulas.get(i).getProfessorId().getId();
+                            Integer profId = aulas.get(i).getProfessorId().getId();
                             Professor p = profDAO.buscarPorId(profId);
-                            int discId = p.getDisciplina().getId();
+                            Integer discId = (p != null && p.getDisciplina() != null)
+                                    ? p.getDisciplina().getId()
+                                    : null;
 
                             for (Disciplina d : todasDisciplinas) {
                                 if (d.getId() == discId) {
@@ -133,14 +140,19 @@ public class ServletLogin extends HttpServlet {
                         request.getRequestDispatcher("views/home.jsp").forward(request, response);
                         return;
                     }
+                    else{
+                        request.setAttribute("erro", "Usuário não encontrado");
+                    }
                 }
             } else {
-                request.getSession().setAttribute("erro", "Senha Incorreta");
+                System.out.println("Chegou");
+                request.setAttribute("erro", "Senha Incorreta");
             }
         } else {
-            request.getSession().setAttribute("erro", "Usuário não encontrado");
+            System.out.println("Não encontrou");
+            request.setAttribute("erro", "Usuário não encontrado");
         }
-
+        request.setAttribute("erro", "Usuário não encontrado");
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

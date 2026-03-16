@@ -1,11 +1,4 @@
-<%@ page import="com.sistema.estudiantes.model.Admin" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%
-    session = request.getSession(false);
-    if(session != null) {
-        session.invalidate();
-    }
-%>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -59,7 +52,9 @@
     <div class="login-box">
         <h2>Login</h2>
 
-        <% if (request.getSession().getAttribute("erro") != null) { %>
+        <%
+            System.out.println(request.getAttribute("erro"));
+            if (request.getAttribute("erro") != null) { %>
         <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Credenciais inválidas!</p>
         <% } %>
 
