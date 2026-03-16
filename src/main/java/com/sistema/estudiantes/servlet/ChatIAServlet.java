@@ -15,7 +15,6 @@ public class ChatIAServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pergunta = request.getParameter("pergunta");
         String apiKey = System.getenv("GEMINI_API_KEY");
-        if (apiKey == null || apiKey.isEmpty()) apiKey = "AIzaSyAVjMHlL-go7KDt4kx3D2eMUQAfrjr777M";
 
         String contexto = dao.obterResumoEstatisticas() + " " + dao.obterRankingParaIA();
         String jsonInput = "{\"contents\":[{\"parts\":[{\"text\":\"Você é um assistente administrativo escolar. Dados: "
