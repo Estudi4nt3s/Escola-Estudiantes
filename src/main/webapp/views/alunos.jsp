@@ -105,6 +105,8 @@
                         <div class="alunos-nome">
                             <%=aluno.getNome()%>
                         </div>
+                </div>
+            </a>
 
 <%--                <div class="acoes-container">--%>
 <%--                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>--%>
@@ -122,9 +124,6 @@
 <%--                        </a>--%>
 <%--                    </div>--%>
 <%--                </div>--%>
-                </div>
-            </a>
-
             <%
                 }
             } else {
@@ -218,6 +217,27 @@
             formTurma.submit();
         }, 500);
 
+    });
+
+    // Seleciona TODOS os links que têm a classe "aaaaa"
+    const linksAlunos = document.querySelectorAll(".aaaaa");
+
+    // Passa por cada um dos links encontrados e adiciona o evento de clique
+    linksAlunos.forEach(function(link) {
+        link.addEventListener("click", function(e) {
+
+            e.preventDefault(); // Impede que a página mude imediatamente
+
+            // Mostra a tela de carregamento (supondo que a variável 'loading' já existe do código anterior)
+            const loading = document.getElementById("loadingOverlay");
+            loading.style.display = "flex";
+
+            // Aguarda 500ms e redireciona para o link (href) específico que foi clicado
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 500);
+
+        });
     });
 
     function openLogoutModal() {

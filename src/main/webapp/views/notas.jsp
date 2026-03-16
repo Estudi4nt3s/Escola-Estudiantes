@@ -11,8 +11,7 @@
     List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
     Disciplina disc = (Disciplina) request.getSession().getAttribute("disciplina");
     List<Observacao> observacoes = (List<Observacao>) request.getSession().getAttribute("observacoes");
-
-
+    Turma turma = (Turma) request.getSession().getAttribute("turmaSelecionada");
 %>
 <head>
     <meta charset="UTF-8">
@@ -27,6 +26,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/aluno_p.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
 
 <body>
@@ -283,28 +283,77 @@
     </div>
 </div>
 
+<div id="loadingOverlay">
+    <div class="loadingBox">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+    </div>
+</div>
+<button id="btnNotas"
+        class="btn-sair-fixo"
+        data-url="${pageContext.request.contextPath}/aluno?sub_acao=buscar_todos&id=<%= turma.getId() %>">
+    Voltar
+</button>
+<script>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
 <script src="${pageContext.request.contextPath}/js/popup.js"></script>
 
 <script>
     console.log("SCRIPT CARREGOU")
 
-    const loading = document.getElementById("loadingOverlay");
+    const btnNotas = document.getElementById("btnNotas")
+    const loading = document.getElementById("loadingOverlay")
 
-    const btnNotas = document.getElementById("btnNotas");
+    if(btnNotas){
 
-    if(btnNotas) {
-        btnNotas.addEventListener("click", function (e) {
+        btnNotas.addEventListener("click", function(){
 
-            e.preventDefault(); // impede abrir imediatamente
+            loading.style.display = "flex"
 
-            loading.style.display = "flex";
+            setTimeout(()=>{
+                window.location.href = this.dataset.url
+            },400)
 
-            setTimeout(() => {
-                window.location.href = this.href;
-            }, 500);
+        })
 
-        });
+    }
+
+    document.querySelectorAll("form").forEach(form => {
+
+        form.addEventListener("submit", function(){
+
+            const loading = document.getElementById("loadingOverlay")
+            if(loading){
+                loading.style.display = "flex"
+            }
+
+        })
+
+    })
+    const btnConfirmarExcluir = document.getElementById("confirmarExcluir")
+
+    if(btnConfirmarExcluir){
+
+        btnConfirmarExcluir.addEventListener("click", function(e){
+
+            console.log(this.href)
+
+            e.preventDefault()
+
+            const loading = document.getElementById("loadingOverlay")
+
+            if(loading){
+                loading.style.display = "flex"
+            }
+
+            setTimeout(()=>{
+                window.location.href = this.href
+            },400)
+
+        })
+
     }
 
     function openLogoutModal() {
