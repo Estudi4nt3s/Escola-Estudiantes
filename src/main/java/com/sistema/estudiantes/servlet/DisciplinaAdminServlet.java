@@ -48,26 +48,7 @@ public class DisciplinaAdminServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String acao = request.getParameter("acao");
 
-        if ("verificarProfessor".equals(acao)) {
-            String nome = request.getParameter("nome");
-            boolean existe = professorDao.verificarSeExistePorNome(nome);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"existe\": " + existe + "}");
-            return;
-        }
-
-        if ("criarProfessorRapido".equals(acao)) {
-            String nome = request.getParameter("nome");
-            String sobrenome = request.getParameter("sobrenome");
-            String email = request.getParameter("email");
-
-            // Se o seu DisciplinaAdmDAO tiver o método criarProfessorBasico, use-o:
-            String nomeCompleto = nome + " " + sobrenome;
-            professorDao.cadastrarRapido(nomeCompleto, email); // Verifique se este método existe no seu DAO
-
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
+        // Removemos as verificações de AJAX de professor que estavam aqui antes
 
         if ("excluir".equals(acao)) {
             String idStr = request.getParameter("id");
@@ -75,13 +56,22 @@ public class DisciplinaAdminServlet extends HttpServlet {
 
         } else if ("novo".equals(acao) || "editar".equals(acao)) {
             DisciplinasAdm d = new DisciplinasAdm();
+
             if ("editar".equals(acao)) {
-                d.setId(Integer.parseInt(request.getParameter("id")));
+                String idStr = request.getParameter("id");
+                if (idStr != null) {
+                    d.setId(Integer.parseInt(idStr));
+                }
             }
 
+            // Pega apenas o nome da disciplina vindo do formulário
             d.setNome(request.getParameter("nome"));
-            d.setProfessorNome(request.getParameter("professorNome"));
 
+            // Explicitamente definimos o professor como nulo/vazio
+            // para que o badge de "Não vinculada" apareça no JSP
+            d.setProfessorNome(null);
+
+            // Se você tiver o campo de turma, pode manter, senão pode remover esta linha
             String turma = request.getParameter("turmaNome");
             if(turma != null) d.setTurmaNome(turma);
 

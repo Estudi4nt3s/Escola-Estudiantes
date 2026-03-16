@@ -14,7 +14,6 @@
   String status = request.getParameter("status");
   String tipo = (String) session.getAttribute("tipoUsuario");
 
-  // Proteção de Rota
   if (tipo == null || !tipo.equals("admin")) {
     response.sendRedirect("cadastro.jsp");
     return;
@@ -25,6 +24,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <title>Configurações Avançadas | ADM</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/configuracoes_a.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -51,6 +51,9 @@
     </a>
     <a class="menu" href="${pageContext.request.contextPath}/DisciplinaAdminServlet">
       <i class="material-icons">menu_book</i><span>Disciplinas</span>
+    </a>
+    <a class="menu" href="${pageContext.request.contextPath}/ChatIAServlet">
+      <i class="material-icons">psychology</i><span>IA Administrativa</span>
     </a>
     <a class="menu active" href="${pageContext.request.contextPath}/servletConfiguracoes">
       <i class="material-icons">settings</i><span>Configurações</span>
@@ -102,27 +105,19 @@
         <h4>Comunicados</h4>
       </div>
     </div>
+    <div class="card" style="margin-top: 20px;">
+      <h3><i class="material-icons">bar_chart</i> Painel de Desempenho</h3>
+      <div style="display: flex; gap: 40px; justify-content: space-around; padding: 20px;">
 
-    <div class="card">
-      <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-        <i class="material-icons">lock</i> Segurança da Conta
-      </h3>
-
-      <% if ("success".equals(status)) { %>
-      <p style="background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: 600;">
-        ✓ Alteração realizada com sucesso!
-      </p>
-      <% } %>
-
-      <form action="${pageContext.request.contextPath}/servletConfiguracoes" method="post">
-        <div class="form-group">
-          <label>Redefinir Senha do Administrador</label>
-          <input type="password" name="novaSenha" placeholder="Digite a nova senha para alterar" required>
+        <div class="chart-container" style="width: 45%;">
+          <canvas id="graficoNotas"></canvas>
         </div>
-        <button type="submit" class="btn-primary" style="width: 100%; height: 50px;">
-          <i class="material-icons">save</i> Atualizar Credenciais
-        </button>
-      </form>
+
+        <div class="chart-container" style="width: 45%;">
+          <canvas id="graficoVinculacao"></canvas>
+        </div>
+
+      </div>
     </div>
   </div>
 </main>
@@ -215,6 +210,42 @@
 </div>
 
 <script>
+  window.onload = function() {
+    // Gráfico de Vinculação
+    new Chart(document.getElementById('graficoVinculacao'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Vinculados', 'Pendentes'],
+        datasets: [{
+          data: [<%= request.getAttribute("totalVinculados") %>, <%= request.getAttribute("totalPendentes") %>],
+          backgroundColor: ['#27ae60', '#f39c12']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Importante para respeitar o height da div
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    // Gráfico de Barras
+    new Chart(document.getElementById('graficoNotas'), {
+      type: 'bar',
+      data: {
+        labels: ['Média Geral'],
+        datasets: [{
+          label: 'Nota Média',
+          data: [<%= mediaGeralObj %>],
+          backgroundColor: '#d11d22'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, max: 10 } }
+      }
+    });
+  };
   function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
   function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
   window.onclick = function(event) { if (event.target.className === 'overlay') event.target.style.display = "none"; }
