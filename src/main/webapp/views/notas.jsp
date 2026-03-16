@@ -5,11 +5,13 @@
 <html lang="pt-BR">
 <%
     Aluno aluno = (Aluno) request.getSession().getAttribute("alunoSelecionado");
-    System.out.println("Aluno: " + aluno.getNome());
     Professor professor = (Professor) request.getSession().getAttribute("professor");
     String[] data = (String[]) request.getSession().getAttribute("data");
     List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
     List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
+    Disciplina disc = (Disciplina) request.getSession().getAttribute("disciplina");
+    List<Observacao> observacoes = (List<Observacao>) request.getSession().getAttribute("observacoes");
+
 
 %>
 <head>
@@ -19,7 +21,8 @@
     <title>Estudiantes - Boletim de <%=aluno.getNome()%></title>
     <%} else { %>
     <title>Estudiantes - Boletim</title>
-    <% } %>
+    <% }
+        assert aluno != null;%>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -41,7 +44,7 @@
         <a class="menu" href="${pageContext.request.contextPath}/views/perfil_p.jsp"><i class="material-icons">person</i>Perfil</a>
     </nav>
     <div class="config">
-        <a class="menu" style="color: #ffffff" href="${pageContext.request.contextPath}/index.jsp">
+        <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
             <i class="material-icons">output</i>Sair
         </a>
     </div>
@@ -64,14 +67,10 @@
     </header>
 
     <div class="main-content">
-        <div class="page-header">
-            <% if (aluno != null && aluno.getUsuarioId() != null) { %>
-            <h2 class="page-title">Boletim Escolar: <%= aluno.getNome()%></h2>
-            <% } else { %>
-            <h2 class="page-title">Boletim Escolar: Usuário não encontrado</h2>
-            <% } %>
+        <div class="page-header" style="margin-bottom: 15px;">
+            <h2>Aluno: <%= aluno.getNome()%></h2>
         </div>
-
+        <h2 class="page-title boletim">Boletim:</h2>
         <div class="table-container">
             <table class="grades-table">
                 <thead>
@@ -87,6 +86,7 @@
                 <%
                     String situacao;
                     for (Disciplina disciplina : disciplinas) {
+                        if(disciplina.getNome().equals(disc.getNome())){
                         Nota notaEncontrada = null;
 
                         for (Nota nota : notas) {
@@ -118,7 +118,6 @@
                     <td>
                         <input class="nota-edit"
                                type="number"
-                               step="0.01"
                                data-id="<%=notaEncontrada.getId()%>"
                                data-campo="n1"
                                min="0"
@@ -126,7 +125,6 @@
                                value="<%=notaEncontrada.getN1() != null ? notaEncontrada.getN1() : ""%>"></td>
                     <td><input class="nota-edit"
                                type="number"
-                               step="0.01"
                                data-id="<%=notaEncontrada.getId()%>"
                                data-campo="n2"
                                min="0"
@@ -135,7 +133,6 @@
                     <td><%= media != null ? String.format("%.2f",media) : "-" %></td>
                     <td>
                         <%
-                            System.out.println(media);
                         %>
                         <span class="status <%= media == null?"andamento": media >= 7 ? "approved" : "attention" %>"><%=situacao%></span>
                     </td>
@@ -155,9 +152,119 @@
                 <%
                         }
                     }
+                    }
                 %>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="page-header">
+            <h2 class="page-title boletim">Observações:</h2>
+            <button id="abrirInserir" class="submit">
+                <i class="material-icons">add</i>
+                Adicionar
+            </button>
+        </div>
+
+
+        <div class="table-container">
+            <table class="grades-table">
+                <thead>
+                <tr>
+                    <th>Observação</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                    if(observacoes != null && !observacoes.isEmpty()){
+
+                        for(Observacao o : observacoes){
+                %>
+                <tr>
+                    <td><%=o.getTexto()%></td>
+                    <td><%=o.getDataCriacao().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))%></td>
+                    <td>
+                        <button class="editar-btn" data-id="<%=o.getId()%>" data-texto="<%=o.getTexto()%>">
+                            <i class="material-icons editar">edit</i>
+                        </button>
+                        <button class="excluir-btn" data-id="<%=o.getId()%>">
+                            <i class="material-icons excluir">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                <%
+                    }
+                }
+                else{
+                %>
+                <tr>
+                    <td colspan="3">Nenhuma observação encontrada</td>
+                </tr>
+                <%
+                    }
+                %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="popupInserir" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Inserir Observação</h3>
+                <span class="material-icons fechar">close</span>
+            </div>
+            <form method="post" action="${pageContext.request.contextPath}/observacao">
+
+                <input type="hidden" name="sub_acao" value="inserir">
+                <input type="hidden" name="alunomatricula" value="<%=aluno.getMatricula()%>">
+
+                <textarea name="texto" id="" placeholder="Digite uma observação" required></textarea>
+
+                <button type="submit" class="confirmar">
+                    Confirmar
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="popupEditar" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Editar Observação</h3>
+                <span class="material-icons fechar">close</span>
+            </div>
+            <form method="post" action="${pageContext.request.contextPath}/observacao">
+
+                <input type="hidden" name="sub_acao" value="atualizar">
+                <input type="hidden" name="id" id="editarId">
+
+                <textarea name="texto" id="editarTexto" required></textarea>
+
+                <button type="submit" class="confirmar">
+                    Salvar
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="popupExcluir" class="modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Excluir Observação</h3>
+                <span class="material-icons fechar">close</span>
+            </div>
+            <p class="texto-excluir">
+                Tem certeza que deseja excluir essa observação?
+            </p>
+            <div class="acoes-excluir">
+                <a id="confirmarExcluir" class="excluir-btn-modal">
+                    Excluir
+                </a>
+                <button class="cancelar fechar">
+                    Cancelar
+                </button>
+            </div>
         </div>
     </div>
 </main>
@@ -177,6 +284,8 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/popup.js"></script>
+
 <script>
     console.log("SCRIPT CARREGOU")
 
@@ -258,7 +367,7 @@
 
                     mediaCell.innerText = "-"
                     status.innerText = "Em andamento"
-                    status.className = "status attention"
+                    status.className = "status andamento"
 
                 }
 
@@ -271,8 +380,12 @@
                 console.log(id)
                 const campo = this.dataset.campo
                 console.log(campo)
-                const valor = this.value
+                let valor = this.value
                 console.log(valor)
+
+                if(valor === ""){
+                    valor = "null"
+                }
 
                 fetch("${pageContext.request.contextPath}/nota", {
                     method: "POST",

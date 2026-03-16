@@ -64,11 +64,11 @@ public class ServletObservacao extends HttpServlet {
             observacoes = new ArrayList<>();
         }
 
-        request.setAttribute("observacoes", observacoes);
-        request.setAttribute("alunoSelecionado", alunos);
-        request.setAttribute("professores", professores);
+        request.getSession().setAttribute("observacoes", observacoes);
+        request.getSession().setAttribute("alunoSelecionado", alunos);
+        request.getSession().setAttribute("professores", professores);
 
-        encaminhar(request, response, "/views/observacoes.jsp");
+        encaminhar(request, response, "/views/notas.jsp");
     }
 
     private void buscarPorId(HttpServletRequest request, HttpServletResponse response)
@@ -102,11 +102,11 @@ public class ServletObservacao extends HttpServlet {
             aluno = alunos.getFirst();
         }
 
-        request.setAttribute("observacoes", filtradas);
+        request.getSession().setAttribute("observacoes", filtradas);
         request.getSession().setAttribute("alunoSelecionado", aluno);
         System.out.println("Aluno: " + aluno);
 
-        encaminhar(request, response, "/views/observacoes.jsp");
+        encaminhar(request, response, "/views/notas.jsp");
 
     }
 

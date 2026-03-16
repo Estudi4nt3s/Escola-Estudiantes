@@ -108,8 +108,17 @@ public class NotaDAO {
 
             psmt.setInt(1, n.getIdDisciplina().getId());
             psmt.setInt(2, n.getIdAluno().getMatricula());
-            psmt.setDouble(3, n.getN1());
-            psmt.setDouble(4, n.getN2());
+            if(n.getN1() != null){
+                psmt.setDouble(3, n.getN1());
+            }else{
+                psmt.setNull(3, java.sql.Types.DOUBLE);
+            }
+
+            if(n.getN2() != null){
+                psmt.setDouble(4, n.getN2());
+            }else{
+                psmt.setNull(4, java.sql.Types.DOUBLE);
+            }
             psmt.setInt(5, n.getId());
 
             return psmt.executeUpdate() > 0;
