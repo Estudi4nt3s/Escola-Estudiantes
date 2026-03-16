@@ -39,13 +39,14 @@ public class BuscarAulasServlet extends HttpServlet {
             case SUNDAY -> "DOM";
         };
 
-        List<Aula> aulas;
+
         AulaDAO aulaDAO = new AulaDAO();
+        List<Aula> aulas;
 
         if (aluno != null) {
-            aulas = aulaDAO.listarPorTurma( diaSemana, aluno.getTurmaId());
+            aulas = aulaDAO.listarComFiltro("a.diasemana = ? AND a.turmaid = ?", diaSemana, aluno.getTurmaId());
         } else if (professor != null) {
-            aulas = aulaDAO.listarPorProfessor(professor.getId(), diaSemana);
+            aulas = aulaDAO.listarComFiltro("a.diasemana = ? AND a.turmaid = ?",professor.getId(), diaSemana);
         } else {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;

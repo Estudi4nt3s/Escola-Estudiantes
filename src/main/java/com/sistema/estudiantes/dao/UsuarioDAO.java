@@ -4,10 +4,7 @@ package com.sistema.estudiantes.dao;
 import com.sistema.estudiantes.conexao.Conexao;
 import com.sistema.estudiantes.model.Usuario;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -214,5 +211,22 @@ public class UsuarioDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Timestamp obterDataExpiracaoDoBanco(String token) {
+        String sql = "SELECT tokenexpira FROM usuarios WHERE tokenrecuperacao = ?";
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, token);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getTimestamp("tokenexpira");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -3,16 +3,8 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.time.LocalTime" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
-<%
-//    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-//    response.setHeader("Pragma", "no-cache");
-//    response.setDateHeader("Expires", 0);
-//    if (session.getAttribute("usuario") == null) {
-//        response.sendRedirect("../index.jsp");
-//    }
-%>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -42,7 +34,7 @@
     conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
     conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
 
-
+    LocalTime agora = LocalTime.now();
 %>
 <body>
 
@@ -64,7 +56,7 @@
                 person</i>Perfil</a>
         </nav>
         <div class="config">
-            <a class="menu" style="color: #590101" href="sair">
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -80,7 +72,7 @@
             </div>
 
             <div class="user">
-                <i class="material-icons" id="openNotification">notifications</i>
+<%--                <i class="material-icons" id="openNotification">notifications</i>--%>
                 <div class="avatar">
                     <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
                     <span><%=aluno.getNome()%></span>
@@ -122,7 +114,8 @@
                         if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !Boolean.parseBoolean((materia[0]))){
                             for(int i = 0;i < qtdmateria;i++){
                              %>
-                    <li><strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> -
+                    <li class="<%=agora.isAfter(aulas.get(i).getHorarioInicio()) && agora.isBefore(aulas.get(i).getHorarioFim())?"atual":""%>">
+                        <strong><%=materia[i].toUpperCase().charAt(0) + materia[i].toLowerCase().substring(1,materia[i].length())%></strong> -
                         <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
                          às
                          <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
@@ -193,6 +186,20 @@
             <p>Carregando...</p>
         </div>
     </div>
+
+    <div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
+        <div class="logout-modal-content" onclick="event.stopPropagation()">
+            <div class="logout-icon">
+                <i class="material-icons">help_outline</i>
+            </div>
+            <h2>Confirmar Saída</h2>
+            <p>Deseja encerrar sua sessão no sistema?</p>
+            <div class="logout-buttons">
+                <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
+            </div>
+        </div>
+    </div>
     <script>
 
         const btnNotas = document.getElementById("btnNotas");
@@ -209,6 +216,30 @@
             },500);
 
         });
+
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('show');
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
+        }
+
+        window.addEventListener("pageshow", function(event) {
+
+            if (event.persisted) {
+                const loading = document.getElementById("loadingOverlay");
+                if(loading) loading.style.display = "none";
+            }
+
+        });
+
+
     </script>
 </body>
 </html>

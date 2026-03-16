@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @WebServlet("/resetSenha")
@@ -15,7 +16,6 @@ public class ServletResetSenha extends HttpServlet {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    // abrir página de reset
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,9 +35,9 @@ public class ServletResetSenha extends HttpServlet {
             return;
         }
 
-        if (usuario.getTokenExpira() == null ||
-                usuario.getTokenExpira().isBefore(LocalDateTime.now())) {
+        Timestamp expiraNoBanco = usuarioDAO.obterDataExpiracaoDoBanco(token);
 
+        if (expiraNoBanco == null || expiraNoBanco.before(new java.util.Date())) {
             request.setAttribute("msg", "Token expirado.");
             request.getRequestDispatcher("/views/resetSenha.jsp").forward(request, response);
             return;
@@ -47,7 +47,6 @@ public class ServletResetSenha extends HttpServlet {
         request.getRequestDispatcher("/views/resetSenha.jsp").forward(request, response);
     }
 
-    // salvar nova senha
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -69,6 +68,6 @@ public class ServletResetSenha extends HttpServlet {
         usuarioDAO.limparToken(usuario.getId());
 
         request.setAttribute("msg", "Senha alterada com sucesso!");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/resetSenha.jsp").forward(request, response);
     }
 }

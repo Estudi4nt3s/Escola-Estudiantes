@@ -51,7 +51,7 @@ public class EmailService {
 
                 message.setSentDate(new Date());
 
-                String link = "http://localhost:8080/estudiantes/resetSenha?token=" + token;
+                String link = "http://localhost:8080/Estudiantes/resetSenha?token=" + token;
 
                 message.setText(
                         "Olá,\n\n" +

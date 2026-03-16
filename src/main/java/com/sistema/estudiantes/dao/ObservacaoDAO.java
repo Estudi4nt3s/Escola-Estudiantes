@@ -151,6 +151,43 @@ public class ObservacaoDAO {
         return observacaos;
     }
 
+    public List<Observacao> listarComFiltro(String condicao, int valor, int id){
+        List<Observacao> observacaos = new ArrayList<>();
+        String sql = "SELECT o.*, a.nome as aluno, " +
+                "p.nome as prof " +
+                "FROM observacoes o " +
+                "JOIN alunos a ON o.alunomatricula = a.matricula " +
+                "JOIN professores p ON o.professorid = p.id " +
+                "WHERE " + condicao;
+
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, valor);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    Professor p = new Professor(rs.getInt("professorid"));
+                    Aluno a = new Aluno(rs.getInt("alunomatricula"));
+
+                    a.setNome(rs.getString("aluno"));
+                    p.setNome(rs.getString("prof"));
+
+                    Observacao o = new Observacao(
+                            rs.getInt("id"),
+                            rs.getString("texto"),
+                            rs.getObject("datacriacao", LocalDate.class),
+                            a,
+                            p
+                    );
+                    observacaos.add(o);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return observacaos;
+    }
+
     public boolean atualizar(Observacao o) {
         String sql = "UPDATE Observacoes SET Texto = ?, DataCriacao = ? WHERE Id = ?";
 

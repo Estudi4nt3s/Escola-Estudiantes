@@ -64,17 +64,19 @@ public class ServletObservacao extends HttpServlet {
             observacoes = new ArrayList<>();
         }
 
-        request.setAttribute("observacoes", observacoes);
-        request.setAttribute("alunoSelecionado", alunos);
-        request.setAttribute("professores", professores);
+        request.getSession().setAttribute("observacoes", observacoes);
+        request.getSession().setAttribute("alunoSelecionado", alunos);
+        request.getSession().setAttribute("professores", professores);
 
-        encaminhar(request, response, "/views/observacoes.jsp");
+        encaminhar(request, response, "/views/notas.jsp");
     }
 
     private void buscarPorId(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("Entrou!!!!!!!!!!!!!!");
 
         int alunoId = Integer.parseInt(request.getParameter("id"));
+        System.out.println(alunoId);
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
         int professorId = usuario.getId();
@@ -92,16 +94,19 @@ public class ServletObservacao extends HttpServlet {
         }
 
         List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
+        System.out.println("Alunos: " + alunos.getFirst().getNome());
+
         Aluno aluno = null;
 
         if(alunos != null && !alunos.isEmpty()){
-            aluno = alunos.get(0);
+            aluno = alunos.getFirst();
         }
 
-        request.setAttribute("observacoes", filtradas);
+        request.getSession().setAttribute("observacoes", filtradas);
         request.getSession().setAttribute("alunoSelecionado", aluno);
+        System.out.println("Aluno: " + aluno);
 
-        encaminhar(request, response, "/views/observacoes.jsp");
+        encaminhar(request, response, "/views/notas.jsp");
 
     }
 

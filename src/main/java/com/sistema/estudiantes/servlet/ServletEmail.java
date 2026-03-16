@@ -39,7 +39,7 @@ public class ServletEmail extends HttpServlet {
             Usuario usuario = usuarios.get(0);
 
             String token = UUID.randomUUID().toString();
-            LocalDateTime expira = LocalDateTime.now().plusMinutes(30);
+            LocalDateTime expira = LocalDateTime.now().plusHours(24);
 
             usuario.setTokenRecuperacao(token);
             usuarioDAO.atualizarToken(usuario.getId(), token, expira);

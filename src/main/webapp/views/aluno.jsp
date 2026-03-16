@@ -7,8 +7,8 @@
     Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
     Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
     String[] data = (String[]) request.getSession().getAttribute("data");
-    List<Disciplina> disciplinas = (List<Disciplina>) request.getAttribute("disciplinas");
-    List<Nota> notas = (List<Nota>) request.getAttribute("notas");
+    List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
+    List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
     List<Observacao> observacaos = (List<Observacao>) request.getSession().getAttribute("observacoes");
 
 %>
@@ -39,7 +39,7 @@
 
         </nav>
         <div class="config">
-            <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
                 <i class="material-icons">output</i>Sair
             </a>
         </div>
@@ -171,8 +171,30 @@
             </div>
         </div>
     </main>
+    <div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
+        <div class="logout-modal-content" onclick="event.stopPropagation()">
+            <div class="logout-icon">
+                <i class="material-icons">help_outline</i>
+            </div>
+            <h2>Confirmar Saída</h2>
+            <p>Deseja encerrar sua sessão no sistema?</p>
+            <div class="logout-buttons">
+                <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
+            </div>
+        </div>
+    </div>
 
 
     <script src="${pageContext.request.contextPath}/js/notificacoes.js"></script>
+    <script>
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('show');
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
+        }
+    </script>
 </body>
 </html>

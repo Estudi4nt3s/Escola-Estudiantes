@@ -27,22 +27,15 @@
     @SuppressWarnings("unchecked")
     List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
 
-    if (professor == null) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
-        return;
-    }
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-
-    if (aulas != null && turmas != null) {
-        for (int i = 0; i < Math.min(aulas.size(), 6); i++) {
-            for (Turma value : turmas) {
-                if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                    turma[i] = value.getNome();
-                    qtdmateria++;
-                    break;
-                }
+    for(int i = 0; i < aulas.size(); i++){
+        for (Turma value : turmas) {
+            if (value.getId() == aulas.get(i).getTurmaId().getId()) {
+                turma[i] = value.getNome();
+                qtdmateria++;
+                break;
             }
         }
     }
@@ -54,14 +47,6 @@
     conteudo.put("geografia", new String[]{"Estudo do espaço geográfico, meio ambiente, população, economia e organização dos territórios.","public"});
     conteudo.put("informática", new String[]{"Aprendizado sobre computadores, sistemas, internet, lógica de programação e utilização de ferramentas digitais no dia a dia.","computer"});
     conteudo.put("ciências", new String[]{"Estudo do corpo humano, meio ambiente, física básica, química e fenômenos naturais.","science"});
-
-    boolean temAulas = !data[2].equals("SÁB") && !data[2].equals("DOM")
-            && materia != null
-            && aulas != null
-            && !aulas.isEmpty();
-
-        String nomeDisc = temAulas ? materia.getNome().toLowerCase() : "";
-    String[] infoDisc = temAulas && conteudo.containsKey(nomeDisc) ? conteudo.get(nomeDisc) : new String[]{"", ""};
 %>
 <body>
 
@@ -79,8 +64,8 @@
         </nav>
 
         <div class="config">
-            <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
-                <i class="material-icons">output</i>Sair
+            <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
+                <i class="material-icons" style="color: #ffffff">output</i>Sair
             </a>
         </div>
     </aside>
@@ -113,14 +98,20 @@
 
                 <div class="flex">
                     <%-- Loop para gerar os cards de conteúdo das aulas --%>
-                        <% if (temAulas) {
-                            for (int i = 0; i < qtdmateria; i++) { %>
-                        <div class="card <%=nomeDisc%>">
+                    <%
+                        System.out.println(materia.getNome());
+                        if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
+                            for(int i = 0;i < aulas.size();i++){
+                    %>
+                        <div class="card card <%=materia.getNome().toLowerCase()%>">
                             <h3><%=turma[i]%></h3>
-                            <p><%=infoDisc[0]%></p>
-                            <i class="material-icons materias"><%=infoDisc[1]%></i>
+                            <p><%=conteudo.get(materia.getNome().toLowerCase())[0]%></p>
+                            <i class="material-icons materias"><%=conteudo.get(materia.getNome().toLowerCase())[1]%></i>
                         </div>
-                        <% } } %>
+                    <%
+                            }
+                        }
+                    %>
                 </div>
 
             </div>
@@ -128,23 +119,46 @@
             <div class="content-today">
                 <h2>Aulas de Hoje</h2>
                 <ul>
-                    <% if (temAulas) {
-                        for (int i = 0; i < qtdmateria; i++) { %>
-                    <li>
-                        <strong><%=turma[i]%></strong> -
-                        <%=String.format("%02d", aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d", aulas.get(i).getHorarioInicio().getMinute())%>
-                        às
-                        <%=String.format("%02d", aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d", aulas.get(i).getHorarioFim().getMinute())%>
-                    </li>
-                    <% } } else { %>
-                    <p>Você não possui aulas hoje.</p>
-                    <% } %>
+                    <%-- Loop para a lista lateral de horários --%>
+                    <%
+                    if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
+                        for(int i = 0;i < qtdmateria;i++){
+                            %>
+                        <li>
+                            <strong><%=turma[i]%></strong> -
+                            <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
+                             às
+                            <%=String.format("%02d",aulas.get(i).getHorarioFim().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioFim().getMinute())%>
+                        </li>
+                    <%
+                        }
+                    }
+                        else{
+
+                    %>
+                        <p>Você não possui aulas hoje.</p>
+                        <%
+                            }
+                        %>
                 </ul>
             </div>
 
         </section>
 
     </main>
+    <div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
+        <div class="logout-modal-content" onclick="event.stopPropagation()">
+            <div class="logout-icon">
+                <i class="material-icons">help_outline</i>
+            </div>
+            <h2>Confirmar Saída</h2>
+            <p>Deseja encerrar sua sessão no sistema?</p>
+            <div class="logout-buttons">
+                <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+                <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
+            </div>
+        </div>
+    </div>
 
     <script src="<%=request.getContextPath()%>/js/notificacoes.js"></script>
 </body>

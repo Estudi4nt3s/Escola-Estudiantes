@@ -78,7 +78,7 @@ body::after { width: 500px; height: 500px; background: rgba(0, 0, 0, 0.4); botto
 .modal-content input {
     width: 100%;
     padding: 14px;
-    margin: 20px 0;
+    margin: 0;
     background: #222;
     border: 1px solid #444;
     color: white;
@@ -156,7 +156,6 @@ input[type="text"], input[type="password"],input[type="email"] {
 }
 
 .olho {
-    margin-top: 20px;
 }
 
 .input-wrapper input {

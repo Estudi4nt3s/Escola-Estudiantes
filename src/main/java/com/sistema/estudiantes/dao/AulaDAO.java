@@ -79,7 +79,8 @@ public class AulaDAO {
                 Connection conn = new Conexao().conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-                stmt.setString(1, valor);
+                stmt.setInt(1, id);
+                stmt.setString(2, valor);
 
             try (ResultSet rs = stmt.executeQuery()) {
 

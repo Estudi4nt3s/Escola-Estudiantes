@@ -52,8 +52,8 @@
 
     </nav>
     <div class="config">
-        <a class="menu" style="margin-left: -25px; color: #590101" href="${pageContext.request.contextPath}/index.jsp">
-            <i class="material-icons">output</i>Sair
+        <a class="menu" style="color: #ffffff" onclick="openLogoutModal()">
+            <i class="material-icons" style="color: #ffffff">output</i>Sair
         </a>
     </div>
 </aside>
@@ -75,20 +75,22 @@
 
     <div class="main-content">
         <div class="alunos-topo">
-            <form action="aluno" method="get">
-                <select class="alunos-titulo" name="id" onchange="this.form.submit()">
-            <%
-                Turma turmaSelecionada = (Turma) request.getAttribute("turmaSelecionada");
-                for(Turma turma:turmas){
-            %>
-                    <option value="<%=turma.getId()%>" <%=turma.getId() == turmaSelecionada.getId()?"selected":""%>><%= turma.getNome() %></option>
+            <form action="aluno" method="get" id="formTurma">
+                <select class="alunos-titulo" name="id" id="selectTurma">
+                    <%
+                        Turma turmaSelecionada = (Turma) request.getAttribute("turmaSelecionada");
+                        for(Turma turma : turmas){
+                    %>
+                    <option value="<%=turma.getId()%>" <%=turma.getId() == turmaSelecionada.getId() ? "selected" : ""%>>
+                        <%= turma.getNome() %>
+                    </option>
                     <% } %>
                 </select>
             </form>
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
-                <input type="text" id="searchAluno" placeholder="Pesquise o aluno">
+                <input type="text" name="busca" placeholder="Pesquise o aluno" value="<%= busca %>">
             </form>
         </div>
 
@@ -98,28 +100,31 @@
                 if (alunos != null && !alunos.isEmpty()) {
                     for (Aluno aluno : alunos) {
             %>
-            <div class="alunos-card">
-                <div class="alunos-nome">
-                    <%= aluno.getNome()%>
-                </div>
+            <a class="aaaaa" href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>">
+                <div class="alunos-card" style="margin-bottom: 7px">
+                        <div class="alunos-nome">
+                            <%=aluno.getNome()%>
+                        </div>
 
-                <div class="acoes-container">
-                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>
+<%--                <div class="acoes-container">--%>
+<%--                    <i class="material-icons opcoes" onclick="alternarVisibilidade(event)">more_vert</i>--%>
 
-                    <div class="popup">
-                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
-                           onclick="document.getElementById('loadingOverlay').style.display='flex'">
-                            <i class="material-icons popup-icones">edit_note</i>
-                            <span>Notas</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/observacao?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"
-                           onclick="document.getElementById('loadingOverlay').style.display='flex'">
-                            <i class="material-icons popup-icones">assignment</i>
-                            <span>Observações</span>
-                        </a>
-                    </div>
+<%--                    <div class="popup">--%>
+<%--                        <a href="${pageContext.request.contextPath}/nota?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"--%>
+<%--                           onclick="document.getElementById('loadingOverlay').style.display='flex'">--%>
+<%--                            <i class="material-icons popup-icones">edit_note</i>--%>
+<%--                            <span>Notas</span>--%>
+<%--                        </a>--%>
+<%--                        <a href="${pageContext.request.contextPath}/observacao?sub_acao=buscar_por_id&id=<%= aluno.getMatricula() %>" class="popup-card"--%>
+<%--                           onclick="document.getElementById('loadingOverlay').style.display='flex'">--%>
+<%--                            <i class="material-icons popup-icones">assignment</i>--%>
+<%--                            <span>Observações</span>--%>
+<%--                        </a>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
                 </div>
-            </div>
+            </a>
+
             <%
                 }
             } else {
@@ -182,27 +187,55 @@
         <p>Carregando...</p>
     </div>
 </div>
+<div id="logoutModal" class="logout-modal-overlay" onclick="closeLogoutModal()">
+    <div class="logout-modal-content" onclick="event.stopPropagation()">
+        <div class="logout-icon">
+            <i class="material-icons">help_outline</i>
+        </div>
+        <h2>Confirmar Saída</h2>
+        <p>Deseja encerrar sua sessão no sistema?</p>
+        <div class="logout-buttons">
+            <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+            <a href="${pageContext.request.contextPath}/index.jsp" class="btn-confirm">Sim, Sair</a>
+        </div>
+    </div>
+</div>
+
 <script>
-    const input = document.getElementById("searchAluno");
+    // Pegamos o select, o formulário e a tela de loading
+    const selectTurma = document.getElementById("selectTurma");
+    const formTurma = document.getElementById("formTurma");
+    const loading = document.getElementById("loadingOverlay");
 
-    input.addEventListener("input", function() {
+    // Ouvimos o evento "change" (quando o usuário troca a opção do select)
+    selectTurma.addEventListener("change", function(e) {
 
-        const filtro = input.value.toLowerCase();
-        const cards = document.querySelectorAll(".alunos-card");
+        // 1. Mostra a tela de carregamento
+        loading.style.display = "flex";
 
-        cards.forEach(card => {
+        // 2. Aguarda 500ms e depois envia o formulário com a nova turma selecionada
+        setTimeout(() => {
+            formTurma.submit();
+        }, 500);
 
-            const nome = card.querySelector(".alunos-nome").textContent.toLowerCase();
+    });
 
-            if(nome.includes(filtro)){
-                card.style.display = "";
-            } else {
-                card.style.display = "none";
-            }
+    function openLogoutModal() {
+        document.getElementById('logoutModal').classList.add('show');
+    }
 
-        });
+    function closeLogoutModal() {
+        document.getElementById('logoutModal').classList.remove('show');
+    }
+    window.addEventListener("pageshow", function(event) {
+
+        if (event.persisted) {
+            const loading = document.getElementById("loadingOverlay");
+            if(loading) loading.style.display = "none";
+        }
 
     });
 </script>
+
 </body>
 </html>
