@@ -43,7 +43,7 @@
         </div>
 
         <div class="avatar">
-            <img src="https://i.pravatar.cc/45?img=5">
+            <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
             <span><%= adminNome %></span>
         </div>
     </header>

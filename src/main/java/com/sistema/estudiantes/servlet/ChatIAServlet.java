@@ -24,7 +24,6 @@ public class ChatIAServlet extends HttpServlet {
         String jsonInput = "{\"contents\":[{\"parts\":[{\"text\":\"Você é um assistente administrativo escolar. Dados: "
                 + contexto + ". Pergunta: " + pergunta + "\"}]}]}";
 
-        // MODELO CORRETO: gemini-1.5-flash
         URL url = new URL("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
