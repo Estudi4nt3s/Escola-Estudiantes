@@ -49,7 +49,7 @@
   <header class="topbar">
     <div class="date"><i class="material-icons">admin_panel_settings</i>Área Administrativa</div>
     <div class="avatar">
-      <img src="https://i.pravatar.cc/45?img=5">
+      <img src="${pageContext.request.contextPath}/utils/perfil_adm.jpg">
       <span><%= (nomeAdmin != null) ? nomeAdmin : "Admin" %></span>
     </div>
   </header>
