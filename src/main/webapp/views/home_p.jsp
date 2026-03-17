@@ -5,6 +5,8 @@
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.LocalTime" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -26,6 +28,8 @@
     List<Turma> turmas = (List<Turma>) request.getSession().getAttribute("turmas");
     @SuppressWarnings("unchecked")
     List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
+
+    LocalTime agora = LocalTime.now();
 
 
     int qtdmateria = 0;
@@ -124,7 +128,7 @@
                     if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
                         for(int i = 0;i < qtdmateria;i++){
                             %>
-                        <li>
+                        <li class="<%=agora.isAfter(aulas.get(i).getHorarioInicio()) && agora.isBefore(aulas.get(i).getHorarioFim())?"atual":""%>">
                             <strong><%=turma[i]%></strong> -
                             <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
                              às

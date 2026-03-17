@@ -21,7 +21,7 @@
     <div class="modal-content">
     <h3>Área Administrativa</h3>
         <form action="${pageContext.request.contextPath}/servletLoginAdmin" method="post">
-            <p style="font-size: 14px; opacity: 0.7;">Identifique-se para continuar</p>
+            <p style="font-size: 14px; opacity: 0.7; margin-bottom: 20px;">Identifique-se para continuar</p>
 
             <input type="text" name="usuario" id="usuario" placeholder="Usuário" required>
             <div class="input-wrapper">
@@ -53,7 +53,6 @@
         <h2>Login</h2>
 
         <%
-            System.out.println(request.getAttribute("erro"));
             if (request.getAttribute("erro") != null) { %>
         <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">Credenciais inválidas!</p>
         <% } %>
