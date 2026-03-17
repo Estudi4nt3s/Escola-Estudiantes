@@ -152,7 +152,9 @@ public class ServletNota extends HttpServlet {
                 nota.setN2(valor);
             }
             System.out.println("Nota N2: " + nota.getN2());
-            notaDAO.atualizar(nota);
+            if(!notaDAO.atualizar(nota)){
+                notaDAO.inserir(nota);
+            }
 
             int alunoId = nota.getIdAluno().getMatricula();
 

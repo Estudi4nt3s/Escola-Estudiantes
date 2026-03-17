@@ -100,10 +100,6 @@
         <i class="material-icons" style="color:#9b59b6">history_edu</i>
         <h4>Relatórios</h4>
       </div>
-      <div class="card action-btn" onclick="abrirModal('modalComunicados')">
-        <i class="material-icons" style="color:#e74c3c">campaign</i>
-        <h4>Comunicados</h4>
-      </div>
     </div>
     <div class="card" style="margin-top: 20px;">
       <h3><i class="material-icons">bar_chart</i> Painel de Desempenho</h3>
@@ -194,21 +190,6 @@
     </button>
   </div>
 </div>
-
-<div id="modalComunicados" class="overlay" style="display:none">
-  <div class="modal">
-    <h2><i class="material-icons">campaign</i> Enviar Comunicado</h2>
-    <div class="form-group" style="margin-top: 15px;">
-      <label>Assunto do Aviso</label>
-      <input type="text" placeholder="Ex: Reunião de Pais">
-      <label style="margin-top:10px;">Mensagem</label>
-      <textarea style="width: 100%; border-radius: 10px; padding: 10px; border: 1px solid #ddd; height: 80px;"></textarea>
-    </div>
-    <button class="btn-primary" style="width:100%; margin-top:10px;">Disparar para Todos</button>
-    <button onclick="fecharModal('modalComunicados')" class="btn-cancelar" style="width:100%; border:none; background:none; margin-top:10px; cursor:pointer; color:#888;">Cancelar</button>
-  </div>
-</div>
-
 <script>
   window.onload = function() {
     // Gráfico de Vinculação
