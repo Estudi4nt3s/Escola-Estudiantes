@@ -24,7 +24,7 @@
         <h2>Recuperação de Senha</h2>
 
         <% if (request.getAttribute("msg") != null) { %>
-        <p style="color:#ffb347; margin-bottom: 15px; font-size: 14px; text-align: center;">
+        <p style="color:white; margin-bottom: 15px; font-size: 14px; text-align: center;">
             <%= request.getAttribute("msg") %>
         </p>
         <% } %>

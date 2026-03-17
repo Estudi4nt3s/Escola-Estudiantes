@@ -52,7 +52,7 @@ public class ServletResetSenha extends HttpServlet {
             throws ServletException, IOException {
 
         String token = request.getParameter("token");
-        String senha = request.getParameter("senha");
+        String novaSenha = request.getParameter("senha");
 
         Usuario usuario = usuarioDAO.buscarPorToken(token);
 
@@ -62,7 +62,14 @@ public class ServletResetSenha extends HttpServlet {
             return;
         }
 
-        usuario.setSenha(senha);
+        if (novaSenha != null && novaSenha.equals(usuario.getSenha())) {
+            request.setAttribute("msg", "A nova senha não pode ser igual à senha atual.");
+            request.setAttribute("token", token);
+            request.getRequestDispatcher("/views/resetSenha.jsp").forward(request, response);
+            return;
+        }
+
+        usuario.setSenha(novaSenha);
         usuarioDAO.atualizar(usuario);
 
         usuarioDAO.limparToken(usuario.getId());

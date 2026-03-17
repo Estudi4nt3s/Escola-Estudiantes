@@ -16,7 +16,7 @@
             <h2>Trocar senha</h2>
 
             <% if(request.getAttribute("msg") != null) { %>
-            <p style="font-size: 13px; color:#ffd27a; text-align:center; margin-bottom: 10px;"><%= request.getAttribute("msg") %></p>
+            <p style="font-size: 13px; color:white; text-align:center; margin-bottom: 10px;"><%= request.getAttribute("msg") %></p>
             <% } %>
 
             <form action="${pageContext.request.contextPath}/resetSenha" method="post">
