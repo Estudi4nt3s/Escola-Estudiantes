@@ -456,6 +456,11 @@ nav {
     color: var(--red);
 }
 
+.status.andamento {
+    background: rgba(246, 209, 17, 0.1);
+    color: #f3ab27;
+}
+
 /* Seção de Observações */
 .observations-section {
     width: 100%;

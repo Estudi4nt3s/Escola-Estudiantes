@@ -49,7 +49,7 @@
     </nav>
 
     <div class="config">
-        <a class="menu" style="color: #590101" href="${pageContext.request.contextPath}/index.jsp">
+        <a class="menu" style="color: #ffffff" href="${pageContext.request.contextPath}/index.jsp">
             <i class="material-icons">output</i>Sair
         </a>
     </div>
@@ -62,9 +62,9 @@
         </div>
 
         <div class="user">
-            <i class="material-icons" id="openNotification">notifications</i>
+<%--            <i class="material-icons" id="openNotification">notifications</i>--%>
             <div class="avatar">
-                <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
+<%--                <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>--%>
                 <span><%=aluno.getNome()%></span>
             </div>
         </div>

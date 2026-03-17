@@ -25,7 +25,6 @@
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/foto_edit.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/perfil_p.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/carregar.css">
 </head>
@@ -69,7 +68,7 @@
 
         <div class="user">
             <div class="avatar">
-                <img id="top-avatar-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
+<%--                <img id="top-avatar-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">--%>
                 <span><%= professor.getNome() %></span>
             </div>
         </div>
@@ -78,9 +77,9 @@
 
     <div class="perfil-page">
         <div class="perfil-header-card">
-            <div class="perfil-foto" onclick="openPhotoModal()" style="cursor: pointer;">
-                <img id="main-profile-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Professor">
-            </div>
+<%--            <div class="perfil-foto" onclick="openPhotoModal()" style="cursor: pointer;">--%>
+<%--                <img id="main-profile-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Professor">--%>
+<%--            </div>--%>
 
 
             <div class="perfil-info-principal">
@@ -94,9 +93,9 @@
             </div>
 
 
-            <button class="btn-edit-perfil">
-                <i class="material-icons" style="font-size: 18px; vertical-align: middle;">edit</i> Editar Perfil
-            </button>
+<%--            <button class="btn-edit-perfil">--%>
+<%--                <i class="material-icons" style="font-size: 18px; vertical-align: middle;">edit</i> Editar Perfil--%>
+<%--            </button>--%>
         </div>
 
 

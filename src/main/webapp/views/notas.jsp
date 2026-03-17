@@ -60,7 +60,7 @@
 
         <div class="user">
             <div class="avatar">
-                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
+<%--                <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">--%>
                 <span><%=professor.getNome()%></span>
             </div>
         </div>

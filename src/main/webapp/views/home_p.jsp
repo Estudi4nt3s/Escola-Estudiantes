@@ -91,7 +91,7 @@
 
             <div class="user">
                 <div class="avatar">
-                    <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
+<%--                    <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>--%>
                     <span><%=professor.getNome()%></span>
                 </div>
             </div>

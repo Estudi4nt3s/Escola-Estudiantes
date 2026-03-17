@@ -160,10 +160,11 @@ public class AulaDAO {
     public List<Aula> listarPorProfessor(int professorId, String diaSemana) {
         List<Aula> aulas = new ArrayList<>();
         String sql = """
-        SELECT a.*, p.nome AS professornome, d.nome AS disciplinanome
+        SELECT a.*, p.nome AS professornome, d.nome AS disciplinanome, t.nome AS turmanome
         FROM aulas a
         LEFT JOIN professores p ON a.professorid = p.id
         LEFT JOIN disciplinas d ON p.disciplinaid = d.id
+        LEFT JOIN turmas t ON t.id = a.turmaid
         WHERE a.professorid = ? AND a.diasemana = ? ORDER BY horarioinicio""";
 
         try (
@@ -181,6 +182,7 @@ public class AulaDAO {
                     d.setNome(rs.getString("disciplinanome"));
                     p.setDisciplina(d);
                     Turma t = new Turma(rs.getInt("turmaid"));
+                    t.setNome(rs.getString("turmanome"));
                     aulas.add(new Aula(rs.getInt("id"),
                             rs.getObject("horarioinicio", LocalTime.class),
                             rs.getObject("horariofim", LocalTime.class),
