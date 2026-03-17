@@ -5,6 +5,8 @@
 <%@ page import="com.sistema.estudiantes.model.Aula" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.LocalTime" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -27,15 +29,24 @@
     @SuppressWarnings("unchecked")
     List<Aula> aulas = (List<Aula>) request.getSession().getAttribute("aulas");
 
+    LocalTime agora = LocalTime.now();
+
+    if (professor == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
+    }
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-    for(int i = 0; i < aulas.size(); i++){
-        for (Turma value : turmas) {
-            if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getNome();
-                qtdmateria++;
-                break;
+
+    if (aulas != null && turmas != null) {
+        for (int i = 0; i < aulas.size(); i++) {
+            for (Turma value : turmas) {
+                if (value.getId() == aulas.get(i).getTurmaId().getId()) {
+                    turma[i] = value.getNome();
+                    qtdmateria++;
+                    break;
+                }
             }
         }
     }
@@ -80,7 +91,7 @@
 
             <div class="user">
                 <div class="avatar">
-                    <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
+<%--                    <a href="${pageContext.request.contextPath}/views/perfil_p.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>--%>
                     <span><%=professor.getNome()%></span>
                 </div>
             </div>
@@ -124,7 +135,7 @@
                     if((!data[2].equals("SÁB") && !data[2].equals("DOM")) && !(materia == null)){
                         for(int i = 0;i < qtdmateria;i++){
                             %>
-                        <li>
+                        <li class="<%=agora.isAfter(aulas.get(i).getHorarioInicio()) && agora.isBefore(aulas.get(i).getHorarioFim())?"atual":""%>">
                             <strong><%=turma[i]%></strong> -
                             <%=String.format("%02d",aulas.get(i).getHorarioInicio().getHour())%>:<%=String.format("%02d",aulas.get(i).getHorarioInicio().getMinute())%>
                              às

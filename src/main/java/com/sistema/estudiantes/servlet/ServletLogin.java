@@ -57,15 +57,18 @@ public class ServletLogin extends HttpServlet {
                 boolean ehProfessor = email.matches(regexFuncionario);
 
                 if (ehProfessor) {
+                    System.out.println("É tetra");
                     ProfessorDAO profDAO = new ProfessorDAO();
                     DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
                     AulaDAO aulaDAO = new AulaDAO();
                     TurmaDAO turmaDAO = new TurmaDAO();
 
                     // Busca na tabela Professor usando usuarioid
-                    List<Professor> profs = profDAO.listarComFiltro(usuarioLogado.getId());
+                    System.out.println("usu");
+                    List<Professor> profs = profDAO.listarFiltro(usuarioLogado.getId());
 
                     if (!profs.isEmpty()) {
+                        System.out.println("Java fudido");
                         Professor prof = profs.getFirst();
                         Disciplina disc = disciplinaDAO.buscarComFiltro("id", String.valueOf(prof.getDisciplina().getId()));
                         List<Aula> aulas = aulaDAO.listarPorProfessor(prof.getId(), semana);

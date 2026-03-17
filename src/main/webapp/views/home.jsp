@@ -74,7 +74,7 @@
             <div class="user">
 <%--                <i class="material-icons" id="openNotification">notifications</i>--%>
                 <div class="avatar">
-                    <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>
+<%--                    <a href="${pageContext.request.contextPath}/views/perfil.jsp"><img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar"></a>--%>
                     <span><%=aluno.getNome()%></span>
                 </div>
             </div>

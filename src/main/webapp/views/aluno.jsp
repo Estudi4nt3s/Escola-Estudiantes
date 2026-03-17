@@ -33,6 +33,7 @@
 
         <nav>
             <a class="menu" href="${pageContext.request.contextPath}/views/home.jsp"><i class="material-icons">home</i>Início</a>
+            <a class="menu" href="${pageContext.request.contextPath}/views/calendario_a.jsp"><i class="material-icons">calendar_month</i>Calendário</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/disciplinas.jsp"> <i class="material-icons">menu_book</i>Minhas Disciplinas</a>
             <a class="menu active"> <i class="material-icons">grading</i>Notas</a>
             <a class="menu" href="${pageContext.request.contextPath}/views/perfil.jsp"><i class="material-icons">person</i>Perfil</a>
@@ -54,7 +55,7 @@
 
             <div class="user">
                 <div class="avatar">
-                    <a href="${pageContext.request.contextPath}/views/perfil.jsp">
+<%--                    <a href="${pageContext.request.contextPath}/views/perfil.jsp">--%>
                         <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
                     </a>
                     <span><%=aluno.getNome()%></span>
@@ -116,7 +117,7 @@
                                 <td><%=(n2 == null ? "-" : String.format("%.2f", n2))%></td>
                                 <td><%=(n1 == null || n2 == null) ? "-" : String.format("%.2f", media)%></td>
                                 <td>
-                                    <span class="status <%=(n1 == null || n2 == null)?"":media >= 7?"approved":"attention"%>"><%=situacao%></span>
+                                    <span class="status <%=(n1 == null || n2 == null)?"andamento":media >= 7?"approved":"attention"%>"><%=situacao%></span>
                                 </td>
                             </tr>
                         <%

@@ -68,7 +68,7 @@
         <div class="user">
 <%--            <i class="material-icons" id="openNotification" onclick="toggleNotifications()">notifications</i>--%>
             <div class="avatar">
-                <img id="top-avatar-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">
+<%--                <img id="top-avatar-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Avatar">--%>
                 <span><%= aluno.getNome() %></span>
             </div>
         </div>
@@ -76,9 +76,9 @@
 
     <div class="perfil-page">
         <div class="perfil-header-card">
-            <div class="perfil-foto" onclick="openPhotoModal()" style="cursor: pointer;">
-                <img id="main-profile-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Aluno">
-            </div>
+<%--            <div class="perfil-foto" onclick="openPhotoModal()" style="cursor: pointer;">--%>
+<%--                <img id="main-profile-img" src="${pageContext.request.contextPath}/utils/perfil.png" alt="Aluno">--%>
+<%--            </div>--%>
 
             <div class="perfil-info-principal">
                 <h2><%= aluno.getNome() %></h2>
@@ -101,7 +101,7 @@
                 <h3>Informações Pessoais</h3>
                 <div class="linha"><span>RA (Matrícula):</span> <span><%= aluno.getMatricula() %></span></div>
                 <div class="linha"><span>E-mail:</span> <span><%= usuario.getEmail() %></span></div>
-                <div class="linha"><span>Telefone Resp.:</span> <span><%= aluno.getTelefonePai() %></span></div>
+                <div class="linha"><span>Telefone Resp.:</span> <span><%= aluno.getTelefonePai() == null?"Telefone não encontrado":aluno.getTelefonePai() %></span></div>
             </div>
 
 
@@ -109,7 +109,7 @@
                 <h3>Turma e Ensino</h3>
                 <div class="linha"><span>Série:</span> <span><%= turma.getAno() %></span></div>
                 <div class="linha"><span>Turma:</span> <span><%= turma.getNome() %></span></div>
-                <div class="linha"><span>Instituição:</span> <span>Instituto J&F</span></div>
+                <div class="linha"><span>Instituição:</span> <span>Escola Estudiantes</span></div>
             </div>
         </div>
     </div>
@@ -177,9 +177,9 @@
     function toggleNotifications() {
         document.getElementById('notificationOverlay').classList.toggle('show');
     }
-    function openPhotoModal() {
-        document.getElementById('photoModal').classList.add('show');
-    }
+    // function openPhotoModal() {
+    //     document.getElementById('photoModal').classList.add('show');
+    // }
 
     const btnNotas = document.getElementById("btnNotas");
     const loading = document.getElementById("loadingOverlay");
@@ -204,9 +204,9 @@
     function closeLogoutModal() {
         document.getElementById('logoutModal').classList.remove('show');
     }
-    function closePhotoModal(event) {
-        document.getElementById('photoModal').classList.remove('show');
-    }
+    // function closePhotoModal(event) {
+    //     document.getElementById('photoModal').classList.remove('show');
+    // }
 
     function previewImage(event) {
         const reader = new FileReader();

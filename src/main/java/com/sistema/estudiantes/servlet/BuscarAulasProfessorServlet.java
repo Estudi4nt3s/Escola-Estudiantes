@@ -34,7 +34,7 @@ public class BuscarAulasProfessorServlet extends HttpServlet {
         List<Aula> aulas = aulaDAO.listarPorProfessor(professor.getId(), diaSemana);
 
         request.setAttribute("aulas", aulas);
-        request.getRequestDispatcher("/views/aulaDia.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/aulaDia_p.jsp").forward(request, response);
     }
 
     private static String getDiaSemana(String data) {

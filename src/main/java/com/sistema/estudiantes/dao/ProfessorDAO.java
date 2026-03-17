@@ -87,6 +87,34 @@ public class ProfessorDAO {
         return professores;
     }
 
+    public List<Professor> listarFiltro(int id) {
+        List<Professor> professores = new ArrayList<>();
+        String sql = "SELECT p.*, d.nome as disciplina FROM professores p " +
+                "JOIN disciplinas d ON p.disciplinaid = d.id WHERE p.usuarioid = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setObject(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario u = new Usuario(rs.getInt("UsuarioId"));
+                    Disciplina d = new Disciplina(rs.getInt("disciplinaid"), rs.getString("disciplina"));
+                    Professor prof = new Professor(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            u,
+                            d
+                    );
+                    professores.add(prof);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return professores;
+    }
+
     public Professor buscarPorId(int id) {
         String sql = "SELECT p.*, d.nome as disciplina FROM Professores p " +
                 "JOIN disciplinas d on p.disciplinaid = d.id " +

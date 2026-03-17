@@ -77,35 +77,46 @@ public class ServletNota extends HttpServlet {
     private void buscarPorId(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int alunoId = Integer.parseInt(request.getParameter("id"));
-        System.out.println(alunoId);
+        if (request.getSession().getAttribute("professor") != null) {
+            int alunoId = Integer.parseInt(request.getParameter("id"));
+            System.out.println(alunoId);
 
-        List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
-        List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
-        List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
-        List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
+            List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
+            List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
+            List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
+            List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
 
-        Professor professor = (Professor) request.getSession().getAttribute("professor");
-        int professorId = professor.getId();
+            Professor professor = (Professor) request.getSession().getAttribute("professor");
+            int professorId = professor.getId();
 
-        List<Observacao> filtradas = new ArrayList<>();
+            List<Observacao> filtradas = new ArrayList<>();
 
-        if(observacoes != null){
-            for (Observacao o : observacoes) {
-                if (o.getIdProfessor().getId() == professorId) {
-                    filtradas.add(o);
+            if(observacoes != null){
+                for (Observacao o : observacoes) {
+                    if (o.getIdProfessor().getId() == professorId) {
+                        filtradas.add(o);
+                    }
                 }
             }
-        }
 
-        request.getSession().setAttribute("notas", notasDoAluno);
-        request.getSession().setAttribute("disciplinas", todasDisciplinas);
-        request.getSession().setAttribute("observacoes", filtradas);
-        request.getSession().setAttribute("alunoSelecionado", alunos.getFirst());
-
-        if (request.getSession().getAttribute("professor") != null) {
+            request.getSession().setAttribute("notas", notasDoAluno);
+            request.getSession().setAttribute("disciplinas", todasDisciplinas);
+            request.getSession().setAttribute("observacoes", filtradas);
+            request.getSession().setAttribute("alunoSelecionado", alunos.getFirst());
             encaminhar(request, response, "/views/notas.jsp");
         } else {
+            int alunoId = Integer.parseInt(request.getParameter("id"));
+
+            List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
+            List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
+            List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
+            List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
+
+
+            request.getSession().setAttribute("notas", notasDoAluno);
+            request.getSession().setAttribute("disciplinas", todasDisciplinas);
+            request.getSession().setAttribute("observacoes", observacoes);
+            request.getSession().setAttribute("alunoSelecionado", alunos.getFirst());
             encaminhar(request, response, "/views/aluno.jsp");
         }
     }
