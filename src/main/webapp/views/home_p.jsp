@@ -40,7 +40,7 @@
     String[] turma = new String[6];
 
     if (aulas != null && turmas != null) {
-        for (int i = 0; i < Math.min(aulas.size(), 6); i++) {
+        for (int i = 0; i < aulas.size(); i++) {
             for (Turma value : turmas) {
                 if (value.getId() == aulas.get(i).getTurmaId().getId()) {
                     turma[i] = value.getNome();
