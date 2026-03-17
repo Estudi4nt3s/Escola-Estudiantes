@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Estudantes</title>
+    <title>Estudiantes - Login</title>
     <link rel="icon" href="${pageContext.request.contextPath}/utils/school.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -67,6 +67,12 @@
                 <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
                 <i class="material-icons" style="color: #ffd27a" onclick="alternarVisibilidade(event)">visibility</i>
             </div>
+
+            <a href="${pageContext.request.contextPath}/views/senha.jsp"
+               style="font-size: 13px; color:#ffd27a; display:block; text-align:center; margin-bottom:10px;">
+                Esqueceu a senha?
+            </a>
+
             <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
         </form>
     </div>
