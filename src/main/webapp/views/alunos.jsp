@@ -90,7 +90,7 @@
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
-                <input type="text" name="busca" placeholder="Pesquise o aluno" value="<%= busca %>">
+                <input type="text" name="busca" id="inputBusca" placeholder="Pesquise o aluno" value="<%= busca %>">
             </form>
         </div>
 
@@ -201,45 +201,60 @@
 </div>
 
 <script>
-    // Pegamos o select, o formulário e a tela de loading
     const selectTurma = document.getElementById("selectTurma");
     const formTurma = document.getElementById("formTurma");
     const loading = document.getElementById("loadingOverlay");
+    const inputBusca = document.getElementById("inputBusca");
+    const formBusca = document.querySelector(".barra-pesquisa");
 
-    // Ouvimos o evento "change" (quando o usuário troca a opção do select)
-    selectTurma.addEventListener("change", function(e) {
+    // --- 1. FILTRO DE BUSCA DE ALUNOS ---
+    if (inputBusca) {
+        // Impede recarregar a página ao dar Enter na busca
+        if (formBusca) {
+            formBusca.addEventListener("submit", (e) => e.preventDefault());
+        }
 
-        // 1. Mostra a tela de carregamento
-        loading.style.display = "flex";
+        inputBusca.addEventListener("input", function() {
+            const termo = inputBusca.value.toLowerCase().trim();
+            // Selecionamos o link "aaaaa" pois ele é o container principal de cada aluno na lista
+            const cardsAlunos = document.querySelectorAll(".aaaaa");
 
-        // 2. Aguarda 500ms e depois envia o formulário com a nova turma selecionada
-        setTimeout(() => {
-            formTurma.submit();
-        }, 500);
+            cardsAlunos.forEach(alunoContainer => {
+                const nomeAluno = alunoContainer.querySelector(".alunos-nome").textContent.toLowerCase();
 
-    });
+                if (nomeAluno.includes(termo)) {
+                    alunoContainer.style.display = ""; // Volta ao padrão (block/flex)
+                } else {
+                    alunoContainer.style.display = "none"; // Esconde o aluno
+                }
+            });
+        });
+    }
 
-    // Seleciona TODOS os links que têm a classe "aaaaa"
-    const linksAlunos = document.querySelectorAll(".aaaaa");
-
-    // Passa por cada um dos links encontrados e adiciona o evento de clique
-    linksAlunos.forEach(function(link) {
-        link.addEventListener("click", function(e) {
-
-            e.preventDefault(); // Impede que a página mude imediatamente
-
-            // Mostra a tela de carregamento (supondo que a variável 'loading' já existe do código anterior)
-            const loading = document.getElementById("loadingOverlay");
-            loading.style.display = "flex";
-
-            // Aguarda 500ms e redireciona para o link (href) específico que foi clicado
+    // --- 2. TROCA DE TURMA (SELECT) ---
+    if (selectTurma && formTurma) {
+        selectTurma.addEventListener("change", function() {
+            if (loading) loading.style.display = "flex";
             setTimeout(() => {
-                window.location.href = this.href;
+                formTurma.submit();
             }, 500);
+        });
+    }
 
+    // --- 3. CLIQUE NOS ALUNOS (LOADING) ---
+    const linksAlunos = document.querySelectorAll(".aaaaa");
+    linksAlunos.forEach(link => {
+        link.addEventListener("click", function(e) {
+            e.preventDefault();
+            const href = this.href;
+            if (loading) loading.style.display = "flex";
+            setTimeout(() => {
+                window.location.href = href;
+            }, 500);
         });
     });
 
+    // --- 4. MODAIS E UTILITÁRIOS ---
     function openLogoutModal() {
         document.getElementById('logoutModal').classList.add('show');
     }
@@ -247,14 +262,18 @@
     function closeLogoutModal() {
         document.getElementById('logoutModal').classList.remove('show');
     }
+
     window.addEventListener("pageshow", function(event) {
-
-        if (event.persisted) {
-            const loading = document.getElementById("loadingOverlay");
-            if(loading) loading.style.display = "none";
+        if (event.persisted && loading) {
+            loading.style.display = "none";
         }
-
     });
+
+    // Fecha modal ao clicar fora
+    window.onclick = function(event) {
+        const logoutModal = document.getElementById('logoutModal');
+        if (event.target == logoutModal) closeLogoutModal();
+    }
 </script>
 
 </body>

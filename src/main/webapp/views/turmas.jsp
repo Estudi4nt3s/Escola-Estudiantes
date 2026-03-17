@@ -79,7 +79,7 @@
 
             <form method="get" action="${pageContext.request.contextPath}/turma" class="barra-pesquisa">
                 <i class="material-icons">search</i>
-                <input type="text" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
+                <input type="text" id="inputBusca" name="busca" placeholder="Pesquise a turma" value="<%= busca %>">
             </form>
         </div>
 
@@ -171,21 +171,31 @@
     </div>
 </div>
 <script>
-    const btnNotas = document.getElementById("btnNotas");
     const loading = document.getElementById("loadingOverlay");
+    const inputBusca = document.getElementById("inputBusca");
+    const formBusca = document.querySelector(".barra-pesquisa");
+    const btnNotas = document.getElementById("btnNotas"); // Pode ser null nesta página
 
-    btnNotas.addEventListener("click", function(e){
+    // --- FILTRO DA BARRA DE PESQUISA (A NOVIDADE) ---
+    if (inputBusca) {
+        // Bloqueia o recarregamento da página ao apertar ENTER
+        if (formBusca) {
+            formBusca.addEventListener("submit", (e) => e.preventDefault());
+        }
 
-        e.preventDefault(); // impede abrir imediatamente
+        inputBusca.addEventListener("input", function() {
+            const termo = inputBusca.value.toLowerCase().trim();
+            const cards = document.querySelectorAll(".turmas-card");
 
-        loading.style.display = "flex";
+            cards.forEach(card => {
+                const nomeTurma = card.querySelector("h3").textContent.toLowerCase();
+                // Se encontrar o termo, exibe como flex (estilo original), se não, esconde
+                card.style.display = nomeTurma.includes(termo) ? "flex" : "none";
+            });
+        });
+    }
 
-        setTimeout(()=>{
-            window.location.href = this.href;
-        },500);
-
-    });
-
+    // --- FUNÇÕES DE LOGOUT (MANTER FUNCIONANDO) ---
     function openLogoutModal() {
         document.getElementById('logoutModal').classList.add('show');
     }
@@ -193,14 +203,27 @@
     function closeLogoutModal() {
         document.getElementById('logoutModal').classList.remove('show');
     }
-    window.addEventListener("pageshow", function(event) {
 
-        if (event.persisted) {
-            const loading = document.getElementById("loadingOverlay");
-            if(loading) loading.style.display = "none";
-        }
+    // --- COMPORTAMENTO DO LOADING (PROTEGIDO) ---
+    // Só adiciona o evento se o btnNotas realmente existir na tela
+    if (btnNotas) {
+        btnNotas.addEventListener("click", function(e) {
+            e.preventDefault();
+            loading.style.display = "flex";
+            setTimeout(() => { window.location.href = this.href; }, 500);
+        });
+    }
 
+    // Garante que o loading suma ao voltar no navegador
+    window.addEventListener("pageshow", (event) => {
+        if (event.persisted && loading) loading.style.display = "none";
     });
+
+    // Fechar modal ao clicar fora
+    window.onclick = function(event) {
+        const logoutModal = document.getElementById('logoutModal');
+        if (event.target == logoutModal) closeLogoutModal();
+    }
 </script>
 
 </body>
