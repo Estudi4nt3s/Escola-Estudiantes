@@ -10,18 +10,12 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# ESTÁGIO 2: Execução (Onde o sistema realmente roda)
+# ESTÁGIO 2: Execução
 FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 
-# O segredo: copiamos o arquivo gerado no ESTÁGIO 1 (build) para cá
-# O Maven do estágio anterior sempre coloca o resultado em /app/target/
-COPY --from=build /app/target/*.jar app.jar
-
-# Se o seu projeto gera um .war em vez de .jar, use a linha abaixo:
-# COPY --from=build /app/target/*.war app.jar
+# O Maven gerou um .war, então buscamos por .war
+COPY --from=build /app/target/*.war app.jar
 
 EXPOSE 8080
-
-# Comando para iniciar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
