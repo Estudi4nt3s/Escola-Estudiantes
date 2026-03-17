@@ -17,7 +17,7 @@ public class AlunoDAO {
 
     public boolean inserir(Aluno aluno) {
 
-        String sql = "INSERT INTO Alunos (matricula, cpf, datanascimento, usuarioid, telefonepai, turmaid) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Alunos (matricula, nome, cpf, datanascimento, usuarioid, telefone, emailresponsavel, turmaid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection conn = new Conexao().conectar();
@@ -25,11 +25,13 @@ public class AlunoDAO {
         ) {
 
             psmt.setInt(1, aluno.getMatricula());
-            psmt.setString(2, aluno.getCpf());
-            psmt.setObject(3, aluno.getDataNascimento());
-            psmt.setInt(4, aluno.getUsuarioId().getId());
-            psmt.setString(5, aluno.getTelefonePai());
-            psmt.setInt(6, aluno.getTurmaId());
+            psmt.setString(2, aluno.getNome());
+            psmt.setString(3, aluno.getCpf());
+            psmt.setObject(4, aluno.getDataNascimento());
+            psmt.setInt(5, aluno.getUsuarioId().getId());
+            psmt.setString(6, aluno.getTelefonePai());
+            psmt.setString(7, aluno.getEmailResponsavel());
+            psmt.setInt(8, aluno.getTurmaId());
 
             return psmt.executeUpdate() > 0;
 
@@ -59,7 +61,7 @@ public class AlunoDAO {
                         rs.getString("cpf"),
                         rs.getObject("datanascimento", LocalDate.class),
                         u,
-                        rs.getString("telefonepai"),
+                        rs.getString("telefone"),
                         rs.getInt("turmaid")
                 );
                 lista.add(aluno);
@@ -94,7 +96,7 @@ public class AlunoDAO {
                             rs.getString("cpf"),
                             rs.getObject("datanascimento", LocalDate.class),
                             u,
-                            rs.getString("telefonepai"),
+                            rs.getString("telefone"),
                             rs.getInt("turmaid")
                     );
                     alunos.add(aluno);
@@ -124,7 +126,7 @@ public class AlunoDAO {
                             rs.getString("cpf"),
                             rs.getObject("datanascimento", LocalDate.class),
                             u,
-                            rs.getString("telefonepai"),
+                            rs.getString("telefone"),
                             rs.getInt("turmaid")
                     );
                     alunos.add(aluno);
@@ -155,8 +157,8 @@ public class AlunoDAO {
                             rs.getString("nome"),
                             rs.getString("cpf"),
                             rs.getObject("datanascimento", LocalDate.class),
-                            null,
-                            null,
+                            new Usuario(rs.getInt("usuarioid")),
+                            rs.getString("telefone"),
                             rs.getInt("turmaid")
                     );
                     alunos.add(aluno);
@@ -190,7 +192,7 @@ public class AlunoDAO {
                                 rs.getString("cpf"),
                                 rs.getObject("datanascimento", LocalDate.class),
                                 u,
-                                rs.getString("telefonepai"),
+                                rs.getString("telefone"),
                                 rs.getInt("turmaid")
                         );
                         System.out.println(aluno);
