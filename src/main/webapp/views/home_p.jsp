@@ -31,15 +31,22 @@
 
     LocalTime agora = LocalTime.now();
 
+    if (professor == null) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
+    }
 
     int qtdmateria = 0;
     String[] turma = new String[6];
-    for(int i = 0; i < aulas.size(); i++){
-        for (Turma value : turmas) {
-            if (value.getId() == aulas.get(i).getTurmaId().getId()) {
-                turma[i] = value.getNome();
-                qtdmateria++;
-                break;
+
+    if (aulas != null && turmas != null) {
+        for (int i = 0; i < Math.min(aulas.size(), 6); i++) {
+            for (Turma value : turmas) {
+                if (value.getId() == aulas.get(i).getTurmaId().getId()) {
+                    turma[i] = value.getNome();
+                    qtdmateria++;
+                    break;
+                }
             }
         }
     }

@@ -25,6 +25,7 @@ public class AlunoDAO {
             psmt.setInt(6, aluno.getTurmaId());
 
             return psmt.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -33,6 +34,7 @@ public class AlunoDAO {
 
     // 2. LISTAR (Geral)
     public List<Aluno> listar() {
+
         List<Aluno> lista = new ArrayList<>();
         String sql = "SELECT * FROM alunos ORDER BY matricula ASC";
         try (Connection conn = new Conexao().conectar();
@@ -41,9 +43,11 @@ public class AlunoDAO {
             while (rs.next()) {
                 lista.add(mapearAluno(rs));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return lista;
     }
 
@@ -53,7 +57,9 @@ public class AlunoDAO {
         String sql = "SELECT * FROM alunos WHERE matricula = ?";
         try (Connection conn = new Conexao().conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, matricula);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     alunos.add(mapearAluno(rs));
@@ -71,7 +77,9 @@ public class AlunoDAO {
         String sql = "SELECT * FROM alunos WHERE usuarioid = ?";
         try (Connection conn = new Conexao().conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, usuarioid);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     alunos.add(mapearAluno(rs));
@@ -83,7 +91,38 @@ public class AlunoDAO {
         return alunos;
     }
 
-    // 5. LISTAR POR TURMA (Mantido nome original)
+    public List<Aluno> listarUsuarioAluno(int usuarioid) {
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = "SELECT * FROM alunos WHERE usuarioid = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, usuarioid);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println("matricula: " + rs.getInt("matricula"));
+                    System.out.println("nome: " + rs.getString("nome"));
+                    System.out.println("turmaid: " + rs.getInt("turmaid"));
+                    Aluno aluno = new Aluno(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getString("cpf"),
+                            rs.getObject("datanascimento", LocalDate.class),
+                            null,
+                            null,
+                            rs.getInt("turmaid")
+                    );
+                    alunos.add(aluno);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return alunos;
+    }
+
     public List<Aluno> listarPorTurma(int turmaId) {
         List<Aluno> alunos = new ArrayList<>();
         String sql = "SELECT * FROM alunos WHERE turmaid = ?";
