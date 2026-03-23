@@ -8,6 +8,7 @@ public class Observacao {
     private LocalDate dataCriacao;
     private Aluno idAluno;
     private Professor idProfessor;
+    private  Disciplina idDisciplina;
 
     public Observacao() {}
 

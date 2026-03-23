@@ -37,10 +37,12 @@ public class ObservacaoDAO {
         List<Observacao> lista = new ArrayList<>();
         // Removemos os JOINs com a tabela de Usuarios
         String sql = """
-            SELECT o.*, a.nome AS aluno_nome, p.nome AS prof_nome
+            SELECT o.*, a.nome AS aluno_nome, p.nome AS prof_nome, d.nome AS disciplina_nome
+            
             FROM observacoes o
             JOIN alunos a ON o.alunomatricula = a.matricula
             JOIN professores p ON o.professorid = p.id
+            join disciplinas d on p.disciplinaid = d.id
             """;
 
         try (Connection conn = new Conexao().conectar();
@@ -49,7 +51,8 @@ public class ObservacaoDAO {
 
             while (rs.next()) {
                 Professor p = new Professor(rs.getInt("professorid"));
-                p.setNome(rs.getString("prof_nome")); // Nome direto do Professor
+                p.setNome(rs.getString("prof_nome"));// Nome direto do Professor
+                p.setDisciplina(new Disciplina(rs.getString("disciplina_nome"))); // Nome direto da Disciplina
 
                 Aluno a = new Aluno();
                 a.setMatricula(rs.getInt("alunomatricula"));
@@ -104,7 +107,6 @@ public class ObservacaoDAO {
                             a,
                             p
                     );
-                    System.out.println(o.getIdProfessor().getNome());
                     observacaos.add(o);
                 }
             }

@@ -79,7 +79,6 @@ public class ServletNota extends HttpServlet {
 
         if (request.getSession().getAttribute("professor") != null) {
             int alunoId = Integer.parseInt(request.getParameter("id"));
-            System.out.println(alunoId);
 
             List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
             List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
@@ -109,7 +108,7 @@ public class ServletNota extends HttpServlet {
 
             List<Nota> notasDoAluno = notaDAO.listarComFiltro("alunomatricula = ?", alunoId);
             List<Disciplina> todasDisciplinas = disciplinaDAO.listar();
-            List<Observacao> observacoes = observacaoDAO.listarComFiltro("alunomatricula = ?", alunoId);
+            List<Observacao> observacoes = observacaoDAO.listarDisciplina(alunoId);
             List<Aluno> alunos = alunoDAO.listarMatricula(alunoId);
 
 
