@@ -33,7 +33,7 @@ public class GerarBoletimServlet extends HttpServlet {
         Aluno aluno = (Aluno) request.getSession().getAttribute("aluno");
         @SuppressWarnings("unchecked")
         List<Nota> notas = (List<Nota>) request.getSession().getAttribute("notas");
-        System.out.println(notas.get(notas.size()).getN2());
+        System.out.println(notas.getLast());
         @SuppressWarnings("unchecked")
         List<Disciplina> disciplinas = (List<Disciplina>) request.getSession().getAttribute("disciplinas");
 

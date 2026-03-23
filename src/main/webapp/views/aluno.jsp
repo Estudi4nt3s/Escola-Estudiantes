@@ -56,7 +56,7 @@
             <div class="user">
                 <div class="avatar">
 <%--                    <a href="${pageContext.request.contextPath}/views/perfil.jsp">--%>
-                        <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">
+<%--                        <img src="${pageContext.request.contextPath}/utils/perfil.png" alt="avatar">--%>
                     </a>
                     <span><%=aluno.getNome()%></span>
                 </div>
